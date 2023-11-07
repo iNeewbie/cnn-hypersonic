@@ -15,6 +15,7 @@ from normalizaDados import normalizaDadosFunc
 """
 
 plt.close('all')
+
 datFile = np.genfromtxt('dw5.dat',
                      delimiter='',
                      skip_header=0)
@@ -40,11 +41,3 @@ results = importResults(interior,simulationFile,datFile,5)
 dadosTemperatura,_,_,_ = interpSDFCart(sdf5deg, X, Y, results)
 
 tempNormalizada = normalizaDadosFunc(dadosTemperatura)
-
-plt.figure()
-c = plt.contourf(X, Y, tempNormalizada, cmap=plt.cm.jet, levels=200)
-plt.colorbar(c)
-plt.title('E Distribution')
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.show()
