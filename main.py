@@ -4,6 +4,7 @@ from signalDistanceFunction import getSDF
 from importCFDResults import importResults
 from interpolationSDFCartGrid import interpSDFCart
 from normalizaDados import normalizaDadosFunc
+from neuralNetwork import trainNeuralNetwork
 
 """Processo para treinar rede neural
 1. Cria SDF 
@@ -35,4 +36,7 @@ dadosTemperatura,_,_,_ = interpSDFCart(sdf5deg, X, Y, results)
 #Normaliza os dados interpolados 
 tempNormalizada = normalizaDadosFunc(dadosTemperatura)
 
+
+
+#trained = trainNeuralNetwork(x_train, conditions_train, y_train, epochs_N, batch_size_N)
 
