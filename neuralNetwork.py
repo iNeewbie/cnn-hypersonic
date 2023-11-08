@@ -5,7 +5,7 @@ Created on Tue Nov  7 09:59:39 2023
 @author: Guilherme
 """
 
-from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape, Concatenate, Conv2DTranspose, UpSampling2D
+from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape, Concatenate, Conv2DTranspose, UpSampling2D, Lambda
 from tensorflow.keras.models import Model
 from tensorflow.keras.activations import swish
 from tensorflow.keras.losses import MeanSquaredError
@@ -35,8 +35,11 @@ def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N):
     x = Conv2DTranspose(300, (5, 5), padding='same', activation=swish)(x)
     x = UpSampling2D((5, 5))(x)
     x = Conv2DTranspose(300, (5, 5), padding='same', activation=swish)(x)
-    x = UpSampling2D((5, 5))(x)
-    decoded = Conv2D(1, (3, 3), activation='sigmoid', padding='same')(x)
+    decoded = UpSampling2D((5, 5))(x)
+    output = Conv2D(2, (1, 1), activation='sigmoid', padding='same')(decoded)
+    # Split the output tensor into three 150x150x1 tensors
+    temperature = Lambda(lambda x: x[:, :, :, 0:1])(output)
+    pressure = Lambda(lambda x: x[:, :, :, 1:2])(output)
 
     
 
@@ -65,7 +68,7 @@ def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N):
     #+ Gshared(y_true, y_pred)
     
     # Compilando o modelo
-    autoencoder = Model(inputs=[input_img, input_conditions ], outputs=decoded)
+    autoencoder = Model(inputs=[input_img, input_conditions ], outputs=[temperature,pressure])
     autoencoder.summary()
 
     autoencoder.compile(optimizer='sgd', loss=MeanSquaredError()) # Usando o otimizador SGD e a função de perda total definida no artigo

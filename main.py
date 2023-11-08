@@ -49,8 +49,9 @@ train_c = np.array([[5,10], [5,10], [5,10]])
 
 
 
-trained, model = trainNeuralNetwork(x, train_c, output1, output2 , 1000, 64)
+trained, model = trainNeuralNetwork(x, train_c, output1, output2 , 10000, 1)
 model.save('model.keras')
+
 
 def testModel(model, x_test, y_test):
     
