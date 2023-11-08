@@ -5,6 +5,8 @@ from importCFDResults import importResults
 from interpolationSDFCartGrid import interpSDFCart
 from normalizaDados import normalizaDadosFunc
 from neuralNetwork import trainNeuralNetwork
+import tensorflow as tf
+import keras
 
 """Processo para treinar rede neural
 1. Cria SDF 
@@ -31,12 +33,28 @@ sdf5deg, X, Y = getSDF(datFile, 5)
 results = importResults(interior,simulationFile,datFile,5)
 
 #Interpola SDF e malha cartesiana
-dadosTemperatura,_,_,_ = interpSDFCart(sdf5deg, X, Y, results)
+dadosTemperatura,grid_pressure,_,_ = interpSDFCart(sdf5deg, X, Y, results)
 
 #Normaliza os dados interpolados 
 tempNormalizada = normalizaDadosFunc(dadosTemperatura)
+pressNormal = normalizaDadosFunc(grid_pressure)
+
+
+train_conditions = np.array([5,10])
+output1 = np.array([tempNormalizada,tempNormalizada, tempNormalizada])
+output2 = np.array([pressNormal,pressNormal, pressNormal])
+
+x = np.array([sdf5deg,sdf5deg, sdf5deg])
+train_c = np.array([[5,10], [5,10], [5,10]])
 
 
 
-#trained = trainNeuralNetwork(x_train, conditions_train, y_train, epochs_N, batch_size_N)
+trained, model = trainNeuralNetwork(x, train_c, output1, output2 , 1000, 64)
+model.save('model.keras')
+
+def testModel(model, x_test, y_test):
+    
+        # Assuming x_test is your test images, y_test is your test labels
+    score = model.evaluate(x_test, y_test, verbose=1)
+
 
