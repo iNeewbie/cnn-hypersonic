@@ -12,3 +12,9 @@ pasta = [os.path.join(base_path, str(AoA) + '-AoA', str(WedgeAngle) + '-WedgeAng
 
 #Simulação tem que rodar:
     
+    
+ind = 0
+for aoa_it in AoAs:
+    for wa_it in WedgeAngles:
+        print(ind)
+        ind+=1
