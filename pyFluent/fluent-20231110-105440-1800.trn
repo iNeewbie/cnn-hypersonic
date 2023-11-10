@@ -69,3 +69,19 @@ Building...
 	air
      parallel,
 Done.
+
+Error: eval: unbound variable
+Error Object: has-fnmatch-wild-card?
+
+Error: eval: unbound variable
+Error Object: has-fnmatch-wild-card?
+
+Error: eval: unbound variable
+Error Object: has-fnmatch-wild-card?
+Shutting down Server...
+Services Shutdown...Done.
+Server Shutdown...Done.
+Queue Cleared...Done.
+Shutdown Complete.
+Auto-Transcript Stop Time:  11:38:49, 10 Nov 2023 Hora oficial do Brasil 
+Total Transcript Time: 44 Minute 9 Second.

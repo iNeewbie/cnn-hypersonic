@@ -1,0 +1,980 @@
+Auto-Transcript Start Time:  11:39:02, 10 Nov 2023 Hora oficial do Brasil 
+Current Directory: "H:\Meu Drive\TCC\Programming\cnn-hypersonic\pyFluent"
+Information: The server has started and is running.
+
+              Welcome to ANSYS Fluent 2023 R1
+
+              Copyright 1987-2023 ANSYS, Inc. All Rights Reserved.
+              Unauthorized use, distribution or duplication is prohibited.
+              This product is subject to U.S. laws governing export and re-export.
+              For full Legal Notice, see documentation.
+
+Build Time: Nov 28 2022 09:52:41 EST  Build Id: 10208  
+ 
+Connected License Server List:	1055@localhost
+Host spawning Node 0 on machine "Guilherme" (win64).
+
+-------------------------------------------------------------------------------------------
+ID    Hostname   Core  O.S.         PID    Vendor                                          
+-------------------------------------------------------------------------------------------
+n7    Guilherme  8/8  Windows-x64  4344   11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n6    Guilherme  7/8  Windows-x64  21620  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n5    Guilherme  6/8  Windows-x64  12252  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n4    Guilherme  5/8  Windows-x64  19112  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n3    Guilherme  4/8  Windows-x64  14968  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n2    Guilherme  3/8  Windows-x64  17272  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n1    Guilherme  2/8  Windows-x64  7260   11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n0*   Guilherme  1/8  Windows-x64  5512   11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+host  Guilherme       Windows-x64  13676  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+
+MPI Option Selected: intel
+Selected system interconnect: default
+-------------------------------------------------------------------------------------------
+
+Cleanup script file is H:\\Meu Drive\\TCC\\Programming\\cnn-hypersonic\\pyFluent\\cleanup-fluent-Guilherme-13676.bat
+
+> Fast-loading "C:\PROGRA~1\ANSYSI~1\v231\fluent\fluent23.1.0\\addons\afd\lib\hdfio.bin"
+Done.
+
+Reading from Guilherme:"H:\Meu Drive\TCC\Programming\cnn-hypersonic\pyFluent\caso.cas.h5" in NODE0 mode ...
+  Reading mesh ...
+       19790 cells,     1 cell zone  ...
+          19790 mixed cells,  zone id: 2
+       40054 faces,     4 face zones ...
+          39081 2D interior faces,  zone id: 1
+            477 2D pressure-far-field faces,  zone id: 5
+            396 2D wall faces,  zone id: 7
+            100 2D pressure-outlet faces,  zone id: 6
+       20264 nodes,     1 node zone  ...
+  Done.
+
+
+Building...
+     mesh
+	distributing mesh
+		parts........,
+		faces........,
+		nodes........,
+		cells........,
+        bandwidth reduction using Reverse Cuthill-McKee: 2470/72 = 34.3056
+     materials,
+     interface,
+     domains,
+	mixture
+     zones,
+	pressure-outlet
+	airfoil
+	pressure-far-field
+	interior-air
+	air
+     parallel,
+Done.
+(cx-gui-do cx-activate-item "MenuBar*ReadSubMenu*Mesh...")
+(cx-gui-do cx-set-toggle-button2 "Read Mesh Options*Table1(Options)*ToggleBox1*Replace mesh" #t)
+(cx-gui-do cx-activate-item "Read Mesh Options*Table1(Options)*ToggleBox1*Replace mesh")
+(cx-gui-do cx-activate-item "Read Mesh Options*PanelButtons*PushButton2(Cancel)")
+(cx-gui-do cx-activate-item "MenuBar*ReadSubMenu*Mesh...")
+(cx-gui-do cx-activate-item "Read Mesh Options*PanelButtons*PushButton1(OK)")
+replace
+invalid command [replace]
+
+> file
+
+/file> help
+
+Type "?<command>" for help on a specific command.
+Type "?" to enter help mode, and "q" to exit help mode.
+
+The commands below are available in this menu.
+Those followed by "*" are unavailable with the current settings.
+
+async-optimize?*                                replace-mesh
+auto-save/                                      set-batch-options
+binary-legacy-files?                            set-err-on-inval-cmd
+cff-files?                                      set-idle-timeout
+cffio-options/                                  set-target-reference-frame-for-write-profiles*
+close-without-save*                             set-tui-version
+confirm-overwrite?                              show-configuration
+data-file-options*                              single-precision-coordinates?*
+define-macro                                    solution-files/
+em-mapping/*                                    start-journal
+execute-macro                                   start-transcript
+export-to-cfd-post*                             stop-journal
+export/                                         stop-macro
+fsi/*                                           stop-transcript
+import/                                         sync-workbench*
+interpolate/                                    table-manager/
+load-act-tool                                   transient-export/
+parametric-project/*                            write-boundary-mesh
+project[beta]/*                                 write-case
+read-case                                       write-case-data*
+read-case-data                                  write-circumferential-averaged-profile*
+read-case-info                                  write-cleanup-script
+read-case-settings*                             write-currently-defined-profiles*
+read-data                                       write-data*
+read-field-functions                            write-fan-profile*
+read-injections                                 write-field-functions
+read-isat-table*                                write-flamelet*
+read-journal                                    write-injections
+read-macros                                     write-isat-table*
+read-pdf*                                       write-macros
+read-profile                                    write-merge-profiles*
+read-rays*                                      write-pdat?
+read-settings                                   write-pdf*
+read-surface-clusters*                          write-profile*
+read-transient-table                            write-selected-defined-profiles*
+read-viewfactors*                               write-settings
+reload-setup*
+
+/file> replace-mesh
+Mesh or Case Filename ["caso.msh"] "H:\Meu Drive\TCC\Programming\cnn-hypersonic\DataCFD\-5-AoA\15-WedgeAngle\meshFile.msh"
+The current case has not been saved.
+OK to discard? [cancel] ok
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\2"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+
+Reading "H:\Meu Drive\TCC\Programming\cnn-hypersonic\DataCFD\-5-AoA\15-WedgeAngle\meshFile.msh"...
+
+Buffering for file scan...
+
+
+       Clearing partially read grid.
+   19133 nodes.
+     981 nodes.
+   38772 2D interior faces, zone  1.
+     482 2D pressure-far-field faces, zone  5.
+     399 2D wall faces, zone  6.
+     100 2D pressure-outlet faces, zone  7.
+   19639 mixed cells, zone  2.
+
+Building...
+     mesh
+	auto partitioning mesh by Metis (fast),
+	distributing mesh
+		parts........,
+		faces........,
+		nodes........,
+		cells........,
+        bandwidth reduction using Reverse Cuthill-McKee: 2452/56 = 43.7857
+     materials,
+     interface,
+     domains,
+     zones,
+	pressure-outlet
+	airfoil
+	pressure-far-field
+	air
+	interior-air
+     parallel,
+Done.
+Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	
+Reading Settings file "C:\Users\guilh\AppData\Local\Temp\2"...
+
+Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	 Setting zone id of air to 2.
+ Setting zone id of interior-air to 1.
+ Setting zone id of pressure-far-field to 5.
+ Setting zone id of airfoil to 7.
+ Setting zone id of pressure-outlet to 6.
+Done.
+
+Setting air (mixture) ... Done.
+Setting interior-air (mixture) ... Done.
+Setting pressure-far-field (mixture) ... Done.
+Setting airfoil (mixture) ... Done.
+Setting pressure-outlet (mixture) ... Done.
+
+
+/file> (cx-use-window-id 51)
+(handle-key "f")
+
+auto-save/              read-field-functions    start-transcript
+binary-legacy-files?    read-injections         stop-journal
+cff-files?              read-journal            stop-macro
+cffio-options/          read-macros             stop-transcript
+confirm-overwrite?      read-profile            table-manager/
+define-macro            read-settings           transient-export/
+execute-macro           read-transient-table    write-boundary-mesh
+export/                 replace-mesh            write-case
+import/                 set-batch-options       write-cleanup-script
+interpolate/            set-err-on-inval-cmd    write-field-functions
+load-act-tool           set-idle-timeout        write-injections
+read-case               set-tui-version         write-macros
+read-case-data          show-configuration      write-pdat?
+read-case-info          solution-files/         write-settings
+read-data               start-journal
+
+/file> replace-mesh/"H:\Meu Drive\TCC\Programming\cnn-hypersonic\DataCFD\-5-AoA\15-WedgeAngle\meshFile.msh" ok
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\3"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+
+Reading "H:\Meu Drive\TCC\Programming\cnn-hypersonic\DataCFD\-5-AoA\15-WedgeAngle\meshFile.msh"...
+
+Buffering for file scan...
+
+
+       Clearing partially read grid.
+   19133 nodes.
+     981 nodes.
+   38772 2D interior faces, zone  1.
+     482 2D pressure-far-field faces, zone  5.
+     399 2D wall faces, zone  6.
+     100 2D pressure-outlet faces, zone  7.
+   19639 mixed cells, zone  2.
+
+Building...
+     mesh
+	auto partitioning mesh by Metis (fast),
+	distributing mesh
+		parts........,
+		faces........,
+		nodes........,
+		cells........,
+        bandwidth reduction using Reverse Cuthill-McKee: 2452/56 = 43.7857
+     materials,
+     interface,
+     domains,
+     zones,
+	pressure-outlet
+	airfoil
+	pressure-far-field
+	air
+	interior-air
+     parallel,
+Done.
+Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	
+Reading Settings file "C:\Users\guilh\AppData\Local\Temp\3"...
+
+Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	 Setting zone id of air to 2.
+ Setting zone id of interior-air to 1.
+ Setting zone id of pressure-far-field to 5.
+ Setting zone id of airfoil to 7.
+ Setting zone id of pressure-outlet to 6.
+Done.
+
+Setting air (mixture) ... Done.
+Setting interior-air (mixture) ... Done.
+Setting pressure-far-field (mixture) ... Done.
+Setting airfoil (mixture) ... Done.
+Setting pressure-outlet (mixture) ... Done.
+
+
+/file> Please answer o[k] or c[ancel].
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\4"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+
+Error: File "H:\Meu" not found!
+Error Object: #f
+
+Error: File "H:\Meu" not found!
+Error Object: #f
+(cx-gui-do cx-activate-item "MenuBar*ReadSubMenu*Mesh...")
+(cx-gui-do cx-activate-item "Read Mesh Options*PanelButtons*PushButton1(OK)")
+(cx-gui-do cx-set-file-dialog-entries "Select File" '( "H:/Meu Drive/TCC/Programming/cnn-hypersonic/DataCFD/-5-AoA/15-WedgeAngle/meshFile.msh") "All Mesh Files (*.msh* *.MSH* )")
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\5"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+Reading "H:/Meu Drive/TCC/Programming/cnn-hypersonic/DataCFD/-5-AoA/15-WedgeAngle/meshFile.msh"...
+Buffering for file scan...
+
+
+       Clearing partially read grid.
+   19133 nodes.
+     981 nodes.
+   38772 2D interior faces, zone  1.
+     482 2D pressure-far-field faces, zone  5.
+     399 2D wall faces, zone  6.
+     100 2D pressure-outlet faces, zone  7.
+   19639 mixed cells, zone  2.
+
+Building...
+     mesh
+	auto partitioning mesh by Metis (fast),
+	distributing mesh
+		parts........,
+		faces........,
+		nodes........,
+		cells........,
+        bandwidth reduction using Reverse Cuthill-McKee: 2452/56 = 43.7857
+     materials,
+     interface,
+     domains,
+     zones,
+	pressure-outlet
+	airfoil
+	pressure-far-field
+	air
+	interior-air
+     parallel,
+Done.
+Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	 Setting zone id of air to 2.
+ Setting zone id of interior-air to 1.
+ Setting zone id of pressure-far-field to 5.
+ Setting zone id of airfoil to 7.
+ Setting zone id of pressure-outlet to 6.
+Done.
+
+Setting air (mixture) ... Done.
+Setting interior-air (mixture) ... Done.
+Setting pressure-far-field (mixture) ... Done.
+Setting airfoil (mixture) ... Done.
+Setting pressure-outlet (mixture) ... Done.
+
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\6"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+
+Error: File "H:\Meu Drive\TCC\Programming\cnn-hypersonic\DataCFD\-5-AoA-WedgeAngle\meshFile.msh" not found!
+Error Object: #f
+
+Error: File "H:\Meu Drive\TCC\Programming\cnn-hypersonic\DataCFD\-5-AoA-WedgeAngle\meshFile.msh" not found!
+Error Object: #f
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\7"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+
+Reading "H:\Meu Drive\TCC\Programming\cnn-hypersonic\DataCFD\-5-AoA\15-WedgeAngle\meshFile.msh"...
+
+Buffering for file scan...
+
+
+       Clearing partially read grid.
+   19133 nodes.
+     981 nodes.
+   38772 2D interior faces, zone  1.
+     482 2D pressure-far-field faces, zone  5.
+     399 2D wall faces, zone  6.
+     100 2D pressure-outlet faces, zone  7.
+   19639 mixed cells, zone  2.
+
+Building...
+     mesh
+	auto partitioning mesh by Metis (fast),
+	distributing mesh
+		parts........,
+		faces........,
+		nodes........,
+		cells........,
+        bandwidth reduction using Reverse Cuthill-McKee: 2452/56 = 43.7857
+     materials,
+     interface,
+     domains,
+     zones,
+	pressure-outlet
+	airfoil
+	pressure-far-field
+	air
+	interior-air
+     parallel,
+Done.
+Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	
+Reading Settings file "C:\Users\guilh\AppData\Local\Temp\7"...
+
+Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	 Setting zone id of air to 2.
+ Setting zone id of interior-air to 1.
+ Setting zone id of pressure-far-field to 5.
+ Setting zone id of airfoil to 7.
+ Setting zone id of pressure-outlet to 6.
+Done.
+
+Setting air (mixture) ... Done.
+Setting interior-air (mixture) ... Done.
+Setting pressure-far-field (mixture) ... Done.
+Setting airfoil (mixture) ... Done.
+Setting pressure-outlet (mixture) ... Done.
+
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Setup|Materials|Fluid|air"))
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Setup|Materials|Fluid|air"))
+(cx-gui-do cx-activate-item "NavigationPane*Frame2*Table1*List_Tree2")
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Setup|Materials|Fluid|air"))
+(cx-gui-do cx-activate-item "Create/Edit Materials*PanelButtons*PushButton1(Close)")
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\8"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+Reading "H:\Meu Drive\TCC\Programming\cnn-hypersonic\DataCFD\-5-AoA\15-WedgeAngle\meshFile.msh"...
+Buffering for file scan...
+
+
+       Clearing partially read grid.
+   19133 nodes.
+     981 nodes.
+   38772 2D interior faces, zone  1.
+     482 2D pressure-far-field faces, zone  5.
+     399 2D wall faces, zone  6.
+     100 2D pressure-outlet faces, zone  7.
+   19639 mixed cells, zone  2.
+
+Building...
+     mesh
+	auto partitioning mesh by Metis (fast),
+	distributing mesh
+		parts........,
+		faces........,
+		nodes........,
+		cells........,
+        bandwidth reduction using Reverse Cuthill-McKee: 2452/56 = 43.7857
+     materials,
+     interface,
+     domains,
+     zones,
+	pressure-outlet
+	airfoil
+	pressure-far-field
+	air
+	interior-air
+     parallel,
+Done.
+Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	Warning: Pressure far-field boundary condition can only be used with ideal gas law.
+  Please change either the boundary condition type or enable ideal gas law.
+  Solver cannot proceed until this is fixed.
+	 Setting zone id of air to 2.
+ Setting zone id of interior-air to 1.
+ Setting zone id of pressure-far-field to 5.
+ Setting zone id of airfoil to 7.
+ Setting zone id of pressure-outlet to 6.
+Done.
+
+Setting air (mixture) ... Done.
+Setting interior-air (mixture) ... Done.
+Setting pressure-far-field (mixture) ... Done.
+Setting airfoil (mixture) ... Done.
+Setting pressure-outlet (mixture) ... Done.
+
+Please answer o[k] or c[ancel].
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\9"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+
+Error: File "H:\Meu" not found!
+Error Object: #f
+
+Error: File "H:\Meu" not found!
+Error Object: #f
+Please answer o[k] or c[ancel].
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\10"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+
+Error: File "H:\Meu" not found!
+Error Object: #f
+
+Error: File "H:\Meu" not found!
+Error Object: #f
+Please answer o[k] or c[ancel].
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\11"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+
+Error: File "H:\Meu" not found!
+Error Object: #f
+
+Error: File "H:\Meu" not found!
+Error Object: #f
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\12"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+
+Error: File "f'{pasta[1]}'" not found!
+Error Object: #f
+
+Error: File "f'{pasta[1]}'" not found!
+Error Object: #f
+Please answer o[k] or c[ancel].
+Please answer o[k] or c[ancel].
+
+Writing Settings file "C:\Users\guilh\AppData\Local\Temp\13"...
+	writing rp variables ... Done.
+	writing domain variables ... Done.
+	writing air (type fluid) (mixture) ... Done.
+	writing interior-air (type interior) (mixture) ... Done.
+	writing pressure-far-field (type pressure-far-field) (mixture) ... Done.
+	writing airfoil (type wall) (mixture) ... Done.
+	writing pressure-outlet (type pressure-outlet) (mixture) ... Done.
+	writing zones map name-id ... Done.
+
+Reading "H:\Meu Drive\TCC\Programming\cnn-hypersonic\DataCFD\-5-AoA\7-WedgeAngle\meshFile.msh"...
+
+Buffering for file scan...
+
+
+Building...
+     mesh
+	auto partitioning mesh by Metis (fast
+==============================================================================
+
+Node 4: Process 19112: Received signal SIGSEGV.
+
+==============================================================================
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+999999: mpt_accept: error: accept failed: Invalid argument
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 0 PID 5512 RUNNING AT Guilherme
+=   EXIT STATUS: -1 (ffffffff)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 1 PID 7260 RUNNING AT Guilherme
+=   EXIT STATUS: -1 (ffffffff)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 2 PID 17272 RUNNING AT Guilherme
+=   EXIT STATUS: -1 (ffffffff)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 4 PID 19112 RUNNING AT Guilherme
+=   EXIT STATUS: -1 (ffffffff)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 5 PID 12252 RUNNING AT Guilherme
+=   EXIT STATUS: -1 (ffffffff)
+===================================================================================
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   RANK 7 PID 4344 RUNNING AT Guilherme
+=   EXIT STATUS: -1 (ffffffff)
+===================================================================================
+ The fl process could not be started.
+
+Error: error: wta[1](string)
+Error Object: ()
+Auto-Transcript Stop Time:  12:05:33, 10 Nov 2023 Hora oficial do Brasil 
+Total Transcript Time: 26 Minute 31 Second.

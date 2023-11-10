@@ -6,7 +6,7 @@ solver = pyfluent.launch_fluent(
     precision="double",
     processor_count=8,
     mode="solver",
-    show_gui=False,
+    show_gui=True,
     version="2d"
     )
 print("Solver iniciado")
@@ -28,4 +28,10 @@ AoAs = [-5, -3, 0, 5, 10, 15]
 
 
 
+
+
+#Trocar malha
+solver.tui.file.replace_mesh('"H:\\Meu Drive\\TCC\\Programming\\cnn-hypersonic\\DataCFD\\-5-AoA\\15-WedgeAngle\\meshFile.msh"', "ok")
+
+#Trocar Mach
 solver.setup.boundary_conditions.pressure_far_field['pressure-far-field'].m.value= 10

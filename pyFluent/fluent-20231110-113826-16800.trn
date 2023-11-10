@@ -1,0 +1,35 @@
+Auto-Transcript Start Time:  11:38:26, 10 Nov 2023 Hora oficial do Brasil 
+Current Directory: "H:\Meu Drive\TCC\Programming\cnn-hypersonic\pyFluent"
+Information: The server has started and is running.
+
+              Welcome to ANSYS Fluent 2023 R1
+
+              Copyright 1987-2023 ANSYS, Inc. All Rights Reserved.
+              Unauthorized use, distribution or duplication is prohibited.
+              This product is subject to U.S. laws governing export and re-export.
+              For full Legal Notice, see documentation.
+
+Build Time: Nov 28 2022 09:52:41 EST  Build Id: 10208  
+ 
+Connected License Server List:	1055@localhost
+Host spawning Node 0 on machine "Guilherme" (win64).
+
+-------------------------------------------------------------------------------------------
+ID    Hostname   Core  O.S.         PID    Vendor                                          
+-------------------------------------------------------------------------------------------
+n7    Guilherme  8/8  Windows-x64  12692  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n6    Guilherme  7/8  Windows-x64  13280  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n5    Guilherme  6/8  Windows-x64  6308   11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n4    Guilherme  5/8  Windows-x64  13340  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n3    Guilherme  4/8  Windows-x64  15160  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n2    Guilherme  3/8  Windows-x64  3832   11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n1    Guilherme  2/8  Windows-x64  16516  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+n0*   Guilherme  1/8  Windows-x64  11864  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+host  Guilherme       Windows-x64  16172  11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz  
+
+MPI Option Selected: intel
+Selected system interconnect: default
+-------------------------------------------------------------------------------------------
+
+Cleanup script file is H:\\Meu Drive\\TCC\\Programming\\cnn-hypersonic\\pyFluent\\cleanup-fluent-Guilherme-16172.bat
+
