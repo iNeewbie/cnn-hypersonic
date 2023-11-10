@@ -1,1 +1,7 @@
-# cnn-hypersonic
+AOA = -5 -3 0 5 10 15 (6)
+WA = 5 7 10 12 15 (5)
+Mach = 5 6 7 8 9 10 (6)
+
+180 soluções
+30 SDFs
+

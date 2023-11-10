@@ -1,0 +1,29 @@
+Auto-Transcript Start Time:  10:02:01, 10 Nov 2023 Hora oficial do Brasil 
+Current Directory: "H:\Meu Drive\TCC\Programming\cnn-hypersonic\pyFluent"
+Information: The server has started and is running.
+
+              Welcome to ANSYS Fluent 2023 R1
+
+              Copyright 1987-2023 ANSYS, Inc. All Rights Reserved.
+              Unauthorized use, distribution or duplication is prohibited.
+              This product is subject to U.S. laws governing export and re-export.
+              For full Legal Notice, see documentation.
+
+Build Time: Nov 28 2022 09:52:02 EST  Build Id: 10208  
+ 
+Connected License Server List:	1055@localhost
+Host spawning Node 0 on machine "Guilherme" (win64).
+[proxy:0:0@Guilherme] HYD_spawn (..\\windows\\src\\hydra_spawn.c:280): unable to run process C:\\PROGRA~1\\ANSYSI~1\\v231\\fluent\\fluent23.1.0\\win64\\3ddp_node\\fl_mpi2310.exe -mport 127.0.0.1:127.0.0.1:53384:0 node -mpiw intel -pic default (error code 1455)
+[proxy:0:0@Guilherme] launch_processes (proxy.c:582): error creating process (error code 1455). O arquivo de paginação é muito pequeno para que esta operação seja concluída.
+
+[proxy:0:0@Guilherme] main (proxy.c:949): error launching_processes
+
+Appli
+catio
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * n
+ is timed out, aborting ...   Timed out in Fluent startup [600 seconds], aborting ... 
+
+   Check networks and computers to make sure they are available and healthy! 
+
+
+   If you believe the systems are good, you can wait longer by setting 
