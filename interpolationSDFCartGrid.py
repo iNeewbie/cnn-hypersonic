@@ -21,12 +21,12 @@ def interpSDFCart(sdf, grid_x, grid_y,results, plot=False):
     grid_temperature = griddata((x, y), temperature, (grid_x, grid_y), method='cubic')
     
     # Interpolate e
-    grid_e = griddata((x, y), e, (grid_x, grid_y), method='cubic')
+    #grid_e = griddata((x, y), e, (grid_x, grid_y), method='cubic')
     
     grid_pressure = grid_pressure*mask
     grid_mach_number = grid_mach_number*mask
     grid_temperature = grid_temperature*mask
-    grid_e = grid_e*mask
+    #grid_e = grid_e*mask
     
     
     if plot != False:
@@ -65,13 +65,13 @@ def interpSDFCart(sdf, grid_x, grid_y,results, plot=False):
         plt.show()
         
         # Plot the grid_e
-        plt.figure()
+        """plt.figure()
         c = plt.contourf(grid_x, grid_y, grid_e, cmap=plt.cm.jet, levels=200)
         plt.colorbar(c)
         plt.title('E Distribution')
         plt.xlabel('X')
         plt.ylabel('Y')
-        plt.show()
+        plt.show()"""
 
-    return [grid_temperature, grid_pressure, grid_mach_number, grid_e]
+    return [grid_temperature, grid_pressure, grid_mach_number]
         

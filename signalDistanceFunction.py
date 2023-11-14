@@ -77,9 +77,9 @@ def getSDF(datFile, AoA, plot=False):
     
     
     
-    mesh = meshio.read('meshFileFromFluent.msh')
+    #mesh = meshio.read('meshFileFromFluent.msh')
     
-    points, _, _ = mesh.points, mesh.cells, mesh.cells_dict
+    #points, _, _ = mesh.points, mesh.cells, mesh.cells_dict
     
     if plot!=False:
             
