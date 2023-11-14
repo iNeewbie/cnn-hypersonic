@@ -7,6 +7,7 @@ from normalizaDados import normalizaDadosFunc
 from neuralNetwork import trainNeuralNetwork
 import tensorflow as tf
 import keras
+import os
 
 """Processo para treinar rede neural
 1. Cria SDF 
@@ -18,6 +19,11 @@ import keras
 """
 
 plt.close('all')
+
+
+MachNumbers = [5, 6, 7, 8, 9, 10]
+WedgeAngles = [5, 7, 10, 12, 15]
+AoAs = [-5, -3, 0, 5, 10, 15]
 
 
 #Importa dados
@@ -49,6 +55,8 @@ train_c = np.array([[5,10], [5,10], [5,10]])
 
 
 
+
+
 trained, model = trainNeuralNetwork(x, train_c, output1, output2 , 10000, 1)
 model.save('model.keras')
 
@@ -57,5 +65,5 @@ def testModel(model, x_test, y_test):
     
         # Assuming x_test is your test images, y_test is your test labels
     score = model.evaluate(x_test, y_test, verbose=1)
-
+    return score
 

@@ -4,7 +4,7 @@ import numpy as np
 from scipy.interpolate import griddata
 
 def interpSDFCart(sdf, grid_x, grid_y,results, plot=False):
-    x,y,pressure,mach_number,temperature,e = results
+    x,y,pressure,mach_number,temperature = results
     mask = np.zeros_like(sdf) # create an array of zeros with the same shape as sdf
     mask[sdf > 0] = 1 # set the values to 1 where sdf is positive
     

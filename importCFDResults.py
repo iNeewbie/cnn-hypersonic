@@ -2,15 +2,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.path import Path
 
-def importResults(interior,data,datFile,AoA,plot=False):
+def importResults(data,plot=False):
     
     # Extract columns
-    x = data[:, 1]+0.498097
-    y = data[:, 2]-0.043575
-    pressure = data[:, 3]
+    x = data[:, 1]
+    y = data[:, 2]
+    pressure = data[:, 5]
     mach_number = data[:, 4]
-    temperature = data[:, 5]
-    e = data[:, 6]
+    temperature = data[:, 3]
+    #e = data[:, 6]
     
     
     if plot!=False:
@@ -50,7 +50,7 @@ def importResults(interior,data,datFile,AoA,plot=False):
         plt.ylim([-0.5,0.5])
         plt.show()
     
-        # Create a contour plot for e
+        """# Create a contour plot for e
         plt.figure()
         plt.tricontourf(x, y, e, cmap=plt.cm.jet,levels=200)
         plt.colorbar()
@@ -60,6 +60,6 @@ def importResults(interior,data,datFile,AoA,plot=False):
         plt.axis('equal')
         plt.xlim([-0.5,1.5])
         plt.ylim([-0.5,0.5])
-        plt.show()
+        plt.show()"""
 
-    return [x,y,pressure,mach_number,temperature,e]
+    return [x,y,pressure,mach_number,temperature]#,e
