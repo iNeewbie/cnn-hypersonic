@@ -1,0 +1,34 @@
+2023-11-09 13:00:30,862 ansys.fluent.networking DEBUG    Can use 127.0.0.1 as remoting ip
+2023-11-09 13:00:36,901 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpc.health.v1.Health/Check, request = {}
+2023-11-09 13:00:36,921 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'status': 'SERVING'}
+2023-11-09 13:00:36,921 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpcRemoting.SchemeEval/StringEval, request = {'input': '(cx-version)'}
+2023-11-09 13:00:54,314 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'output': '(23 1 0)'}
+2023-11-09 13:01:15,819 ansys.fluent.networking DEBUG    Can use 127.0.0.1 as remoting ip
+2023-11-09 13:01:22,851 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpc.health.v1.Health/Check, request = {}
+2023-11-09 13:01:22,851 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'status': 'SERVING'}
+2023-11-09 13:01:22,861 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpcRemoting.SchemeEval/StringEval, request = {'input': '(cx-version)'}
+2023-11-09 13:01:36,168 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'output': '(23 1 0)'}
+2023-11-09 13:01:36,168 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpcRemoting.SchemeEval/Exec, request = {'command': ['(exit-server)'], 'wait': True, 'silent': True}
+2023-11-09 13:01:36,189 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {}
+2023-11-09 13:01:50,211 ansys.fluent.networking DEBUG    Can use 127.0.0.1 as remoting ip
+2023-11-09 13:01:57,233 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpc.health.v1.Health/Check, request = {}
+2023-11-09 13:01:57,243 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'status': 'SERVING'}
+2023-11-09 13:01:57,243 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpcRemoting.SchemeEval/StringEval, request = {'input': '(cx-version)'}
+2023-11-09 13:02:15,135 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'output': '(23 1 0)'}
+2023-11-09 13:02:15,174 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpcRemoting.SchemeEval/Exec, request = {'command': ['(exit-server)'], 'wait': True, 'silent': True}
+2023-11-09 13:02:15,196 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {}
+2023-11-09 13:03:49,432 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpcRemoting.SchemeEval/Exec, request = {'command': ['(exit-server)'], 'wait': True, 'silent': True}
+2023-11-09 13:04:37,377 ansys.fluent.networking DEBUG    Can use 127.0.0.1 as remoting ip
+2023-11-09 13:04:42,408 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpc.health.v1.Health/Check, request = {}
+2023-11-09 13:04:42,408 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'status': 'SERVING'}
+2023-11-09 13:04:42,418 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpcRemoting.SchemeEval/StringEval, request = {'input': '(cx-version)'}
+2023-11-09 13:04:58,035 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'output': '(23 1 0)'}
+2023-11-09 13:05:22,406 ansys.fluent.networking DEBUG    Can use 127.0.0.1 as remoting ip
+2023-11-09 13:05:28,435 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpc.health.v1.Health/Check, request = {}
+2023-11-09 13:05:28,445 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'status': 'SERVING'}
+2023-11-09 13:05:28,455 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpcRemoting.SchemeEval/StringEval, request = {'input': '(cx-version)'}
+2023-11-09 13:05:40,115 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'output': '(23 1 0)'}
+2023-11-09 13:05:40,265 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpcRemoting.SchemeEval/Exec, request = {'command': ['(exit-server)'], 'wait': True, 'silent': True}
+2023-11-09 13:05:40,277 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {}
+2023-11-09 13:07:43,276 ansys.fluent.networking DEBUG    GRPC_TRACE: rpc = /grpc.health.v1.Health/Check, request = {}
+2023-11-09 13:07:43,276 ansys.fluent.networking DEBUG    GRPC_TRACE: response = {'status': 'SERVING'}
