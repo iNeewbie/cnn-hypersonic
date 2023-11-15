@@ -6,6 +6,8 @@ from interpolationSDFCartGrid import interpSDFCart
 from normalizaDados import normalizaDadosFunc
 from neuralNetwork import trainNeuralNetwork
 from tqdm import tqdm
+import keras
+import matplotlib.pyplot as plt
 
 
 
@@ -60,6 +62,44 @@ sdfFile = np.array(sdfFile)
 outputTemp = np.array(outputTemp)
 outputPress = np.array(outputPress)
 
-trained, model = trainNeuralNetwork(sdfFile, conditionsFile, outputTemp, outputPress , 100, 1)
+model = keras.models.load_model('model.keras',safe_mode=False)
+
+model = False
+trained, model = trainNeuralNetwork(sdfFile, conditionsFile, outputTemp, outputPress , 1000, 15, model)
 model.save('model.keras')
+
+temp, press = model.predict([np.array([sdfFile[0]]),np.array([[-5,5]])])
         
+
+# Create arrays for X and Y coordinates
+X, Y = np.meshgrid(np.arange(150), np.arange(150))
+
+# Divide X and Y by your desired values
+X = X / 150*2 - 0.5
+Y = Y / 150 - 0.5
+
+# Now you can plot it using X and Y for coordinates and press for values
+plt.figure()
+c = plt.contourf(X, Y, temp[0,:,:,0], cmap=plt.cm.jet, levels=200)
+plt.colorbar(c)
+plt.title('Temperatura Prevista')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.axis('equal')
+plt.xlim([-0.5,1.5])
+plt.ylim([-0.5,0.5])
+plt.show()
+
+
+# Now you can plot it using X and Y for coordinates and press for values
+plt.figure()
+c = plt.contourf(X, Y, press[0,:,:,0], cmap=plt.cm.jet, levels=200)
+plt.colorbar(c)
+plt.title('Pressão prevista')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.axis('equal')
+plt.xlim([-0.5,1.5])
+plt.ylim([-0.5,0.5])
+plt.show()
+

@@ -55,12 +55,25 @@ x_pred = [np.array([sdf5deg]),np.array([[5,10]])]
 
 temp,press = model.predict(x_pred)
 
+
+# Plot the first image
+X = 2 * temp[:, :, :, 0] / 150 - 0.5
+Y = temp[:, :, :, 1] / 150 - 0.5
+
 plt.figure()
-c = plt.contourf(temp[0,:,:,0], cmap=plt.cm.jet, levels=200)
+c = plt.contourf(X, Y, temp[0, :, :, 2], cmap=plt.cm.jet, levels=200)
 plt.colorbar(c)
 plt.title('temp Distribution')
 plt.xlabel('X')
 plt.ylabel('Y')
+plt.axis('equal')
+
+# Adjust the x-limits to range from -0.5 to 1.5
+plt.xlim([-0.5, 1.5])
+
+# Adjust the y-limits to range from -0.5 to 0.5
+plt.ylim([-0.5, 0.5])
+
 plt.show()
 
 
@@ -71,7 +84,9 @@ plt.colorbar(c)
 plt.title('pre Distribution')
 plt.xlabel('X')
 plt.ylabel('Y')
+plt.axis('equal')
+plt.xlim([-0.5,1.5])
+plt.ylim([-0.5,0.5])
 plt.show()
-
 
 
