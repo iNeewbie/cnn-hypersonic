@@ -64,7 +64,7 @@ outputPress = np.array(outputPress)
 
 model = keras.models.load_model('model.keras',safe_mode=False)
 
-model = False
+#model = False
 trained, model = trainNeuralNetwork(sdfFile, conditionsFile, outputTemp, outputPress , 1000, 15, model)
 model.save('model.keras')
 
