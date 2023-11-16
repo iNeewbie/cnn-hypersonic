@@ -70,10 +70,10 @@ def getSDF(datFile, AoA, plot=False):
     
     #airfoil_mask = create_airfoil_mask(x_coords, y_coords, X, Y)
     # Create the initial distance field
-    phi = np.where(airfoil_mask, -1, 1)
+    phi = np.where(airfoil_mask, -150, 150)
     
     # Compute the signed distance function using the Fast Marching Method
-    distance = skfmm.distance(phi,dx=0.001)
+    distance = skfmm.distance(phi,dx=1/150)
     
     
     

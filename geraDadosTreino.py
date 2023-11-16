@@ -27,12 +27,12 @@ pasta2 = [os.path.join(base_path, str(AoA) + "-AoA", str(WedgeAngle) + "-WedgeAn
 simFiles = []
 
 
-for i in tqdm(pasta2):
+"""for i in tqdm(pasta2):
     if i == "H:\\Meu Drive\\TCC\Programming\\cnn-hypersonic\\DataCFD\\5-AoA\\7-WedgeAngle\\5-Mach\\solData":
         break
     simFiles.append(np.genfromtxt(i, delimiter=',', skip_header=1))
 
-
+"""
 index = 0
 index_mach = 0
 
@@ -42,10 +42,13 @@ conditionsFile = []
 outputTemp = []
 outputPress = []
 for aoa_it in range(len(AoAs)):
-    if aoa_it == 3:
-        break
+    #if aoa_it == 3:
+        #break
     for wa_it in range(len(WedgeAngles)):
         for mn_it in tqdm(range(len(MachNumbers))):       
+           # if index_mach > 0:
+                
+            simFiles.append(np.genfromtxt(pasta2[index_mach], delimiter=',', skip_header=1))
             conditionsFile.append([AoAs[aoa_it],MachNumbers[mn_it]])
             sdf,X,Y = getSDF(genDatFile(WedgeAngles[wa_it]), AoAs[aoa_it])
             sdfFile.append(sdf)
@@ -55,51 +58,87 @@ for aoa_it in range(len(AoAs)):
             outputPress.append(normalizaDadosFunc(grid_pressure))
             
             index_mach+=1
-        index += 1
+            break
+        break
+    index += 1
+    break
+        
         
 conditionsFile = np.array(conditionsFile)    
 sdfFile = np.array(sdfFile) 
 outputTemp = np.array(outputTemp)
 outputPress = np.array(outputPress)
 
-model = keras.models.load_model('model.keras',safe_mode=False)
+#model = keras.models.load_model('model.keras',safe_mode=False)
 
-#model = False
-trained, model = trainNeuralNetwork(sdfFile, conditionsFile, outputTemp, outputPress , 1000, 15, model)
+model = False
+trained, model = trainNeuralNetwork(sdfFile, conditionsFile, outputTemp, outputPress ,1000, 1, 0.05, model)
 model.save('model.keras')
 
 temp, press = model.predict([np.array([sdfFile[0]]),np.array([[-5,5]])])
         
+plt.close('all')
 
 # Create arrays for X and Y coordinates
-X, Y = np.meshgrid(np.arange(150), np.arange(150))
+#X, Y = np.meshgrid(np.arange(150), np.arange(150))
 
 # Divide X and Y by your desired values
-X = X / 150*2 - 0.5
-Y = Y / 150 - 0.5
+#X = X / 150*2 - 0.5
+#Y = Y / 150 - 0.5
 
 # Now you can plot it using X and Y for coordinates and press for values
 plt.figure()
-c = plt.contourf(X, Y, temp[0,:,:,0], cmap=plt.cm.jet, levels=200)
+data = temp[0,:,:,0]
+mask = np.zeros_like(data, dtype=bool)
+mask[sdf < 0] = True
+masked_data = np.ma.masked_array(data, mask)
+c = plt.contourf(masked_data, cmap=plt.cm.jet, levels=200)
 plt.colorbar(c)
 plt.title('Temperatura Prevista')
 plt.xlabel('X')
 plt.ylabel('Y')
-plt.axis('equal')
-plt.xlim([-0.5,1.5])
-plt.ylim([-0.5,0.5])
+
 plt.show()
+
+plt.figure()
+data = outputTemp[0]
+mask = np.zeros_like(data, dtype=bool)
+mask[sdf < 0] = True
+masked_data = np.ma.masked_array(data, mask)
+c = plt.contourf(masked_data, cmap=plt.cm.jet, levels=200)
+plt.colorbar(c)
+plt.title('Temperatura Real')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.show()
+
 
 
 # Now you can plot it using X and Y for coordinates and press for values
 plt.figure()
-c = plt.contourf(X, Y, press[0,:,:,0], cmap=plt.cm.jet, levels=200)
+data = outputPress[0]
+mask = np.zeros_like(data, dtype=bool)
+mask[sdf < 0] = True
+masked_data = np.ma.masked_array(data, mask)
+c = plt.contourf(masked_data, cmap=plt.cm.jet, levels=200)
 plt.colorbar(c)
-plt.title('Pressão prevista')
+plt.title('Pressao prevista')
 plt.xlabel('X')
 plt.ylabel('Y')
-plt.axis('equal')
-plt.xlim([-0.5,1.5])
-plt.ylim([-0.5,0.5])
+
 plt.show()
+
+plt.figure()
+data = press[0,:,:,0]
+mask = np.zeros_like(data, dtype=bool)
+mask[sdf < 0] = True
+masked_data = np.ma.masked_array(data, mask)
+c = plt.contourf(masked_data, cmap=plt.cm.jet, levels=200)
+plt.colorbar(c)
+plt.title('Pressao Real')
+plt.xlabel('X')
+plt.ylabel('Y')
+
+plt.show()
+
 

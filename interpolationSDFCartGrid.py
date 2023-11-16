@@ -51,7 +51,7 @@ def interpSDFCart(sdf, grid_x, grid_y,results, plot=False):
         
         # Plot the grid_temperature
         plt.figure()
-        c = plt.contourf(grid_x, grid_y, grid_temperature, cmap=plt.cm.jet, levels=200)
+        c = plt.contourf(grid_temperature, cmap=plt.cm.jet, levels=200)
         
         # Add a colorbar to the plot
         plt.colorbar(c)
