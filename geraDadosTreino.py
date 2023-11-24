@@ -22,8 +22,8 @@ def genDatFile(WA):
 
 
 base_path = "H:\\Meu Drive\\TCC\\Programming\\cnn-hypersonic\\DataCFD"
-pasta2 = [os.path.join(base_path, str(AoA) + "-AoA", str(WedgeAngle) + "-WedgeAngle", str(MachNumber) + "-Mach","solData") 
-         for AoA in AoAs for WedgeAngle in WedgeAngles for MachNumber in MachNumbers]
+pasta2 = [os.path.join(base_path, str(WedgeAngle) + "-WedgeAngle", str(AoA) + "-AoA", str(MachNumber) + "-Mach","solData") 
+        for WedgeAngle in WedgeAngles for AoA in AoAs for MachNumber in MachNumbers]
 
 simFiles = []
 
@@ -42,26 +42,23 @@ sdfFile = []
 conditionsFile = []
 outputTemp = []
 outputPress = []
-for aoa_it in range(len(AoAs)):
-    if aoa_it == 3:
-        break
-    for wa_it in range(len(WedgeAngles)):
+for wa_it in range(len(WedgeAngles)):
+    for aoa_it in range(len(AoAs)):    
         for mn_it in tqdm(range(len(MachNumbers))):       
            # if index_mach > 0:
-                
-            simFiles.append(np.genfromtxt(pasta2[index_mach], delimiter=',', skip_header=1))
-            conditionsFile.append([AoAs[aoa_it],MachNumbers[mn_it]])
-            sdf,X,Y = getSDF(genDatFile(WedgeAngles[wa_it]), AoAs[aoa_it])
-            sdfFile.append(sdf)
-            results = importResults(simFiles[index_mach])
-            dadosTemperatura,grid_pressure,_ = interpSDFCart(sdf, X, Y, results)
-            outputTemp.append(normalizaDadosFunc(dadosTemperatura))
-            outputPress.append(normalizaDadosFunc(grid_pressure))
+            if os.path.isfile(pasta2[index_mach]):
+                simFiles.append(np.genfromtxt(pasta2[index_mach], delimiter=',', skip_header=1))
+                conditionsFile.append([AoAs[aoa_it],MachNumbers[mn_it]])
+                sdf,X,Y = getSDF(genDatFile(WedgeAngles[wa_it]), AoAs[aoa_it])
+                sdfFile.append(sdf)
+                results = importResults(simFiles[index_mach])
+                dadosTemperatura,grid_pressure,_ = interpSDFCart(sdf, X, Y, results)
+                outputTemp.append(normalizaDadosFunc(dadosTemperatura))
+                outputPress.append(normalizaDadosFunc(grid_pressure))
             
             index_mach+=1
-            break
-        break
     index += 1
+    
         
         
 conditionsFile = np.array(conditionsFile)    
@@ -148,24 +145,9 @@ plt.show()
 
 
 plt.figure()
-plt.plot(trained.history['lambda_6_loss'])
-plt.title('Model lambda_6_loss')
+plt.plot(trained.history['loss'])
+plt.title('Model Loss')
 plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.show()
 
-# Plot training & validation lambda_7_loss values
-plt.figure()
-plt.plot(trained.history['lambda_7_loss'])
-plt.title('Model lambda_7_loss')
-plt.ylabel('Loss')
-plt.xlabel('Epoch')
-plt.show()
-
-# Plot training lambda_6_mean_absolute_percentage_error values
-plt.figure()
-plt.plot(trained.history['lambda_6_mean_absolute_percentage_error'])
-plt.title('Model lambda_6_mean_absolute_percentage_error')
-plt.ylabel('Mean Absolute Percentage Error')
-plt.xlabel('Epoch')
-plt.show()

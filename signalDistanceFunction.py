@@ -23,6 +23,7 @@ def getSDF(datFile, AoA, plot=False):
     
     np.set_printoptions(threshold=np.inf)
     
+    AoA = 0
     
     
     

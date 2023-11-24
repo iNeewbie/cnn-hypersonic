@@ -125,9 +125,9 @@ def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, lr 
 
 
     my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200)]
-    lambda_mse = 0#0.03
-    lambda_gs = 0.3#0.1
-    lambda_l2 = 0#1e-5
+    lambda_mse = 0.03#0.03
+    lambda_gs = 0.15#0.1
+    lambda_l2 = 1e-5#1e-5
     lambda_huber = 0.9#0.9
     autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gs, lambda_l2,lambda_huber),metrics = tf.keras.metrics.MeanAbsolutePercentageError())
 
