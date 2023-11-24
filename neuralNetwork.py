@@ -62,20 +62,27 @@ def L2regularization(theta, lambda_l2):
         l2_reg += tf.reduce_sum(tf.square(weight))
     return lambda_l2 * l2_reg / 2
 
+def huber_loss(y_true, y_pred, lambda_huber):
+    error = y_true - y_pred
+    is_small_error = tf.abs(error) <= 1
+    squared_loss = tf.square(error) / 2
+    linear_loss  = tf.abs(error) - 0.5
+    return tf.where(is_small_error, squared_loss*lambda_huber, linear_loss*lambda_huber)
+
 
 
 
 @register_keras_serializable(package="my_package", name="my_loss_fn")
-def total_loss(y_true, y_pred, model, lambda_mse, lambda_gs, lambda_l2):
-    return MSEshared(y_true, y_pred, lambda_mse)  + L2regularization(model.trainable_weights, lambda_l2)+ GSshared(y_true, y_pred, lambda_gs)
+def total_loss(y_true, y_pred, model, lambda_mse, lambda_gs, lambda_l2, lambda_huber):
+    return MSEshared(y_true, y_pred, lambda_mse)  + L2regularization(model.trainable_weights, lambda_l2)+ GSshared(y_true, y_pred, lambda_gs) + huber_loss(y_true, y_pred, lambda_huber)
 
 # Define a custom loss function that wraps the total_loss function
-def get_total_loss(model, lambda_mse, lambda_gs, lambda_l2):
+def get_total_loss(model, lambda_mse, lambda_gs, lambda_l2,lambda_huber):
     def loss_fn(y_true, y_pred):
-        return total_loss(y_true, y_pred, model, lambda_mse, lambda_gs, lambda_l2)
+        return total_loss(y_true, y_pred, model, lambda_mse, lambda_gs, lambda_l2,lambda_huber)
     return loss_fn
 
-def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, lr = 0.01, autoencoder = False):
+def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, lr = 0.01, autoencoder = False, filters = 300):
     get_custom_objects().clear()
         
 
@@ -85,11 +92,11 @@ def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, lr 
     if autoencoder == False:
         # Definindo o codificador
         input_img = Input(shape=(150, 150, 1))  # adaptar isso para o tamanho da sua imagem
-        x = Conv2D(150, (5, 5), activation=swish, padding='same')(input_img)
+        x = Conv2D(filters, (5, 5), activation=swish, padding='same')(input_img)
         x = MaxPooling2D((5, 5))(x)
-        x = Conv2D(150, (5, 5), activation=swish, padding='same')(x)
+        x = Conv2D(filters, (5, 5), activation=swish, padding='same')(x)
         x = MaxPooling2D((5, 5))(x)
-        x = Conv2D(150, (3, 3), activation=swish, padding='same')(x)
+        x = Conv2D(filters, (3, 3), activation=swish, padding='same')(x)
         x = MaxPooling2D((3, 3))(x)
         encoded = Flatten()(x)
         # Adicionando o ângulo de ataque e o número de Reynolds como entrada
@@ -97,13 +104,13 @@ def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, lr 
         input2Flat = Flatten()(input_conditions)
         merged = Concatenate()([input2Flat,encoded ])    
         # Definindo o decodificador
-        x = Dense(150*2*2, activation=swish)(merged)
-        x = Reshape((2,2,150))(x)
-        x = Conv2D(150, (3, 3), padding='same', activation=swish)(x)
+        x = Dense(filters*2*2, activation=swish)(merged)
+        x = Reshape((2,2,filters))(x)
+        x = Conv2D(filters, (3, 3), padding='same', activation=swish)(x)
         x = UpSampling2D((3, 3))(x)
-        x = Conv2D(150, (5, 5), padding='same', activation=swish)(x)
+        x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
         x = UpSampling2D((5, 5))(x)
-        x = Conv2D(150, (5, 5), padding='same', activation=swish)(x)
+        x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
         decoded = UpSampling2D((5, 5))(x)
         output = Conv2D(2, (1, 1), padding='same')(decoded)
         mask = tf.cast(tf.greater(input_img, 0), dtype='float32')
@@ -118,10 +125,11 @@ def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, lr 
 
 
     my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200)]
-    lambda_mse = 0.9
-    lambda_gs = 0.1
-    lambda_l2 = 1e-5
-    autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gs, lambda_l2))
+    lambda_mse = 0#0.03
+    lambda_gs = 0.3#0.1
+    lambda_l2 = 0#1e-5
+    lambda_huber = 0.9#0.9
+    autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gs, lambda_l2,lambda_huber),metrics = tf.keras.metrics.MeanAbsolutePercentageError())
 
     #autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gs, lambda_l2))
     
