@@ -82,7 +82,7 @@ def get_total_loss(model, lambda_mse, lambda_gs, lambda_l2,lambda_huber):
         return total_loss(y_true, y_pred, model, lambda_mse, lambda_gs, lambda_l2,lambda_huber)
     return loss_fn
 
-def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, lr = 0.01, autoencoder = False, filters = 300):
+def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, autoencoder = False, lambda_mse = 0.03, lambda_gs = 0.1, lambda_l2=1e-5, lambda_huber=0.9, lr=0.3, filters=300):
     get_custom_objects().clear()
         
 
@@ -91,13 +91,15 @@ def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, lr 
     
     if autoencoder == False:
         # Definindo o codificador
-        input_img = Input(shape=(150, 150, 1))  # adaptar isso para o tamanho da sua imagem
+        input_img = Input(shape=(300, 300, 1))  # adaptar isso para o tamanho da sua imagem
         x = Conv2D(filters, (5, 5), activation=swish, padding='same')(input_img)
         x = MaxPooling2D((5, 5))(x)
         x = Conv2D(filters, (5, 5), activation=swish, padding='same')(x)
         x = MaxPooling2D((5, 5))(x)
         x = Conv2D(filters, (3, 3), activation=swish, padding='same')(x)
         x = MaxPooling2D((3, 3))(x)
+        x = Conv2D(filters, (2, 2), activation=swish, padding='same')(x)
+        x = MaxPooling2D((2, 2))(x)
         encoded = Flatten()(x)
         # Adicionando o ângulo de ataque e o número de Reynolds como entrada
         input_conditions = Input(shape=(2,))  # adaptar isso para o tamanho do seu vetor de condições
@@ -106,6 +108,8 @@ def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, lr 
         # Definindo o decodificador
         x = Dense(filters*2*2, activation=swish)(merged)
         x = Reshape((2,2,filters))(x)
+        x = Conv2D(filters, (2, 2), padding='same', activation=swish)(x)
+        x = UpSampling2D((2,2))(x)
         x = Conv2D(filters, (3, 3), padding='same', activation=swish)(x)
         x = UpSampling2D((3, 3))(x)
         x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
@@ -121,18 +125,14 @@ def trainNeuralNetwork(x_train,conditions_train,y1,y2,epochs_N,batch_size_N, lr 
 
         # Definindo o modelo
         autoencoder = Model(inputs=[input_img, input_conditions ], outputs=[temperature,pressure])
-        autoencoder.summary()
+        #autoencoder.summary()
 
 
-    my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200)]
-    lambda_mse = 0.03#0.03
-    lambda_gs = 0.15#0.1
-    lambda_l2 = 1e-5#1e-5
-    lambda_huber = 0.9#0.9
+    my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200), tf.keras.callbacks.EarlyStopping(monitor='loss', patience=250,min_delta = 0.001), tf.keras.callbacks.TerminateOnNaN()]
     autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gs, lambda_l2,lambda_huber),metrics = tf.keras.metrics.MeanAbsolutePercentageError())
 
     #autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gs, lambda_l2))
     
-    history = autoencoder.fit([x_train,conditions_train], [y1,y2], epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks)
+    history = autoencoder.fit([x_train,conditions_train], [y1,y2], epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1)
     
     return history, autoencoder
