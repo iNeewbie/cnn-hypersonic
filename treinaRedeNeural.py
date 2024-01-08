@@ -28,16 +28,19 @@ class MaskingLayer(Layer):
 # Inicializar o DataFrame
 df = pd.DataFrame(columns=['Dia', 'Épocas', 'Loss', 'Tempo'])
 
-
+tempo_gerarDados = time.time()
 
 x1, x2, y1, _ = geraDadosTreino()
 
+fim_gerarDados = time.time()
+
+print(f"Passou {fim_gerarDados-tempo_gerarDados/60} minutos para gerar dados")
 x1_train, x1_test, y_train, y_test = train_test_split(x1, y1, test_size=0.15, shuffle=True, random_state=13)
 x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
 
 
-epochs_N = 2000
-batch_size_N = 32
+epochs_N = 100
+batch_size_N = 153
 
 
 
