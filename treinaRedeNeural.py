@@ -13,7 +13,7 @@ import time
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.layers import Layer
 import matplotlib.pyplot as plt
-
+import numpy as np
 
 class MaskingLayer(Layer):
     def __init__(self, **kwargs):
@@ -28,19 +28,29 @@ class MaskingLayer(Layer):
 # Inicializar o DataFrame
 df = pd.DataFrame(columns=['Dia', 'Épocas', 'Loss', 'Tempo'])
 
-tempo_gerarDados = time.time()
 
-x1, x2, y1, _ = geraDadosTreino()
-
-fim_gerarDados = time.time()
-
-print(f"Passou {fim_gerarDados-tempo_gerarDados/60} minutos para gerar dados")
-x1_train, x1_test, y_train, y_test = train_test_split(x1, y1, test_size=0.15, shuffle=True, random_state=13)
-x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
+try:
+    data = np.load('arquivo.npz')
+    x1_train = data['array1']
+    x2_train = data['array2']
+    x1_test = data['array3']
+    x2_test = data['array4']
+    y_train = data['array5']
+    y_test = data['array5']
+except:
+    tempo_gerarDados = time.time()
+    
+    x1, x2, y1, _ = geraDadosTreino()
+    
+    fim_gerarDados = time.time()
+    
+    print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
+    x1_train, x1_test, y_train, y_test = train_test_split(x1, y1, test_size=0.15, shuffle=True, random_state=13)
+    x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
 
 
 epochs_N = 100
-batch_size_N = 153
+batch_size_N = 154/2
 
 
 
