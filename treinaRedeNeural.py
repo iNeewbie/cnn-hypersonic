@@ -28,6 +28,7 @@ class MaskingLayer(Layer):
 # Inicializar o DataFrame
 df = pd.DataFrame(columns=['Dia', 'Épocas', 'Loss', 'Tempo'])
 
+plt.close('all')
 
 try:
     data = np.load('arquivo.npz')
@@ -39,18 +40,19 @@ try:
     y_test = data['array5']
 except:
     tempo_gerarDados = time.time()
-    
-    x1, x2, y1, _ = geraDadosTreino()
-    
+    x1, x2, y1, _ = geraDadosTreino()    
     fim_gerarDados = time.time()
     
     print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
     x1_train, x1_test, y_train, y_test = train_test_split(x1, y1, test_size=0.15, shuffle=True, random_state=13)
     x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
+    np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test, array5=y_train, array6=y_test)
+
+    
 
 
-epochs_N = 100
-batch_size_N = 154/2
+epochs_N = 10
+batch_size_N = 17
 
 
 
@@ -117,7 +119,7 @@ except:
 hist_df.to_csv('history.csv', index=False)
 
 
-plt.close('all')
+
 # Criar uma nova figura
 plt.figure()
 
