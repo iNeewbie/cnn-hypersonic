@@ -15,6 +15,20 @@ from keras.optimizers import SGD
 from tensorflow.keras import backend as K
 from keras.saving import register_keras_serializable, get_custom_objects
 from tensorflow.keras.layers import Layer
+from tensorflow.keras.losses import Loss
+
+class TotalLoss(Loss):
+    def __init__(self, model, lambda_mse, lambda_gs, lambda_l2, lambda_huber, **kwargs):
+        super().__init__(**kwargs)
+        self.model = model
+        self.lambda_mse = lambda_mse
+        self.lambda_gs = lambda_gs
+        self.lambda_l2 = lambda_l2
+        self.lambda_huber = lambda_huber
+
+    def call(self, y_true, y_pred):
+        return total_loss(y_true, y_pred, self.model, self.lambda_mse, self.lambda_gs, self.lambda_l2, self.lambda_huber)
+
 
 class MaskingLayer(Layer):
     def __init__(self, **kwargs):
@@ -76,19 +90,18 @@ def huber_loss(y_true, y_pred, lambda_huber):
 def total_loss(y_true, y_pred, model, lambda_mse, lambda_gs, lambda_l2, lambda_huber):
     return MSEshared(y_true, y_pred, lambda_mse)  + L2regularization(model.trainable_weights, lambda_l2)+ GSshared(y_true, y_pred, lambda_gs) + huber_loss(y_true, y_pred, lambda_huber)
 
-# Define a custom loss function that wraps the total_loss function
+@register_keras_serializable(package="my_package", name="my_loss_fn_wrapper")
 def get_total_loss(model, lambda_mse, lambda_gs, lambda_l2,lambda_huber):
     def loss_fn(y_true, y_pred):
         return total_loss(y_true, y_pred, model, lambda_mse, lambda_gs, lambda_l2,lambda_huber)
     return loss_fn
 
+# Registrar a função de perda personalizada
+get_custom_objects().update({'my_loss_fn_wrapper': get_total_loss})
+
+
 def trainNeuralNetwork(lambda_mse = 0.03, lambda_gs = 0.1, lambda_l2=1e-5, lambda_huber=0.9, lr=0.3, filters=300):
     get_custom_objects().clear()
-        
-
-    
-
-
     # Definindo o codificador
     input_img = Input(shape=(300, 300, 1))  # adaptar isso para o tamanho da sua imagem
     x = Conv2D(filters, (5, 5), activation=swish, padding='same')(input_img)
@@ -115,15 +128,12 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gs = 0.1, lambda_l2=1e-5, lambd
     x = UpSampling2D((5, 5))(x)
     x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
     decoded = UpSampling2D((5, 5))(x)
-    output = Conv2D(2, (1, 1), padding='same')(decoded)
+    output = Conv2D(1, (1, 1), padding='same')(decoded)
     mask = tf.cast(tf.greater(input_img, 0), dtype='float32')
     masked_output = MaskingLayer()([output, mask])
-    # Split the output tensor into three 150x150x1 tensors
-    temperature = Lambda(lambda x: x[:, :, :, 0:1])(masked_output)
-    pressure = Lambda(lambda x: x[:, :, :, 1:2])(masked_output)
 
     # Definindo o modelo
-    autoencoder = Model(inputs=[input_img, input_conditions ], outputs=[temperature,pressure])
+    autoencoder = Model(inputs=[input_img, input_conditions], outputs=[masked_output])
     #autoencoder.summary()
 
 
