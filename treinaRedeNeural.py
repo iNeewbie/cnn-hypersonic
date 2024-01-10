@@ -51,7 +51,7 @@ except:
 
 
 epochs_N = 800
-batch_size_N = 17
+batch_size_N = 153
 
 
 tensorboard_callback = TensorBoard(log_dir='logs')
