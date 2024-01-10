@@ -48,9 +48,18 @@ except:
 
     
 
+# Create datasets for training and testing
+train_dataset = tf.data.Dataset.from_tensor_slices((x1_train, x2_train, y_train))
+test_dataset = tf.data.Dataset.from_tensor_slices((x1_test, x2_test, y_test))
+
+# Apply preprocessing and optimization (adjust as needed)
+train_dataset = train_dataset.shuffle(buffer_size=1024)  # Shuffle for better generalization
+train_dataset = train_dataset.batch(batch_size=32)  # Adjust batch size as needed
+train_dataset = train_dataset.prefetch(tf.data.AUTOTUNE)  # Prefetch for smoother training
+
 
 epochs_N = 800
-batch_size_N = 17
+batch_size_N = 153
 
 
 
@@ -71,16 +80,17 @@ try:
     loss = get_total_loss(model, lambda_mse, lambda_gs, lambda_l2, lambda_huber)
 
     # Compilar o modelo com a função de perda personalizada
+    tf.config.optimizer.set_jit(True)
     model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=loss, metrics=tf.keras.metrics.MeanAbsolutePercentageError())
     
 except:
     print("NÃO carregou modelo")
     # Se o modelo ainda não existe, inicialize-o
-    model = trainNeuralNetwork(0, 0.6, 1e-6, 0.9, 0.1, 150)
+    model = trainNeuralNetwork(0, 0.6, 1e-6, 0.9, 0.1, 300)
 
 # Treinar o modelo
 start_time = time.time()
-history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1)
+history = model.fit(train_dataset, validation_data= test_dataset, epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1)
 end_time = time.time()
 
 elapsed_time = end_time-start_time
@@ -101,7 +111,7 @@ except:
 # Adicionar os dados ao DataFrame
 df = pd.concat([df, pd.DataFrame([{'Dia': last_day+1, 'Épocas': len(loss), 'Loss': loss, 'Val_loss':val_loss, 'Tempo': elapsed_time}])], ignore_index=True)
 # Salvar o modelo
-model.save('meu_modelo.keras')
+model.save('meu_modelo.keras',save_format='tf')
 
 # Salvar o DataFrame como um arquivo CSV
 df.to_csv('dados_treinamento.csv',index=False)
