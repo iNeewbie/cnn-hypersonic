@@ -35,7 +35,7 @@ try:
     x1_test = data['array3']
     x2_test = data['array4']
     y_train = data['array5']
-    y_test = data['array5']
+    y_test = data['array6']
 except:
     tempo_gerarDados = time.time()
     x1, x2, y1, _ = geraDadosTreino()    
