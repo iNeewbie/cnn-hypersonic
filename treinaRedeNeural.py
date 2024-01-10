@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.layers import Layer
 import matplotlib.pyplot as plt
 import numpy as np
+from keras.callbacks import TensorBoard
 
 class MaskingLayer(Layer):
     def __init__(self, **kwargs):
@@ -53,9 +54,10 @@ epochs_N = 800
 batch_size_N = 17
 
 
+tensorboard_callback = TensorBoard(log_dir='logs')
 
 #my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200), tf.keras.callbacks.EarlyStopping(monitor='loss', patience=100,min_delta = 0.001), tf.keras.callbacks.TerminateOnNaN()]
-my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=50,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN()]
+my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=50,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN(), tensorboard_callback]
 
 
 try:
