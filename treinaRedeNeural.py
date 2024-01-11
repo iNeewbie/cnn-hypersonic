@@ -15,6 +15,7 @@ from tensorflow.keras.layers import Layer
 import matplotlib.pyplot as plt
 import numpy as np
 from keras.callbacks import TensorBoard
+from keras.callbacks import ModelCheckpoint
 
 class MaskingLayer(Layer):
     def __init__(self, **kwargs):
@@ -55,9 +56,10 @@ batch_size_N = 17
 
 
 tensorboard_callback = TensorBoard(log_dir='logs')
+checkpoint = ModelCheckpoint('meu_modelo.keras', period=50)
 
 #my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200), tf.keras.callbacks.EarlyStopping(monitor='loss', patience=100,min_delta = 0.001), tf.keras.callbacks.TerminateOnNaN()]
-my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=50,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN(), tensorboard_callback]
+my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=50,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN(), tensorboard_callback, checkpoint]
 
 
 try:
