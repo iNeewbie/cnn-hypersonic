@@ -50,8 +50,8 @@ except:
     
 
 
-epochs_N = 800
-batch_size_N = 153
+epochs_N = 1000
+batch_size_N = 77
 
 
 tensorboard_callback = TensorBoard(log_dir='logs')
@@ -78,7 +78,7 @@ try:
 except:
     print("NÃO carregou modelo")
     # Se o modelo ainda não existe, inicialize-o
-    model = trainNeuralNetwork(0, 0.6, 1e-6, 0.9, 0.1, 150)
+    model = trainNeuralNetwork(0, 0.6, 1e-6, 0.9, 0.1, 300)
 
 # Treinar o modelo
 start_time = time.time()
@@ -120,7 +120,7 @@ except:
 hist_df.to_csv('history.csv', index=False)
 
 
-
+"""
 # Criar uma nova figura
 plt.figure()
 
@@ -173,3 +173,4 @@ axs[1].set_ylabel('Y')
 
 plt.tight_layout()
 plt.show()
+"""
