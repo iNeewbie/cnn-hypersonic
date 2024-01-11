@@ -100,7 +100,7 @@ try:
     last_day = df['Dia'].iloc[-1]
 except:
     # Se o arquivo CSV ainda não existe, inicialize o DataFrame e defina o último dia como 0
-    df = pd.DataFrame(columns=['Dia', 'Épocas', 'Loss', 'Val_loss' 'Tempo'])
+    df = pd.DataFrame(columns=['Dia', 'Épocas', 'Loss', 'Val_loss', 'Tempo'])
     last_day = 0
 
 
