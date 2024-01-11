@@ -85,6 +85,8 @@ start_time = time.time()
 history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
 end_time = time.time()
 
+model.save('meu_modelo.keras')
+
 elapsed_time = end_time-start_time
 
 # Obter o loss e o tempo
@@ -101,9 +103,9 @@ except:
 
 
 # Adicionar os dados ao DataFrame
-df = pd.concat([df, pd.DataFrame([{'Dia': last_day+1, 'Épocas': len(loss), 'Loss': loss, 'Val_loss':val_loss, 'Tempo': elapsed_time}])], ignore_index=True)
+df = pd.concat([df, pd.DataFrame([{'Dia': last_day+1, 'Épocas': len(history.history['loss']), 'Loss': loss, 'Val_loss':val_loss, 'Tempo': elapsed_time}])], ignore_index=True)
 # Salvar o modelo
-model.save('meu_modelo.keras')
+
 
 # Salvar o DataFrame como um arquivo CSV
 df.to_csv('dados_treinamento.csv',index=False)
