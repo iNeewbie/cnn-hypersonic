@@ -2,3 +2,4 @@
 *.trn
 desktop.ini
 *.npz
+__pycache__
