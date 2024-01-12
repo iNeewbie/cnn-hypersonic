@@ -87,6 +87,7 @@ start_time = time.time()
 history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
 end_time = time.time()
 
+weights = model.get_weights
 model.save('meu_modelo.keras')
 
 elapsed_time = end_time-start_time
@@ -145,36 +146,5 @@ plt.legend()
 # Mostrar o gráfico
 plt.show()
 
-temp = model.predict([np.array([x1_test[0]]),np.array([x2_test[0]])])
 
-# Calculate color map limits
-vmin_temp = min(temp[0,:,:,0].min(), y_test[0].min())
-vmax_temp = max(temp[0,:,:,0].max(), y_test[0].max())
-
-fig, axs = plt.subplots(2, 1, figsize=(10, 10))
-
-# Subfigure for predicted temperature
-data = temp
-mask = np.zeros_like(data[0,:,:,0], dtype=bool)
-mask[x1_test[0] < 0] = True
-masked_data = np.ma.masked_array(data[0,:,:,0], mask)
-c = axs[0].contourf(masked_data, cmap=plt.cm.jet, levels=200, vmin=vmin_temp, vmax=vmax_temp)
-fig.colorbar(c, ax=axs[0])
-axs[0].set_title('Temperatura Prevista')
-axs[0].set_xlabel('X')
-axs[0].set_ylabel('Y')
-
-# Subfigure for real temperature
-data = y_test
-mask = np.zeros_like(data[0,:,:], dtype=bool)
-mask[x1_test[0] < 0] = True
-masked_data = np.ma.masked_array(data[0,:,:], mask)
-c = axs[1].contourf(masked_data, cmap=plt.cm.jet, levels=200, vmin=vmin_temp, vmax=vmax_temp)
-fig.colorbar(c, ax=axs[1])
-axs[1].set_title('Temperatura Real')
-axs[1].set_xlabel('X')
-axs[1].set_ylabel('Y')
-
-plt.tight_layout()
-plt.show()
 """
