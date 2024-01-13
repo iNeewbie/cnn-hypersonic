@@ -38,7 +38,7 @@ def geraDadosTreino():
     index = 0
     index_mach = 0
     
-    
+    label = []
     sdfFile = []
     conditionsFile = []
     outputTemp = []
@@ -54,20 +54,20 @@ def geraDadosTreino():
                     sdfFile.append(sdf)
                     results = importResults(simFiles[index_mach])
                     dadosTemperatura,_,_ = interpSDFCart(sdf, X, Y, results)
-                
+                    
                     outputTemp.append(dadosTemperatura)
                     #outputPress.append(normalizaDadosFunc(grid_pressure))
-                
+                    label.append(f'Wedge: {WedgeAngles[wa_it]}, AoA: {AoAs[aoa_it]}, Mach: {MachNumbers[mn_it]}')
+
                     index_mach+=1
                 else:
                     print("Arquivo não existe")
         index += 1
         
-    outputTemp = normalizaDadosFunc(outputTemp)
-            
+    outputTemp, mean, std = normalizaDadosFunc(outputTemp) 
             
     conditionsFile = np.array(conditionsFile)    
     sdfFile = np.array(sdfFile) 
     outputTemp = np.array(outputTemp)
     outputPress = np.array(outputPress)
-    return sdfFile, conditionsFile, outputTemp, outputPress
+    return sdfFile, conditionsFile, outputTemp, outputPress, label, mean, std
