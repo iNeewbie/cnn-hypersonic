@@ -51,7 +51,7 @@ except:
     
 
 
-epochs_N = 500
+epochs_N = 2000
 batch_size_N = 77
 
 
