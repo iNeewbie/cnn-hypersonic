@@ -61,7 +61,7 @@ lr = 0.1
 filtros = 300
 
 tensorboard_callback = TensorBoard(log_dir='logs')
-checkpoint = ModelCheckpoint('meu_modelo.keras', period=100)
+checkpoint = ModelCheckpoint('meu_modelo.keras', save_freq=200)
 
 #my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200), tf.keras.callbacks.EarlyStopping(monitor='loss', patience=100,min_delta = 0.001), tf.keras.callbacks.TerminateOnNaN()]
 my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=200,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN(), tensorboard_callback, checkpoint]
