@@ -37,16 +37,25 @@ try:
     x2_test = data['array4']
     y_train = data['array5']
     y_test = data['array6']
+    label_train = data['array7']
+    label_test = data['array8']
+    media = data['array9'][0]
+    std_dev = data['array9'][1]
 except:
     tempo_gerarDados = time.time()
-    x1, x2, y1, _ = geraDadosTreino()    
+    x1, x2, y1, _, label, mean, std = geraDadosTreino()    
     fim_gerarDados = time.time()
     
     print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
     x1_train, x1_test = train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
     x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
     y_train, y_test = train_test_split(y1, test_size=0.15, shuffle=True, random_state=13)
-    np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test, array5=y_train, array6=y_test)
+    label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)
+    
+    media_std = np.array([mean,std])
+    
+    np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
+             array5=y_train, array6=y_test, array7=label_train, array8=label_test,array9=media_std)
 
     
 

@@ -21,4 +21,4 @@ def normalizaDadosFunc(dados,plot=False):
         plt.show()
 
         
-    return normalized_data
+    return normalized_data, mean, std_dev
