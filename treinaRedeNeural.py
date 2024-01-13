@@ -57,7 +57,7 @@ lambda_mse=0
 lambda_gs=0.6
 lambda_l2=1e-6
 lambda_huber=0.9
-lr = 0.1
+lr = 0.05
 filtros = 300
 
 tensorboard_callback = TensorBoard(log_dir='logs')
