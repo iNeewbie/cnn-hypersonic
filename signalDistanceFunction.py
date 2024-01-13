@@ -86,20 +86,22 @@ def getSDF(datFile, AoA, plot=False):
             
         # Plot the signed distance function
         plt.figure()
-        plt.contourf(X, Y, distance, levels=9)
-        plt.colorbar(label='Signed Distance')
-        plt.plot(x_coords_rotated, y_coords_rotated, 'k-', linewidth=0.5)
-        plt.axis('equal')
-        plt.xlim([-0.5,1.5])
-        plt.ylim([-0.5,0.5])
+        #plt.contourf(X, Y, distance, levels=5,cmap=plt.cm.jet)
+        #plt.colorbar(label='Distância')
+        plt.plot(x_coords_rotated, y_coords_rotated, 'r-', linewidth=1.5)
+        plt.plot(X,Y,'k.',markersize=2)
+        #plt.axis('equal')
+        #plt.xlim([-0.5,1.5])
+        #plt.ylim([-0.5,0.5])
+        plt.tight_layout()
         plt.show()
         
         
-        
-        plt.figure()
+
+        """plt.figure()
         plt.plot(points[:,0],points[:,1],'ko',markersize=1)
         plt.axis('equal')
         plt.xlim([-0.5,1.5])
         plt.ylim([-0.5,0.5])
-        plt.show()
+        plt.show()"""
     return distance, X, Y
