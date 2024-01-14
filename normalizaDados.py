@@ -2,12 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def normalizaDadosFunc(dados,plot=False):
-    # Calculate the mean and standard deviation of the data
-    mean = np.mean(dados)
-    std_dev = np.std(dados)
-    
-    # Normalize the data
-    normalized_data = (dados - mean) / std_dev
+
+    normalized_data = np.log(dados)
     
     if plot != False:
     
