@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 def normalizaDadosFunc(dados,plot=False):
 
     dados = np.array(dados)
-    dados = np.where(dados < 0, 0, dados)
+    dados = np.where(dados < 0, 1, dados)
     normalized_data = np.log(dados)
     
     if plot != False:
