@@ -64,10 +64,10 @@ def geraDadosTreino():
                     print("Arquivo não existe")
         index += 1
         
-    outputTemp, mean, std = normalizaDadosFunc(outputTemp) 
+    outputTemp = normalizaDadosFunc(outputTemp) 
             
     conditionsFile = np.array(conditionsFile)    
     sdfFile = np.array(sdfFile) 
     outputTemp = np.array(outputTemp)
     outputPress = np.array(outputPress)
-    return sdfFile, conditionsFile, outputTemp, outputPress, label, mean, std
+    return sdfFile, conditionsFile, outputTemp, outputPress, label
