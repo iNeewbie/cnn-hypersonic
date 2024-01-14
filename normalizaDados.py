@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 def normalizaDadosFunc(dados,plot=False):
 
+    dados = np.where(dados < 0, 0, dados)
     normalized_data = np.log(dados)
     
     if plot != False:
