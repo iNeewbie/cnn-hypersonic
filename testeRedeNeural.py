@@ -33,6 +33,7 @@ try:
     y_test = data['array6']
     label_train = data['array7']
     label_test = data['array8']
+
 except:
     tempo_gerarDados = time.time()
     x1, x2, y1, _, label, mean, std = geraDadosTreino()    
@@ -45,6 +46,7 @@ except:
     label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)  
     np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
              array5=y_train, array6=y_test, array7=label_train, array8=label_test)
+
 
     
 
