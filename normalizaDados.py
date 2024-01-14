@@ -6,8 +6,8 @@ def normalizaDadosFunc(dados,plot=False):
     dados = np.array(dados)
     dados = np.where(dados < 0, 1, dados)
     dados = np.where(dados == 0, 1, dados)
-    normalized_data = np.log(dados)
-    
+    normalized_data = np.log(dados, out=np.zeros_like(dados), where=(dados!=0))
+        
     if plot != False:
     
                 # Plot the grid_mach_number
