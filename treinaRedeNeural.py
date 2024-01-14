@@ -37,26 +37,35 @@ try:
     x2_test = data['array4']
     y_train = data['array5']
     y_test = data['array6']
+    label_train = data['array7']
+    label_test = data['array8']
 except:
     tempo_gerarDados = time.time()
-    x1, x2, y1, _ = geraDadosTreino()    
+    x1, x2, y1, _, label, mean, std = geraDadosTreino()    
     fim_gerarDados = time.time()
     
     print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
     x1_train, x1_test = train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
     x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
     y_train, y_test = train_test_split(y1, test_size=0.15, shuffle=True, random_state=13)
-    np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test, array5=y_train, array6=y_test)
+    label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)  
+    np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
+             array5=y_train, array6=y_test, array7=label_train, array8=label_test)
 
     
 
 
 epochs_N = 2000
 batch_size_N = 77
-
+lambda_mse=0
+lambda_gs=0.6
+lambda_l2=1e-6
+lambda_huber=0.9
+lr = 0.1
+filtros = 300
 
 tensorboard_callback = TensorBoard(log_dir='logs')
-checkpoint = ModelCheckpoint('meu_modelo.keras', period=100)
+checkpoint = ModelCheckpoint('meu_modelo.keras', save_freq=200)
 
 #my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200), tf.keras.callbacks.EarlyStopping(monitor='loss', patience=100,min_delta = 0.001), tf.keras.callbacks.TerminateOnNaN()]
 my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=200,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN(), tensorboard_callback, checkpoint]
@@ -67,20 +76,15 @@ try:
     model = load_model('meu_modelo.keras', custom_objects={'MaskingLayer': MaskingLayer, 'my_loss_fn_wrapper': get_total_loss})
     print("carregou modelo")
     # Criar uma instância da função de perda personalizada
-    lambda_mse=0
-    lambda_gs=0.6
-    lambda_l2=1e-6
-    lambda_huber=0.9
-    lr = 0.1
-    loss = get_total_loss(model, lambda_mse, lambda_gs, lambda_l2, lambda_huber)
 
+    loss = get_total_loss(model, lambda_mse, lambda_gs, lambda_l2, lambda_huber)
     # Compilar o modelo com a função de perda personalizada
     model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=loss, metrics=tf.keras.metrics.MeanAbsolutePercentageError())
     
 except:
     print("NÃO carregou modelo")
     # Se o modelo ainda não existe, inicialize-o
-    model = trainNeuralNetwork(0, 0.6, 1e-6, 0.9, 0.1, 300)
+    model = trainNeuralNetwork(lambda_mse, lambda_gs, lambda_l2, lambda_huber, lr, filtros)
 
 # Treinar o modelo
 start_time = time.time()
