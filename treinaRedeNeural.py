@@ -45,13 +45,13 @@ except:
     
 
 
-epochs_N = 2000
+epochs_N = 1000
 batch_size_N = 77
-lambda_mse=0
-lambda_gs=0.6
-lambda_l2=1e-6
-lambda_huber=0.9
-lr = 0.05
+lambda_mse=0.0
+lambda_gs=1.2
+lambda_l2=1e-07
+lambda_huber=0.021757
+lr = 0.1
 filtros = 300
 
 tensorboard_callback = TensorBoard(log_dir='logs')
