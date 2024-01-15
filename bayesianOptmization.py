@@ -79,8 +79,8 @@ opt_time_start = time.time()
 
 # Optimize
 optimizer.maximize(
-    init_points=3,
-    n_iter=2,
+    init_points=20,
+    n_iter=5,
 )
 
 opt_time_end = time.time()
@@ -93,7 +93,8 @@ print(f"Otimização demorou {(opt_time_end - opt_time_start)/60} minutos")
 df = pd.DataFrame(optimizer.res)
 
 # Append the maximum result to the DataFrame
-df = df.append({'params': optimizer.max['params'], 'target': optimizer.max['target']}, ignore_index=True)
+df_new_row = pd.DataFrame({'params': optimizer.max['params'], 'target': optimizer.max['target']}, index=[0])
+df = pd.concat([df, df_new_row])
 
 # Save the DataFrame to a CSV file
 df.to_csv('optimization_results.csv', index=False)
