@@ -31,7 +31,7 @@ def interpSDFCart(sdf, grid_x, grid_y,results, plot=False):
     
     if plot != False:
     
-                # Plot the grid_mach_number
+        """                # Plot the grid_mach_number
         plt.figure()
         c = plt.contourf(grid_x, grid_y, grid_mach_number, cmap=plt.cm.jet, levels=200)
         plt.colorbar(c)
@@ -47,7 +47,7 @@ def interpSDFCart(sdf, grid_x, grid_y,results, plot=False):
         plt.title('Pressure Distribution')
         plt.xlabel('X')
         plt.ylabel('Y')
-        plt.show()
+        plt.show()"""
         
         # Plot the grid_temperature
         plt.figure()
