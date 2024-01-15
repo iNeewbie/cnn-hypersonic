@@ -47,21 +47,21 @@ def geraDadosTreino():
         sdf,X,Y = getSDF(genDatFile(WedgeAngles[wa_it]), 0)
         for aoa_it in range(len(AoAs)):    
             for mn_it in range(len(MachNumbers)):       
-                if index_mach <6:
-                    if os.path.isfile(pasta2[index_mach]):
-                        simFiles.append(np.genfromtxt(pasta2[index_mach], delimiter=',', skip_header=1))
-                        conditionsFile.append([AoAs[aoa_it],MachNumbers[mn_it]])                    
-                        sdfFile.append(sdf)
-                        results = importResults(simFiles[index_mach])
-                        dadosTemperatura,_,_ = interpSDFCart(sdf, X, Y, results)
-                        
-                        outputTemp.append(dadosTemperatura)
-                        #outputPress.append(normalizaDadosFunc(grid_pressure))
-                        label.append(f'Wedge: {WedgeAngles[wa_it]}, AoA: {AoAs[aoa_it]}, Mach: {MachNumbers[mn_it]}')
-    
-                        index_mach+=1
-                    else:
-                        print("Arquivo não existe")
+                #if index_mach <6:
+                if os.path.isfile(pasta2[index_mach]):
+                    simFiles.append(np.genfromtxt(pasta2[index_mach], delimiter=',', skip_header=1))
+                    conditionsFile.append([AoAs[aoa_it],MachNumbers[mn_it]])                    
+                    sdfFile.append(sdf)
+                    results = importResults(simFiles[index_mach])
+                    dadosTemperatura,_,_ = interpSDFCart(sdf, X, Y, results)
+                    
+                    outputTemp.append(dadosTemperatura)
+                    #outputPress.append(normalizaDadosFunc(grid_pressure))
+                    label.append(f'Wedge: {WedgeAngles[wa_it]}, AoA: {AoAs[aoa_it]}, Mach: {MachNumbers[mn_it]}')
+
+                    index_mach+=1
+                else:
+                    print("Arquivo não existe")
         index += 1
         
     outputTemp = normalizaDadosFunc(outputTemp) 
