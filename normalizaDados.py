@@ -2,11 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def normalizaDadosFunc(dados,plot=False):
-
+    
     dados = np.array(dados)
-    dados = np.where(dados < 0, 1, dados)
-    dados = np.where(dados == 0, 1, dados)
-    normalized_data = np.log(dados, out=np.zeros_like(dados), where=(dados!=0))
+    dados[dados <= 216.65] = 216.65
+
+    normalized_data = np.log(dados)
         
     if plot != False:
     

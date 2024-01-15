@@ -67,7 +67,11 @@ def geraDadosTreino():
     outputTemp = normalizaDadosFunc(outputTemp) 
             
     conditionsFile = np.array(conditionsFile)    
-    sdfFile = np.array(sdfFile) 
-    outputTemp = np.array(outputTemp)
     outputPress = np.array(outputPress)
+    
+    
+    
+    sdfFile = np.array(sdfFile)
+    outputTemp = np.array(outputTemp)
+    
     return sdfFile, conditionsFile, outputTemp, outputPress, label

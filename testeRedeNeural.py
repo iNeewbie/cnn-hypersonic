@@ -36,7 +36,7 @@ try:
 
 except:
     tempo_gerarDados = time.time()
-    x1, x2, y1, _, label, mean, std = geraDadosTreino()    
+    x1, x2, y1, _, label = geraDadosTreino()    
     fim_gerarDados = time.time()
     
     print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
