@@ -19,7 +19,7 @@ def geraDadosTreino():
     AoAs = [-5, -3, 0, 5, 10, 15]
     
     def genDatFile(WA):
-        datFile = np.array([[0,0],[0.5,0.5*np.tan(WA/2*np.pi/180)],[1,0],[0.5,-0.5*np.tan(WA/2*np.pi/180)],[0,0]])
+        datFile = np.array([[0,0],[0.5,0.5*np.tan(WA*np.pi/180)],[1,0],[0.5,-0.5*np.tan(WA*np.pi/180)],[0,0]])
         return datFile
     
     
