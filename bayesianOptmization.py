@@ -43,11 +43,11 @@ model = trainNeuralNetwork(lambda_mse=0, lambda_gs=0, lambda_l2=0, lambda_huber=
 initial_weights = model.get_weights()
 
 def optimizeParameters(lambda_mse, lambda_gs, lambda_huber, lambda_l2):    
-    epochs_N = 2000
+    epochs_N = 1000
     lr = 0.1
     batch_size_N = 100
     
-    my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=200,min_delta = 0.005), tf.keras.callbacks.TerminateOnNaN()]
+    my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=200,min_delta = 0.0005), tf.keras.callbacks.TerminateOnNaN()]
 
     # Reset the weights of the model
     model.set_weights(initial_weights)
@@ -64,9 +64,9 @@ def optimizeParameters(lambda_mse, lambda_gs, lambda_huber, lambda_l2):
 
 # Define the bounds of the hyperparameters
 pbounds = {
-    'lambda_mse': (0,1),
-    'lambda_gs': (0.5, 1.5),
-    'lambda_huber': (0, 1),
+    'lambda_mse': (0,1.5),
+    'lambda_gs': (0, 1.5),
+    'lambda_huber': (0, 1.5),
     'lambda_l2': (1e-7, 1e-4)
 }
 
@@ -79,8 +79,8 @@ opt_time_start = time.time()
 
 # Optimize
 optimizer.maximize(
-    init_points=20,
-    n_iter=5,
+    init_points=50,
+    n_iter=10,
 )
 
 opt_time_end = time.time()
@@ -91,10 +91,6 @@ print(f"Otimização demorou {(opt_time_end - opt_time_start)/60} minutos")
 
 # Convert the optimization results to a DataFrame
 df = pd.DataFrame(optimizer.res)
-
-# Append the maximum result to the DataFrame
-df_new_row = pd.DataFrame({'params': optimizer.max['params'], 'target': optimizer.max['target']}, index=[0])
-df = pd.concat([df, df_new_row])
 
 # Save the DataFrame to a CSV file
 df.to_csv('optimization_results.csv', index=False)
