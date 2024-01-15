@@ -4,27 +4,17 @@ Created on Mon Jan  8 13:01:14 2024
 
 @author: Guilherme
 """
-from neuralNetwork import trainNeuralNetwork, get_total_loss
+from neuralNetwork import trainNeuralNetwork, get_total_loss, MaskingLayer
 from geraDadosTreino import geraDadosTreino
 import tensorflow as tf
 from keras.models import load_model
 import pandas as pd
 import time
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.layers import Layer
 import matplotlib.pyplot as plt
 import numpy as np
 from keras.callbacks import TensorBoard
 from keras.callbacks import ModelCheckpoint
-
-class MaskingLayer(Layer):
-    def __init__(self, **kwargs):
-        super(MaskingLayer, self).__init__(**kwargs)
-
-    def call(self, inputs):
-        y_pred, mask = inputs
-        inverse_mask = 1 - mask
-        return y_pred * mask + inverse_mask * 0
 
 
 plt.close('all')
