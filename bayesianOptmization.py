@@ -47,7 +47,7 @@ def optimizeParameters(lambda_mse, lambda_gs, lambda_huber, lambda_l2):
     lr = 0.01
     batch_size_N = 100
     
-    my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=100,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN()]
+    my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=100,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN()]
 
     # Reset the weights of the model
     model.set_weights(initial_weights)
@@ -55,9 +55,9 @@ def optimizeParameters(lambda_mse, lambda_gs, lambda_huber, lambda_l2):
     # Recompile the model with the new lambda values
     model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(model, lambda_mse, lambda_gs, lambda_l2,lambda_huber),metrics = tf.keras.metrics.MeanAbsolutePercentageError())
     
-    history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
+    history = model.fit([x1_train,x2_train], y_train, epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
     
-    loss = history.history['val_mean_absolute_percentage_error'][-1]
+    loss = history.history['mean_absolute_percentage_error'][-1]
     if np.isnan(loss) or np.isinf(loss):
         return -1e10
     return -loss
