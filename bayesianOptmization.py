@@ -43,11 +43,11 @@ model = trainNeuralNetwork(lambda_mse=0, lambda_gs=0, lambda_l2=0, lambda_huber=
 initial_weights = model.get_weights()
 
 def optimizeParameters(lambda_mse, lambda_gs, lambda_huber, lambda_l2):    
-    epochs_N = 1000
-    lr = 0.1
+    epochs_N = 10000
+    lr = 0.01
     batch_size_N = 100
     
-    my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=200,min_delta = 0.0005), tf.keras.callbacks.TerminateOnNaN()]
+    my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=100,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN()]
 
     # Reset the weights of the model
     model.set_weights(initial_weights)
@@ -57,17 +57,17 @@ def optimizeParameters(lambda_mse, lambda_gs, lambda_huber, lambda_l2):
     
     history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
     
-    loss = history.history['val_loss'][-1]
+    loss = history.history['val_mean_absolute_percentage_error'][-1]
     if np.isnan(loss) or np.isinf(loss):
         return -1e10
     return -loss
 
 # Define the bounds of the hyperparameters
 pbounds = {
-    'lambda_mse': (0,1.5),
-    'lambda_gs': (0, 1.5),
-    'lambda_huber': (0, 1.5),
-    'lambda_l2': (1e-7, 1e-4)
+    'lambda_mse': (0,0.5),
+    'lambda_gs': (0.8, 1.5),
+    'lambda_huber': (0.8, 1.5),
+    'lambda_l2': (1e-7, 1e-5)
 }
 
 optimizer = BayesianOptimization(
@@ -79,8 +79,8 @@ opt_time_start = time.time()
 
 # Optimize
 optimizer.maximize(
-    init_points=50,
-    n_iter=10,
+    init_points=70,
+    n_iter=30,
 )
 
 opt_time_end = time.time()
