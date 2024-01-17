@@ -28,14 +28,20 @@ except:
     tempo_gerarDados = time.time()
     x1, x2, y1, _, label = geraDadosTreino()    
     fim_gerarDados = time.time()
+
+    arr0  = np.array([0])
     
-    print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
-    x1_train, x1_test = train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
-    x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
-    y_train, y_test = train_test_split(y1, test_size=0.15, shuffle=True, random_state=13)
-    label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)  
-    np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
-             array5=y_train, array6=y_test, array7=label_train, array8=label_test)
+    if len(x1) == 1: 
+        np.savez('arquivo.npz', array1=x1, array2=x2, array3=arr0, array4=arr0,
+                 array5=y1, array6=arr0, array7=label, array8=arr0)
+    else:
+        print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
+        x1_train, x1_test = train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
+        x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
+        y_train, y_test = train_test_split(y1, test_size=0.15, shuffle=True, random_state=13)
+        label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13) 
+        np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
+                 array5=y_train, array6=y_test, array7=label_train, array8=label_test)
 
 
 # Initialize the model and weights outside the function
