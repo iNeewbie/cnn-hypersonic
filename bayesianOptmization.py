@@ -49,7 +49,7 @@ model = trainNeuralNetwork(lambda_mse=0, lambda_gs=0, lambda_l2=0, lambda_huber=
 initial_weights = model.get_weights()
 
 def optimizeParameters(lambda_mse, lambda_gs, lambda_huber, lambda_l2):    
-    epochs_N = 10000
+    epochs_N = 2000
     lr = 0.01
     batch_size_N = 100
     
@@ -85,8 +85,8 @@ opt_time_start = time.time()
 
 # Optimize
 optimizer.maximize(
-    init_points=70,
-    n_iter=30,
+    init_points=31,
+    n_iter=31,
 )
 
 opt_time_end = time.time()
