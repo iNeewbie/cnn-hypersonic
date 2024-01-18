@@ -76,13 +76,13 @@ def L2regularization(theta, lambda_l2):
         l2_reg += tf.reduce_sum(tf.square(weight))
     return lambda_l2 * l2_reg / 2
 
-def huber_loss(y_true, y_pred):
+def huber_loss(y_true, y_pred,lambda_huber):
     delta = 3
     error = y_true - y_pred
     is_small_error = tf.abs(error) <= delta
     squared_loss = tf.square(error) / 2
     linear_loss  = delta * (tf.abs(error) - 0.5 * delta)
-    return tf.where(is_small_error, squared_loss, linear_loss)
+    return tf.where(is_small_error, squared_loss*lambda_huber, linear_loss*lambda_huber)
 
 
 
