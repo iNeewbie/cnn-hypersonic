@@ -47,11 +47,11 @@ except:
 
 epochs_N = 2000
 batch_size_N = 77
-lambda_mse=0.9
-lambda_gs=0.1
-lambda_l2=5.35e-05
-lambda_huber=0
-lr = 0.01
+lambda_mse=0.0
+lambda_gs=0.6
+lambda_l2=1e-6
+lambda_huber=0.9
+lr = 0.1
 filtros = 150
 
 tensorboard_callback = TensorBoard(log_dir='logs')
