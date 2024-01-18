@@ -48,22 +48,20 @@ def mse_loss(y_true, y_pred, lambda_mse):
     
     return loss
 
-def gdl_loss(y_true, y_pred,lambda_gdl):
-    # Define alpha
-    alpha = 1
+def gdl_loss(y_true, y_pred):
     mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
     y_true = y_true*mask
     y_pred = y_pred*mask
-    # Calculate the gradient difference for the x and y directions
-    grad_diff_x = tf.abs(tf.subtract(y_true[:, :, :-1, :] - y_true[:, :, 1:, :], y_pred[:, :, :-1, :] - y_pred[:, :, 1:, :]))
-    grad_diff_y = tf.abs(tf.subtract(y_true[:, :-1, :, :] - y_true[:, 1:, :, :], y_pred[:, :-1, :, :] - y_pred[:, 1:, :, :]))
+    
+    alpha = 1
+    grad_diff_x = tf.abs(tf.subtract(y_true[:, :, :-1] - y_true[:, :, 1:], y_pred[:, :, :-1] - y_pred[:, :, 1:]))
+    grad_diff_y = tf.abs(tf.subtract(y_true[:, :-1, :] - y_true[:, 1:, :], y_pred[:, :-1, :] - y_pred[:, 1:, :]))
 
-    # Calculate the loss for the x and y directions
     loss_x = tf.reduce_sum(grad_diff_x ** alpha)
     loss_y = tf.reduce_sum(grad_diff_y ** alpha)
 
-    # Return the total loss
-    return (loss_x + loss_y)*lambda_gdl
+    return loss_x + loss_y
+
 
 
 def L2regularization(theta, lambda_l2):
