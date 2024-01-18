@@ -48,11 +48,10 @@ except:
 model = trainNeuralNetwork(lambda_mse=0, lambda_gs=0, lambda_l2=0, lambda_huber=0, lr=0.1, filters=150)
 initial_weights = model.get_weights()
 
-global_counter = 0
 
 def optimizeParameters(lambda_gs, lambda_huber):    
     
-    epochs_N = 15
+    epochs_N = 2000
     lr = 0.01
     lambda_mse = 0
     lambda_l2 = 5.35e-5
@@ -68,10 +67,7 @@ def optimizeParameters(lambda_gs, lambda_huber):
     
     history = model.fit([x1_train,x2_train], y_train, epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
     
-    global global_counter
-    model.save(f'otm_{global_counter}_model.keras')
-    global_counter += 1
-    
+      
     
     loss = np.mean(history.history['mean_absolute_percentage_error'][-10:])
     if np.isnan(loss) or np.isinf(loss):
@@ -93,8 +89,8 @@ opt_time_start = time.time()
 
 # Optimize
 optimizer.maximize(
-    init_points=2,
-    n_iter=1,
+    init_points=25,
+    n_iter=125,
 )
 
 opt_time_end = time.time()
