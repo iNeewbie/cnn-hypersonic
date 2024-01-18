@@ -45,20 +45,20 @@ except:
     
 
 
-epochs_N = 1000
+epochs_N = 2000
 batch_size_N = 77
 lambda_mse=0.0
-lambda_gs=1.2
-lambda_l2=1e-07
-lambda_huber=0.021757
-lr = 0.1
+lambda_gs=0.965
+lambda_l2=5.35e-05
+lambda_huber=1.45
+lr = 0.01
 filtros = 300
 
 tensorboard_callback = TensorBoard(log_dir='logs')
 checkpoint = ModelCheckpoint('meu_modelo.keras', save_freq=200)
 
 #my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200), tf.keras.callbacks.EarlyStopping(monitor='loss', patience=100,min_delta = 0.001), tf.keras.callbacks.TerminateOnNaN()]
-my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=200,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN(), tensorboard_callback, checkpoint]
+my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=200,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN(), tensorboard_callback, checkpoint]
 
 
 try:
@@ -78,7 +78,8 @@ except:
 
 # Treinar o modelo
 start_time = time.time()
-history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
+#history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
+history = model.fit([x1_train,x2_train],y_train,epochs=epochs_N, batch_size = batch_size_N, callbacks=my_callbacks, verbose=1, use_multiprocessing=True)
 end_time = time.time()
 
 weights = model.get_weights
@@ -87,25 +88,25 @@ model.save('meu_modelo.keras')
 elapsed_time = end_time-start_time
 
 # Obter o loss e o tempo
-loss = history.history['loss'][-1]  # Substitua se você tiver uma maneira diferente de calcular o loss
-val_loss = history.history['val_loss'][-1]
+#loss = history.history['loss'][-1]  # Substitua se você tiver uma maneira diferente de calcular o loss
+#val_loss = history.history['val_loss'][-1]
 # Tente ler o arquivo CSV
-try:
-    df = pd.read_csv('dados_treinamento.csv')
-    last_day = df['Dia'].iloc[-1]
-except:
+#try:
+   #df = pd.read_csv('dados_treinamento.csv')
+   # last_day = df['Dia'].iloc[-1]
+#except:
     # Se o arquivo CSV ainda não existe, inicialize o DataFrame e defina o último dia como 0
-    df = pd.DataFrame(columns=['Dia', 'Épocas', 'Loss', 'Val_loss', 'Tempo'])
-    last_day = 0
+    #df = pd.DataFrame(columns=['Dia', 'Épocas', 'Loss', 'Val_loss', 'Tempo'])
+    #last_day = 0
 
 
 # Adicionar os dados ao DataFrame
-df = pd.concat([df, pd.DataFrame([{'Dia': last_day+1, 'Épocas': len(history.history['loss']), 'Loss': loss, 'Val_loss':val_loss, 'Tempo': elapsed_time}])], ignore_index=True)
+#df = pd.concat([df, pd.DataFrame([{'Dia': last_day+1, 'Épocas': len(history.history['loss']), 'Loss': loss, 'Val_loss':val_loss, 'Tempo': elapsed_time}])], ignore_index=True)
 # Salvar o modelo
 
 
 # Salvar o DataFrame como um arquivo CSV
-df.to_csv('dados_treinamento.csv',index=False)
+#df.to_csv('dados_treinamento.csv',index=False)
 
 
 new_hist_df = pd.DataFrame(history.history)
