@@ -18,16 +18,16 @@ from tensorflow.keras.layers import Layer
 from tensorflow.keras.losses import Loss
 
 class TotalLoss(Loss):
-    def __init__(self, model, lambda_mse, lambda_gs, lambda_l2, lambda_huber, **kwargs):
+    def __init__(self, model, lambda_mse, lambda_gdl, lambda_l2, lambda_huber, **kwargs):
         super().__init__(**kwargs)
         self.model = model
         self.lambda_mse = lambda_mse
-        self.lambda_gs = lambda_gs
+        self.lambda_gdl = lambda_gdl
         self.lambda_l2 = lambda_l2
         self.lambda_huber = lambda_huber
 
     def call(self, y_true, y_pred):
-        return total_loss(y_true, y_pred, self.model, self.lambda_mse, self.lambda_gs, self.lambda_l2, self.lambda_huber)
+        return total_loss(y_true, y_pred, self.model, self.lambda_mse, self.lambda_gdl, self.lambda_l2, self.lambda_huber)
 
 
 class MaskingLayer(Layer):
@@ -39,35 +39,31 @@ class MaskingLayer(Layer):
         inverse_mask = 1 - mask
         return y_pred * mask + inverse_mask * 0
     
-def MSEshared(y_true, y_pred, lambda_mse):
+def mse_loss(y_true, y_pred, lambda_mse):
     mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
-    m = tf.shape(y_true)[0]
-    nx = tf.shape(y_true)[1]
-    ny = tf.shape(y_true)[2]
-    U_true, V_true = tf.split(y_true * mask, 2, axis=-1)
-    U_pred, V_pred = tf.split(y_pred * mask, 2, axis=-1)
-    U_diff = K.square(U_true - U_pred)
-    V_diff = K.square(V_true - V_pred)
-    sum_diff = K.sum(U_diff[:, 1:-1, 1:-1] + V_diff[:, 1:-1, 1:-1])
-    loss = lambda_mse * sum_diff / tf.cast(m * (nx - 2) * (ny - 2), tf.float32)
+    y_true = y_true*mask
+    y_pred = y_pred*mask
+    
+    loss = (y_pred-y_true)**2 * lambda_mse
+    
     return loss
 
-def GSshared(y_true, y_pred, lambda_gs):
+def gdl_loss(y_true, y_pred,lambda_gdl):
+    # Define alpha
+    alpha = 1
     mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
-    m = tf.shape(y_true)[0]
-    nx = tf.shape(y_true)[1]
-    ny = tf.shape(y_true)[2]
-    U_true, V_true = tf.split(y_true * mask, 2, axis=-1)
-    U_pred, V_pred = tf.split(y_pred * mask, 2, axis=-1)
-    dUdx_true = U_true[:, 2:, :] - U_true[:, :-2, :]
-    dUdx_pred = U_pred[:, 2:, :] - U_pred[:, :-2, :]
-    dVdx_true = V_true[:, 2:, :] - V_true[:, :-2, :]
-    dVdx_pred = V_pred[:, 2:, :] - V_pred[:, :-2, :]
-    dU_diff = K.square(dUdx_true - dUdx_pred)
-    dV_diff = K.square(dVdx_true - dVdx_pred)
-    sum_diff = K.sum(dU_diff[:, 1:-1, 1:-1] + dV_diff[:, 1:-1, 1:-1])
-    loss = lambda_gs * sum_diff / tf.cast(6 * m * (nx - 2) * (ny - 2), tf.float32)
-    return loss
+    y_true = y_true*mask
+    y_pred = y_pred*mask
+    # Calculate the gradient difference for the x and y directions
+    grad_diff_x = tf.abs(tf.subtract(y_true[:, :, :-1, :] - y_true[:, :, 1:, :], y_pred[:, :, :-1, :] - y_pred[:, :, 1:, :]))
+    grad_diff_y = tf.abs(tf.subtract(y_true[:, :-1, :, :] - y_true[:, 1:, :, :], y_pred[:, :-1, :, :] - y_pred[:, 1:, :, :]))
+
+    # Calculate the loss for the x and y directions
+    loss_x = tf.reduce_sum(grad_diff_x ** alpha)
+    loss_y = tf.reduce_sum(grad_diff_y ** alpha)
+
+    # Return the total loss
+    return (loss_x + loss_y)*lambda_gdl
 
 
 def L2regularization(theta, lambda_l2):
@@ -88,20 +84,20 @@ def huber_loss(y_true, y_pred,lambda_huber):
 
 
 @register_keras_serializable(package="my_package", name="my_loss_fn")
-def total_loss(y_true, y_pred, model, lambda_mse, lambda_gs, lambda_l2, lambda_huber):
-    return MSEshared(y_true, y_pred, lambda_mse)  + L2regularization(model.trainable_weights, lambda_l2)+ GSshared(y_true, y_pred, lambda_gs) + huber_loss(y_true, y_pred, lambda_huber)
+def total_loss(y_true, y_pred, model, lambda_mse, lambda_gdl, lambda_l2, lambda_huber):
+    return mse_loss(y_true, y_pred, lambda_mse)  + L2regularization(model.trainable_weights, lambda_l2)+ gdl_loss(y_true, y_pred, lambda_gdl) + huber_loss(y_true, y_pred, lambda_huber)
 
 @register_keras_serializable(package="my_package", name="my_loss_fn_wrapper")
-def get_total_loss(model, lambda_mse, lambda_gs, lambda_l2,lambda_huber):
+def get_total_loss(model, lambda_mse, lambda_gdl, lambda_l2,lambda_huber):
     def loss_fn(y_true, y_pred):
-        return total_loss(y_true, y_pred, model, lambda_mse, lambda_gs, lambda_l2,lambda_huber)
+        return total_loss(y_true, y_pred, model, lambda_mse, lambda_gdl, lambda_l2,lambda_huber)
     return loss_fn
 
 # Registrar a função de perda personalizada
 get_custom_objects().update({'my_loss_fn_wrapper': get_total_loss})
 
 
-def trainNeuralNetwork(lambda_mse = 0.03, lambda_gs = 0.1, lambda_l2=1e-5, lambda_huber=0.9, lr=0.3, filters=300):
+def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lambda_huber=0.9, lr=0.3, filters=300):
     get_custom_objects().clear()
     # Definindo o codificador
     input_img = Input(shape=(300, 300, 1))  # adaptar isso para o tamanho da sua imagem
@@ -138,8 +134,8 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gs = 0.1, lambda_l2=1e-5, lambd
     #autoencoder.summary()
 
 
-    autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gs, lambda_l2,lambda_huber),metrics = tf.keras.metrics.MeanAbsolutePercentageError())
+    autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gdl, lambda_l2,lambda_huber),metrics = tf.keras.metrics.MeanAbsolutePercentageError())
 
-    #autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gs, lambda_l2))
+    #autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gdl, lambda_l2))
     
     return autoencoder
