@@ -48,7 +48,7 @@ def mse_loss(y_true, y_pred, lambda_mse):
     
     return loss
 
-def gdl_loss(y_true, y_pred):
+def gdl_loss(y_true, y_pred,lambda_gdl):
     mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
     y_true = y_true*mask
     y_pred = y_pred*mask
@@ -60,7 +60,7 @@ def gdl_loss(y_true, y_pred):
     loss_x = tf.reduce_sum(grad_diff_x ** alpha)
     loss_y = tf.reduce_sum(grad_diff_y ** alpha)
 
-    return loss_x + loss_y
+    return (loss_x + loss_y)*lambda_gdl
 
 
 
