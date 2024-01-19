@@ -45,14 +45,14 @@ except:
     
 
 
-epochs_N = 5000
+epochs_N = 75000
 batch_size_N = 77
-lambda_mse=0.9
-lambda_gs=0.1
-lambda_l2=0#1e6
+lambda_mse=1
+lambda_gs=0#0.1
+lambda_l2=0#1e-7
 lambda_huber=0.0
-lr = 0.001
-filtros = 100
+lr = 0.01
+filtros = 150
 
 tensorboard_callback = TensorBoard(log_dir='logs')
 checkpoint = ModelCheckpoint('meu_modelo.keras', save_freq=200)
