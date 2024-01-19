@@ -21,8 +21,6 @@ import numpy as np
 
 
 
-plt.close('all')
-
 try:
     data = np.load('arquivo.npz')
     x1_train = data['array1']
@@ -56,47 +54,67 @@ model = load_model('meu_modelo.keras', custom_objects={'MaskingLayer': MaskingLa
 print("carregou modelo")
 # Criar uma instância da função de perda personalizada
 lambda_mse=0
-lambda_gs=0.6
-lambda_l2=1e-6
-lambda_huber=0.9
-lr = 0.1
+lambda_gs=0#0.6
+lambda_l2=0#1e-6
+lambda_huber=0#0.9
+lr = 0.01
 loss = get_total_loss(model, lambda_mse, lambda_gs, lambda_l2, lambda_huber)
 
 # Compilar o modelo com a função de perda personalizada
 model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=loss, metrics=tf.keras.metrics.MeanAbsolutePercentageError())
 
 
-temp = model.predict([np.array([x1_test[0]]),np.array([x2_test[0]])])
+temp = model.predict([x1_train,x2_train])
 
-# Calculate color map limits
-vmin_temp = min(temp[0,:,:,0].min(), y_test[0].min())
-vmax_temp = max(temp[0,:,:,0].max(), y_test[0].max())
+mask = np.zeros_like(temp, dtype=bool)
+mask[temp <= 0] = True
+tempMasked = (np.ma.masked_array(temp, mask))
+y_testMasked = (np.ma.masked_array(y_train, mask))
 
-fig, axs = plt.subplots(2, 1, figsize=(10, 10))
+model.evaluate([x1_train,x2_train], y_train)
 
-# Subfigure for predicted temperature
-data = temp
-mask = np.zeros_like(data[0,:,:,0], dtype=bool)
-mask[x1_test[0] < 0] = True
-masked_data = np.ma.masked_array(data[0,:,:,0], mask)
-c = axs[0].contourf(masked_data, cmap=plt.cm.jet, levels=200, vmin=vmin_temp, vmax=vmax_temp)
-fig.colorbar(c, ax=axs[0])
-axs[0].set_title('Temperatura Prevista')
-axs[0].set_xlabel('X')
-axs[0].set_ylabel('Y')
+for i in range(len(temp)):
+  # Create a new figure
 
-# Subfigure for real temperature
-data = y_test
-mask = np.zeros_like(data[0,:,:], dtype=bool)
-mask[x1_test[0] < 0] = True
-masked_data = np.ma.masked_array(data[0,:,:], mask)
-c = axs[1].contourf(masked_data, cmap=plt.cm.jet, levels=200, vmin=vmin_temp, vmax=vmax_temp)
-fig.colorbar(c, ax=axs[1])
-axs[1].set_title('Temperatura Real')
-axs[1].set_xlabel('X')
-axs[1].set_ylabel('Y')
 
-plt.tight_layout()
-plt.show()
+
+
+  # Aplicação da máscara ao array de temperatura
+
+
+  vmin_temp = (min(temp[i,:,:,0].min(), y_train[i].min()))
+  vmax_temp = (max(temp[i,:,:,0].max(), y_train[i].max()))
+  plt.figure(figsize=(10, 5))
+
+
+
+  # Subfigure for temp[i]
+  plt.subplot(2, 2, 1)
+  #plt.contour(temp_denormalizada[i,:,:,0],levels=11,colors='black')
+  plt.contourf((tempMasked[i,:,:,0]),levels=200, cmap='jet')
+  plt.colorbar()
+  plt.title('Temp[i]')
+
+  # Subfigure for y_test[i]
+  plt.subplot(2, 2, 2)
+  #plt.contour(y_denormalizado[i],levels=11,colors='black')
+  plt.contourf((y_testMasked[i]),levels=200, cmap='jet')
+  plt.colorbar()
+  plt.title('y_test[i]')
+
+  # Calculate the difference
+  diff =(y_testMasked[i]) - (tempMasked[i,:,:,0])
+
+
+  # Subfigure for the difference
+  plt.subplot(2, 2, 3)
+  plt.contourf(diff, levels=200, cmap='jet')
+  plt.colorbar()
+  plt.title('y_test[i] - Temp[i]')
+
+  # Show the figure
+  plt.tight_layout()
+  plt.show()
+
 
 
