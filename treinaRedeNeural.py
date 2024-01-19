@@ -47,7 +47,7 @@ except:
 
 epochs_N = 2000
 batch_size_N = 77
-lambda_mse=1
+lambda_mse=1.5
 lambda_gs=0.3
 lambda_l2=1e-6
 lambda_huber=0.0
