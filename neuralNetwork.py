@@ -49,15 +49,18 @@ def mse_loss(y_true, y_pred, lambda_mse):
     return loss
 
 def gdl_loss(y_true, y_pred,lambda_gdl):
-    mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
-    y_true = y_true*mask
-    y_pred = y_pred*mask
-    
-    alpha = 1
-    
-    grad_diff_x = tf.abs(tf.abs(y_true[:, 1:, :] - y_true[:, :-1, :]) - tf.abs(y_pred[:, 1:, :] - y_pred[:, :-1, :])) ** alpha
-    grad_diff_y = tf.abs(tf.abs(y_true[:, :, 1:] - y_true[:, :, :-1]) - tf.abs(y_pred[:, :, 1:] - y_pred[:, :, :-1])) ** alpha
-    return (tf.reduce_sum(grad_diff_x) + tf.reduce_sum(grad_diff_y))*lambda_gdl
+    # Calculate the difference in the x direction
+    diff_x_true = tf.abs(y_true[:, 1:, :] - y_true[:, :-1, :])
+    diff_x_pred = tf.abs(y_pred[:, 1:, :] - y_pred[:, :-1, :])
+    loss_x = tf.reduce_sum(tf.abs(diff_x_true - diff_x_pred))
+
+    # Calculate the difference in the y direction
+    diff_y_true = tf.abs(y_true[:, :, 1:] - y_true[:, :, :-1])
+    diff_y_pred = tf.abs(y_pred[:, :, 1:] - y_pred[:, :, :-1])
+    loss_y = tf.reduce_sum(tf.abs(diff_y_true - diff_y_pred))
+
+    # Sum the losses in both directions
+    return (loss_x + loss_y) * lambda_gdl
 
 
 
