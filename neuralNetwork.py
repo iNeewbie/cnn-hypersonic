@@ -48,40 +48,19 @@ def mse_loss(y_true, y_pred, lambda_mse):
     
     return loss
 
-def gdl_loss(y_true, y_pred, lambda_gdl):
-    # Calculate the mean of the nearest neighbors for the corner elements
-    bottom_left_corner_mean = (y_true[:, -1, 0] + y_true[:, -2, 0] + y_true[:, -2, 1]) / 3
-    top_right_corner_mean = (y_true[:, 0, -1] + y_true[:, 0, -2] + y_true[:, 1, -2]) / 3
-
-    # Pad the tensors along the second and third dimensions
-    y_true_padded = tf.pad(y_true, [[0, 0], [0, 1], [0, 1]])
-    y_pred_padded = tf.pad(y_pred, [[0, 0], [0, 1], [0, 1]])
-
-    # Create new tensors with the updated corner elements
-    y_true_padded = tf.tensor_scatter_nd_update(
-        y_true_padded,
-        indices=[[0, -1, 0], [0, 0, -1]],
-        updates=[bottom_left_corner_mean, top_right_corner_mean]
-    )
-    y_pred_padded = tf.tensor_scatter_nd_update(
-        y_pred_padded,
-        indices=[[0, -1, 0], [0, 0, -1]],
-        updates=[bottom_left_corner_mean, top_right_corner_mean]
-    )
-
+def gdl_loss(y_true, y_pred,lambda_gdl):
     # Calculate the difference in the x direction
-    diff_x_true = tf.abs(y_true_padded[:, :, 1:] - y_true_padded[:, :, :-1])
-    diff_x_pred = tf.abs(y_pred_padded[:, :, 1:] - y_pred_padded[:, :, :-1])    
-    loss_x = tf.reduce_sum(tf.abs(diff_x_true - diff_x_pred), axis=[0, 2])
+    diff_x_true = tf.abs(y_true[:, :, 1:] - y_true[:, :, :-1])
+    diff_x_pred = tf.abs(y_pred[:, :, 1:] - y_pred[:, :, :-1])    
+    loss_x = tf.reduce_sum(tf.abs(diff_x_true - diff_x_pred),axis=[0,2])
 
     # Calculate the difference in the y direction
-    diff_y_true = tf.abs(y_true_padded[:, 1:, :] - y_true_padded[:, :-1, :])
-    diff_y_pred = tf.abs(y_pred_padded[:, 1:, :] - y_pred_padded[:, :-1, :])
-    loss_y = tf.reduce_sum(tf.abs(diff_y_true - diff_y_pred), axis=[0, 1])
+    diff_y_true = tf.abs(y_true[:, 1:, :] - y_true[:, :-1, :])
+    diff_y_pred = tf.abs(y_pred[:, 1:, :] - y_pred[:, :-1, :])
+    loss_y = tf.reduce_sum(tf.abs(diff_y_true - diff_y_pred),axis=[0,1])
     
     # Sum the losses in both directions
     return (loss_x + loss_y) * lambda_gdl
-
 
 
 
