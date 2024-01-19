@@ -55,13 +55,9 @@ def gdl_loss(y_true, y_pred,lambda_gdl):
     
     alpha = 1
     
-    grad_diff_x = tf.abs(tf.abs(tf.subtract(y_true[:, 1:, :], y_true[:, :-1, :])) - tf.abs(tf.subtract(y_pred[:, 1:, :], y_pred[:, :-1, :])))**alpha
-    grad_diff_y = tf.abs(tf.abs(tf.subtract(y_true[:, :, 1:], y_true[:, :, :-1])) - tf.abs(tf.subtract(y_pred[:, :, 1:], y_pred[:, :, :-1])))**alpha
-    
-    loss_x = tf.reduce_sum(grad_diff_x)
-    loss_y = tf.reduce_sum(grad_diff_y)
-
-    return (loss_x + loss_y)*lambda_gdl
+    grad_diff_x = tf.abs(tf.abs(y_true[:, 1:, :] - y_true[:, :-1, :]) - tf.abs(y_pred[:, 1:, :] - y_pred[:, :-1, :])) ** alpha
+    grad_diff_y = tf.abs(tf.abs(y_true[:, :, 1:] - y_true[:, :, :-1]) - tf.abs(y_pred[:, :, 1:] - y_pred[:, :, :-1])) ** alpha
+    return (tf.reduce_sum(grad_diff_x) + tf.reduce_sum(grad_diff_y))*lambda_gdl
 
 
 
