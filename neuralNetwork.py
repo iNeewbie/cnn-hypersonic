@@ -50,15 +50,16 @@ def mse_loss(y_true, y_pred, lambda_mse):
 
 def gdl_loss(y_true, y_pred,lambda_gdl):
     # Calculate the difference in the x direction
-    diff_x_true = tf.abs(y_true[:, 1:, :] - y_true[:, :-1, :])
-    diff_x_pred = tf.abs(y_pred[:, 1:, :] - y_pred[:, :-1, :])
-    loss_x = tf.reduce_sum(tf.abs(diff_x_true - diff_x_pred))
+    diff_x_true = tf.abs(y_true[:, :, 1:] - y_true[:, :, :-1])
+    diff_x_pred = tf.abs(y_pred[:, :, 1:] - y_pred[:, :, :-1])    
+    loss_x = tf.reduce_sum(tf.abs(diff_x_true - diff_x_pred),axis=1)
 
     # Calculate the difference in the y direction
-    diff_y_true = tf.abs(y_true[:, :, 1:] - y_true[:, :, :-1])
-    diff_y_pred = tf.abs(y_pred[:, :, 1:] - y_pred[:, :, :-1])
-    loss_y = tf.reduce_sum(tf.abs(diff_y_true - diff_y_pred))
-
+    diff_y_true = tf.abs(y_true[:, 1:, :] - y_true[:, :-1, :])
+    diff_y_pred = tf.abs(y_pred[:, 1:, :] - y_pred[:, :-1, :])
+    loss_y = tf.reduce_sum(tf.abs(diff_y_true - diff_y_pred),axis=2)
+    
+    
     # Sum the losses in both directions
     return (loss_x + loss_y) * lambda_gdl
 
