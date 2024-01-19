@@ -47,9 +47,9 @@ except:
 
 epochs_N = 5000
 batch_size_N = 77
-lambda_mse=1
-lambda_gs=0#0.1
-lambda_l2=0#1e-6
+lambda_mse=0.9
+lambda_gs=0.1
+lambda_l2=0#1e-5
 lambda_huber=0.0
 lr = 0.001
 filtros = 100
