@@ -45,7 +45,7 @@ except:
     
 
 
-epochs_N = 75000
+epochs_N = 2000
 batch_size_N = 77
 lambda_mse=0.9
 lambda_gs=00.1
