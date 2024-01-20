@@ -64,7 +64,7 @@ def geraDadosTreino():
                         print("Arquivo não existe")
         index += 1
         
-    outputTemp = normalizaDadosFunc(outputTemp) 
+    outputTemp, scaler = normalizaDadosFunc(outputTemp) 
             
     conditionsFile = np.array(conditionsFile)    
     outputPress = np.array(outputPress)
@@ -74,4 +74,4 @@ def geraDadosTreino():
     sdfFile = np.array(sdfFile)
     outputTemp = np.array(outputTemp)
     
-    return sdfFile, conditionsFile, outputTemp, outputPress, label
+    return sdfFile, conditionsFile, outputTemp, outputPress, label, scaler

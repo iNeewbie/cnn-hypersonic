@@ -40,9 +40,9 @@ class MaskingLayer(Layer):
         return y_pred * mask + inverse_mask * 0
     
 def mse_loss(y_true, y_pred, lambda_mse):
-    mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
-    y_true = y_true*mask
-    y_pred = y_pred*mask
+    #mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
+    #y_true = y_true*mask
+    #y_pred = y_pred*mask
     
     loss = tf.reduce_mean(tf.square(y_true - y_pred))
 
@@ -50,9 +50,9 @@ def mse_loss(y_true, y_pred, lambda_mse):
 
 
 def gdl_loss(y_true, y_pred,lambda_gdl):
-    mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
-    y_true = y_true*mask
-    y_pred = y_pred*mask
+    #mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
+    #y_true = y_true*mask
+    #y_pred = y_pred*mask
     # Calculate the difference in the x direction
     diff_x_true = tf.abs(y_true[:, :, 1:] - y_true[:, :, :-1])
     diff_x_pred = tf.abs(y_pred[:, :, 1:] - y_pred[:, :, :-1])    
@@ -128,11 +128,13 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
     decoded = UpSampling2D((5, 5))(x)
     output = Conv2D(1, (1, 1), padding='same')(decoded)
-    mask = tf.cast(tf.greater(input_img, 0), dtype='float32')
-    masked_output = MaskingLayer()([output, mask])
+    output = Reshape((300, 300))(output)
+
+    #mask = tf.cast(tf.greater(input_img, 0), dtype='float32')
+    #masked_output = MaskingLayer()([output, mask])
 
     # Definindo o modelo
-    autoencoder = Model(inputs=[input_img, input_conditions], outputs=[masked_output])
+    autoencoder = Model(inputs=[input_img, input_conditions], outputs=output)
     #autoencoder.summary()
 
     autoencoder.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=get_total_loss(autoencoder, lambda_mse, lambda_gdl, lambda_l2,lambda_huber),metrics = tf.keras.metrics.MeanAbsolutePercentageError())

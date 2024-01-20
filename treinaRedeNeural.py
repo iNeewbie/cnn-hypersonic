@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from keras.callbacks import TensorBoard
 from keras.callbacks import ModelCheckpoint
+import joblib
 
 
 plt.close('all')
@@ -29,15 +30,17 @@ try:
     y_test = data['array6']
     label_train = data['array7']
     label_test = data['array8']
+    scaler = joblib.load('scaler.pkl')
 except:
     tempo_gerarDados = time.time()
-    x1, x2, y1, _, label = geraDadosTreino()    
+    x1, x2, y1, _, label, scaler = geraDadosTreino()    
     fim_gerarDados = time.time()
-    
+    joblib.dump(scaler, 'scaler.pkl')
     if len(x1) == 1:
         ar0  = np.array([0])
         np.savez('arquivo.npz', array1=x1, array2=x2, array3=ar0, array4=ar0,
              array5=y1, array6=ar0, array7=label, array8=ar0)
+        
     else:
             
         print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
@@ -51,11 +54,11 @@ except:
     
 
 
-epochs_N = 500
+epochs_N = 1
 batch_size_N = 77
-lambda_mse=1
-lambda_gs=0#0.5#1
-lambda_l2=0#1e-6
+lambda_mse=0.9
+lambda_gs=0.1#0.5#1
+lambda_l2=1e-6#1e-6
 lambda_huber=0.0
 lr = 0.01
 filtros = 150
@@ -66,8 +69,7 @@ checkpoint = ModelCheckpoint('meu_modelo.keras', save_freq=200)
 #my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200), tf.keras.callbacks.EarlyStopping(monitor='loss', patience=100,min_delta = 0.001), tf.keras.callbacks.TerminateOnNaN()]
 my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=1000,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN()]
 
-
-"""try:
+try:
     # Carregar o modelo
     model = load_model('meu_modelo.keras', custom_objects={'MaskingLayer': MaskingLayer, 'my_loss_fn_wrapper': get_total_loss})
     print("carregou modelo")
@@ -80,10 +82,10 @@ my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=1000,m
 except:
     print("NÃO carregou modelo")
     # Se o modelo ainda não existe, inicialize-o
-    model = trainNeuralNetwork(lambda_mse, lambda_gs, lambda_l2, lambda_huber, lr, filtros)"""
+    model = trainNeuralNetwork(lambda_mse, lambda_gs, lambda_l2, lambda_huber, lr, filtros)
     
 
-model = trainNeuralNetwork(lambda_mse, lambda_gs, lambda_l2, lambda_huber, lr, filtros)
+#model = trainNeuralNetwork(lambda_mse, lambda_gs, lambda_l2, lambda_huber, lr, filtros)
 
 
 # Treinar o modelo
@@ -120,7 +122,7 @@ elapsed_time = end_time-start_time
 
 
 new_hist_df = pd.DataFrame(history.history)
-"""
+
 try:
     hist_df = pd.read_csv('history.csv')
     hist_df = pd.concat([hist_df, new_hist_df], ignore_index=True)
@@ -128,10 +130,9 @@ except:
     hist_df = new_hist_df  
 
 hist_df.to_csv('history.csv', index=False)
+
+
 """
-new_hist_df.to_csv('history.csv', index=False)
-
-
 # Criar uma nova figura
 plt.figure()
 
@@ -153,5 +154,5 @@ plt.legend()
 plt.show()
 
 
-
+"""
 
