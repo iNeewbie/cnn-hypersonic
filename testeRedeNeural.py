@@ -64,7 +64,7 @@ lambda_mse=0
 lambda_gs=0#0.6
 lambda_l2=0#1e-6
 lambda_huber=0#0.9
-lr = 0.01
+lr = 0
 loss = get_total_loss(model, lambda_mse, lambda_gs, lambda_l2, lambda_huber)
 
 # Compilar o modelo com a função de perda personalizada
@@ -75,32 +75,32 @@ temp = model.predict([x1_train,x2_train])
 
 
 
-y_train = y_train.reshape(-1, 1)
-temp = temp.reshape(-1, 1)
+#y_train = y_train.reshape(-1, 1)
+#temp = temp.reshape(-1, 1)
 
 # Agora você pode usar o inverse_transform
-y_train_inv = scaler.inverse_transform(y_train)
-temp_inv = scaler.inverse_transform(temp)
+#y_train_inv = scaler.inverse_transform(y_train)
+#temp_inv = scaler.inverse_transform(temp)
 
 # Redimensiona os dados de volta para a forma original
-y_train_inv = y_train_inv.reshape(-1, 300, 300)
-temp_inv = temp_inv.reshape(-1, 300, 300)
+#y_train_inv = y_train_inv.reshape(-1, 300, 300)
+#temp_inv = temp_inv.reshape(-1, 300, 300)
 
 mask = np.zeros_like(x1_train, dtype=bool)
 mask[x1_train <= 0] = True
 
-y_testMasked = (np.ma.masked_array(y_train_inv, mask))
-tempMasked = (np.ma.masked_array(temp_inv, mask))
+y_testMasked = (np.ma.masked_array(y_train, mask))
+tempMasked = (np.ma.masked_array(temp, mask))
 
 
 # Redimensiona os dados de volta para a forma original
 
 
 
-for i in range(len(temp_inv)):
+for i in range(len(temp)):
  
-  vmin_temp = (min(temp_inv[i].min(), y_train_inv[i].min()))
-  vmax_temp = (max(temp_inv[i].max(), y_train_inv[i].max()))
+  vmin_temp = (min(tempMasked[i].min(), y_testMasked[i].min()))
+  vmax_temp = (max(tempMasked[i].max(), y_testMasked[i].max()))
   plt.figure(figsize=(10, 5))
 
 
@@ -115,7 +115,7 @@ for i in range(len(temp_inv)):
   # Subfigure for y_test[i]
   plt.subplot(2, 2, 2)
   #plt.contour(y_denormalizado[i],levels=11,colors='black')
-  plt.contourf((y_testMasked[i]),levels=200, cmap='jet', vmin = vmin_temp, vmax = vmax_temp)
+  plt.contourf((y_testMasked[i]),levels=200, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
   plt.colorbar()
   plt.title('y_test[i]')
 

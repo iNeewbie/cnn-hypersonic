@@ -54,13 +54,13 @@ except:
     
 
 
-epochs_N = 1
+epochs_N = 1000
 batch_size_N = 77
 lambda_mse=0.9
 lambda_gs=0.1#0.5#1
-lambda_l2=1e-6#1e-6
+lambda_l2=1e-6#1e-6#1e-6
 lambda_huber=0.0
-lr = 0.01
+lr = 0.1
 filtros = 150
 
 tensorboard_callback = TensorBoard(log_dir='logs')

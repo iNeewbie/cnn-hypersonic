@@ -59,8 +59,8 @@ def gdl_loss(y_true, y_pred,lambda_gdl):
     loss_x = tf.reduce_sum(tf.abs(diff_x_true - diff_x_pred),axis=[0,2])
 
     # Calculate the difference in the y direction
-    diff_y_true = tf.abs(y_true[:, 1:, :] - y_true[:, :-1, :])
-    diff_y_pred = tf.abs(y_pred[:, 1:, :] - y_pred[:, :-1, :])
+    diff_y_true = tf.abs(y_true[:, :-1, :] - y_true[:, 1:, :])
+    diff_y_pred = tf.abs(y_pred[:, :-1, :] - y_pred[:, 1:, :])
     loss_y = tf.reduce_sum(tf.abs(diff_y_true - diff_y_pred),axis=[0,1])
     
     # Sum the losses in both directions
