@@ -50,17 +50,16 @@ except:
         label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)  
         np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
                  array5=y_train, array6=y_test, array7=label_train, array8=label_test)
-
     
 
 
-epochs_N = 1000
+epochs_N = 10
 batch_size_N = 77
 lambda_mse=0.9
 lambda_gs=0.1#0.5#1
 lambda_l2=1e-6#1e-6#1e-6
 lambda_huber=0.0
-lr = 0.1
+lr = 0.01
 filtros = 150
 
 tensorboard_callback = TensorBoard(log_dir='logs')
