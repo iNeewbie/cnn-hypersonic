@@ -53,11 +53,11 @@ except:
     
 
 
-epochs_N = 10
+epochs_N = 10000
 batch_size_N = 77
-lambda_mse=0.9
-lambda_gs=0.1#0.5#1
-lambda_l2=1e-6#1e-6#1e-6
+lambda_mse=1
+lambda_gs=0#0.5#1
+lambda_l2=0#1e-6#1e-6#1e-6
 lambda_huber=0.0
 lr = 0.01
 filtros = 150
@@ -66,7 +66,7 @@ tensorboard_callback = TensorBoard(log_dir='logs')
 checkpoint = ModelCheckpoint('meu_modelo.keras', save_freq=200)
 
 #my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200), tf.keras.callbacks.EarlyStopping(monitor='loss', patience=100,min_delta = 0.001), tf.keras.callbacks.TerminateOnNaN()]
-my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=1000,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN()]
+my_callbacks = [tf.keras.callbacks.EarlyStopping(monitor='loss', patience=10000,min_delta = 0.0001), tf.keras.callbacks.TerminateOnNaN()]
 
 try:
     # Carregar o modelo

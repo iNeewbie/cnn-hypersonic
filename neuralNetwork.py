@@ -43,29 +43,42 @@ def mse_loss(y_true, y_pred, lambda_mse):
     #mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
     #y_true = y_true*mask
     #y_pred = y_pred*mask
-    
-    loss = tf.reduce_mean(tf.square(y_true - y_pred))
+    loss = tf.keras.losses.MeanSquaredError()(y_true, y_pred)
 
     return loss*lambda_mse
 
 
-def gdl_loss(y_true, y_pred,lambda_gdl):
+"""def gdl_loss(y_true, y_pred,lambda_gdl):
     #mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
     #y_true = y_true*mask
     #y_pred = y_pred*mask
     # Calculate the difference in the x direction
     diff_x_true = tf.abs(y_true[:, :, 1:] - y_true[:, :, :-1])
     diff_x_pred = tf.abs(y_pred[:, :, 1:] - y_pred[:, :, :-1])    
-    loss_x = tf.reduce_sum(tf.abs(diff_x_true - diff_x_pred),axis=[2])
+    loss_x = tf.reduce_sum(tf.abs(diff_x_true - diff_x_pred),axis=2)
 
     # Calculate the difference in the y direction
     diff_y_true = tf.abs(y_true[:, :-1, :] - y_true[:, 1:, :])
     diff_y_pred = tf.abs(y_pred[:, :-1, :] - y_pred[:, 1:, :])
-    loss_y = tf.reduce_sum(tf.abs(diff_y_true - diff_y_pred),axis=[1])
+    loss_y = tf.reduce_sum(tf.abs(diff_y_true - diff_y_pred),axis=1)
     
     # Sum the losses in both directions
-    return tf.reduce_mean(loss_x + loss_y) * lambda_gdl
+    return tf.reduce_mean(loss_x + loss_y) * lambda_gdl"""
 
+
+def gdl_loss(y_true, y_pred, lambda_gdl):
+    alpha=1
+    y_true = tf.expand_dims(y_true, axis=-1)
+    y_pred = tf.expand_dims(y_pred, axis=-1)
+
+    # Calculate gradients for true and predicted images
+    dy_true, dx_true = tf.image.image_gradients(y_true)
+    dy_pred, dx_pred = tf.image.image_gradients(y_pred)
+
+    # Compute gradient difference loss
+    gd_loss = tf.reduce_sum(tf.abs(dy_true - dy_pred) + tf.abs(dx_true - dx_pred), axis=[1, 2]) ** alpha
+
+    return tf.reduce_mean(gd_loss)*lambda_gdl
 
 
 def L2regularization(theta, lambda_l2):

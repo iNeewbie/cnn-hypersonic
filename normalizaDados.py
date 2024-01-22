@@ -6,7 +6,7 @@ def normalizaDadosFunc(dados,plot=False):
     
     dados = np.array(dados)
     dados[dados <= 216.65] = 216.65
-    #log_data = np.log(dados)
+    dados = np.log(dados)
     
     # Redimensiona os dados para duas dimensões
     dados_2d = dados.reshape(-1, 1)
