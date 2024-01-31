@@ -73,7 +73,9 @@ model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=loss, me
 
 temp = model.predict([x1_train,x2_train])
 
-
+temp = temp[:,1:-1,1:-1]
+x1_train = x1_train[:,1:-1,1:-1]
+y_train = y_train[:,1:-1,1:-1]
 
 #y_train = y_train.reshape(-1, 1)
 #temp = temp.reshape(-1, 1)
@@ -86,7 +88,7 @@ temp = model.predict([x1_train,x2_train])
 #y_train_inv = y_train_inv.reshape(-1, 300, 300)
 #temp_inv = temp_inv.reshape(-1, 300, 300)
 
-mask = np.zeros_like(x1_train, dtype=bool)
+mask = np.zeros_like(temp, dtype=bool)
 mask[x1_train <= 0] = True
 
 y_testMasked = (np.ma.masked_array(y_train, mask))
@@ -108,26 +110,26 @@ for i in range(len(temp)):
   # Subfigure for temp[i]
   plt.subplot(2, 2, 1)
   #plt.contour(temp_denormalizada[i,:,:,0],levels=11,colors='black')
-  plt.contourf((tempMasked[i]),levels=200, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
+  plt.contourf((tempMasked[i]),levels=15, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
   plt.colorbar()
-  plt.title('Temp[i]')
+  plt.title('Predição')
 
   # Subfigure for y_test[i]
   plt.subplot(2, 2, 2)
   #plt.contour(y_denormalizado[i],levels=11,colors='black')
-  plt.contourf((y_testMasked[i]),levels=200, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
+  plt.contourf((y_testMasked[i]),levels=15, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
   plt.colorbar()
-  plt.title('y_test[i]')
+  plt.title('Ground truth')
 
   # Calculate the difference
-  diff =(tempMasked[i]) - (y_testMasked[i])
+  diff =np.abs(tempMasked[i]- y_testMasked[i])#/y_testMasked[i]
 
 
   # Subfigure for the difference
   plt.subplot(2, 2, 3)
   plt.contourf(diff, levels=200, cmap='jet')
   plt.colorbar()
-  plt.title('y_test[i] - Temp[i]')
+  plt.title('Erro percentual')
 
   # Show the figure
   plt.tight_layout()

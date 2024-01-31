@@ -17,6 +17,16 @@ from keras.saving import register_keras_serializable, get_custom_objects
 from tensorflow.keras.layers import Layer
 from tensorflow.keras.losses import Loss
 
+class PredictionCallback(tf.keras.callbacks.Callback):
+    def __init__(self, N):
+        super(PredictionCallback, self).__init__()
+        self.N = N
+
+    def on_epoch_end(self, epoch, logs={}):
+        if epoch % self.N == 0:  # N is the number of epochs after which you want to predict
+            y_pred = self.model.predict(self.validation_data[0])
+            print('prediction: {} at epoch: {}'.format(y_pred, epoch))
+
 class TotalLoss(Loss):
     def __init__(self, model, lambda_mse, lambda_gdl, lambda_l2, lambda_huber, **kwargs):
         super().__init__(**kwargs)
@@ -40,45 +50,67 @@ class MaskingLayer(Layer):
         return y_pred * mask + inverse_mask * 0
     
 def mse_loss(y_true, y_pred, lambda_mse):
-    #mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
-    #y_true = y_true*mask
-    #y_pred = y_pred*mask
+
     loss = tf.keras.losses.MeanSquaredError()(y_true, y_pred)
 
-    return loss*lambda_mse
+    return lambda_mse * loss
 
-
-"""def gdl_loss(y_true, y_pred,lambda_gdl):
-    #mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
-    #y_true = y_true*mask
-    #y_pred = y_pred*mask
-    # Calculate the difference in the x direction
-    diff_x_true = tf.abs(y_true[:, :, 1:] - y_true[:, :, :-1])
-    diff_x_pred = tf.abs(y_pred[:, :, 1:] - y_pred[:, :, :-1])    
-    loss_x = tf.reduce_sum(tf.abs(diff_x_true - diff_x_pred),axis=2)
-
-    # Calculate the difference in the y direction
-    diff_y_true = tf.abs(y_true[:, :-1, :] - y_true[:, 1:, :])
-    diff_y_pred = tf.abs(y_pred[:, :-1, :] - y_pred[:, 1:, :])
-    loss_y = tf.reduce_sum(tf.abs(diff_y_true - diff_y_pred),axis=1)
-    
-    # Sum the losses in both directions
-    return tf.reduce_mean(loss_x + loss_y) * lambda_gdl"""
-
+"""
 
 def gdl_loss(y_true, y_pred, lambda_gdl):
     alpha=1
+
+
     y_true = tf.expand_dims(y_true, axis=-1)
     y_pred = tf.expand_dims(y_pred, axis=-1)
 
     # Calculate gradients for true and predicted images
     dy_true, dx_true = tf.image.image_gradients(y_true)
     dy_pred, dx_pred = tf.image.image_gradients(y_pred)
+    
+    # Compute the squared difference of the partial derivatives
+    diff_dXdx = tf.square(dx_true - dx_pred)
+    diff_dXdy = tf.square(dy_true - dy_pred)
+    
+    mean_x = tf.reduce_mean(diff_dXdx)
+    mean_y = tf.reduce_mean(diff_dXdy)
+    # Compute the GSseparated value
+    GSseparated = mean_x+mean_y
+    
+    # Return the GSseparated value
+    return GSseparated * lambda_gdl
+
+    
+    
 
     # Compute gradient difference loss
-    gd_loss = tf.reduce_sum(tf.abs(dy_true - dy_pred) + tf.abs(dx_true - dx_pred), axis=[1, 2]) ** alpha
+    #gd_loss = tf.reduce_sum(tf.abs(dy_true - dy_pred) + tf.abs(dx_true - dx_pred), axis=[1, 2]) ** alpha
 
-    return tf.reduce_mean(gd_loss)*lambda_gdl
+    #return tf.reduce_mean(gd_loss)*lambda_gdl"""
+
+def gdl_loss(y_true, y_pred, lambda_gdl):
+    mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
+    m = tf.shape(y_true)[0]
+    nx = tf.shape(y_true)[1]
+    ny = tf.shape(y_true)[2]
+    U_true, V_true = tf.split(y_true * mask, 2, axis=-1)
+    U_pred, V_pred = tf.split(y_pred * mask, 2, axis=-1)
+    dUdx_true = U_true[:, 1:, :] - U_true[:, :-1, :]
+    dUdx_pred = U_pred[:, 1:, :] - U_pred[:, :-1, :]
+    dVdx_true = V_true[:, 1:, :] - V_true[:, :-1, :]
+    dVdx_pred = V_pred[:, 1:, :] - V_pred[:, :-1, :]
+    dU_diff = K.square(dUdx_true - dUdx_pred)
+    dV_diff = K.square(dVdx_true - dVdx_pred)
+    sum_diff = K.sum(dU_diff[:, 1:-1, 1:-1] + dV_diff[:, 1:-1, 1:-1])
+    loss = lambda_gdl * sum_diff / tf.cast(2 * m * (nx - 2) * (ny - 2), tf.float32)
+    return loss
+
+    
+
+    
+    # Return the GSseparated value
+    return GSseparated * lambda_gdl
+
 
 
 def L2regularization(theta, lambda_l2):
@@ -88,7 +120,7 @@ def L2regularization(theta, lambda_l2):
     return lambda_l2 * l2_reg / 2
 
 def huber_loss(y_true, y_pred,lambda_huber):
-    delta = 3
+    delta = 2
     error = y_true - y_pred
     is_small_error = tf.abs(error) <= delta
     squared_loss = tf.square(error) / 2
