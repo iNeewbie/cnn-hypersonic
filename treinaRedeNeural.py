@@ -89,8 +89,8 @@ except:
 
 # Treinar o modelo
 start_time = time.time()
-#history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
-history = model.fit([x1_train,x2_train],y_train,epochs=epochs_N, batch_size = batch_size_N, callbacks=my_callbacks, verbose=1, use_multiprocessing=True)
+history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
+#history = model.fit([x1_train,x2_train],y_train,epochs=epochs_N, batch_size = batch_size_N, callbacks=my_callbacks, verbose=1, use_multiprocessing=True)
 end_time = time.time()
 
 weights = model.get_weights
