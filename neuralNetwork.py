@@ -147,15 +147,13 @@ get_custom_objects().update({'my_loss_fn_wrapper': get_total_loss})
 def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lambda_huber=0.9, lr=0.3, filters=300):
     get_custom_objects().clear()
     # Definindo o codificador
-    input_img = Input(shape=(300, 300, 1))  # adaptar isso para o tamanho da sua imagem
+    input_img = Input(shape=(150, 150, 1))  # adaptar isso para o tamanho da sua imagem
     x = Conv2D(filters, (5, 5), activation=swish, padding='same')(input_img)
     x = MaxPooling2D((5, 5))(x)
     x = Conv2D(filters, (5, 5), activation=swish, padding='same')(x)
     x = MaxPooling2D((5, 5))(x)
     x = Conv2D(filters, (3, 3), activation=swish, padding='same')(x)
     x = MaxPooling2D((3, 3))(x)
-    x = Conv2D(filters, (2, 2), activation=swish, padding='same')(x)
-    x = MaxPooling2D((2, 2))(x)
     encoded = Flatten()(x)
     # Adicionando o ângulo de ataque e o número de Reynolds como entrada
     input_conditions = Input(shape=(2,))  # adaptar isso para o tamanho do seu vetor de condições
@@ -164,8 +162,6 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     # Definindo o decodificador
     x = Dense(filters*2*2, activation=swish)(merged)
     x = Reshape((2,2,filters))(x)
-    x = Conv2D(filters, (2, 2), padding='same', activation=swish)(x)
-    x = UpSampling2D((2,2))(x)
     x = Conv2D(filters, (3, 3), padding='same', activation=swish)(x)
     x = UpSampling2D((3, 3))(x)
     x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
@@ -173,7 +169,7 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
     decoded = UpSampling2D((5, 5))(x)
     output = Conv2D(1, (1, 1), padding='same')(decoded)
-    output = Reshape((300, 300))(output)
+    output = Reshape((150, 150))(output)
 
     #mask = tf.cast(tf.greater(input_img, 0), dtype='float32')
     #masked_output = MaskingLayer()([output, mask])

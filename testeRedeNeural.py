@@ -110,14 +110,14 @@ for i in range(len(temp)):
   # Subfigure for temp[i]
   plt.subplot(2, 2, 1)
   #plt.contour(temp_denormalizada[i,:,:,0],levels=11,colors='black')
-  plt.contourf((tempMasked[i]),levels=15, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
+  plt.contourf((tempMasked[i]),levels=200, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
   plt.colorbar()
   plt.title('Predição')
 
   # Subfigure for y_test[i]
   plt.subplot(2, 2, 2)
   #plt.contour(y_denormalizado[i],levels=11,colors='black')
-  plt.contourf((y_testMasked[i]),levels=15, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
+  plt.contourf((y_testMasked[i]),levels=200, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
   plt.colorbar()
   plt.title('Ground truth')
 

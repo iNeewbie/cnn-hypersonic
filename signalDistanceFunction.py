@@ -39,7 +39,7 @@ def getSDF(datFile, AoA, plot=False):
                                 [np.sin(angle_rad), np.cos(angle_rad)]])
     
     # Define the grid for the signed distance function calculation
-    nx, ny = 300,300
+    nx, ny = 150,150
     x = np.linspace(-0.5, 1.5, nx)
     y = np.linspace(-0.5, 0.5, ny)
     X, Y = np.meshgrid(x, y)
@@ -71,7 +71,7 @@ def getSDF(datFile, AoA, plot=False):
     
     #airfoil_mask = create_airfoil_mask(x_coords, y_coords, X, Y)
     # Create the initial distance field
-    phi = np.where(airfoil_mask, -300, 300)
+    phi = np.where(airfoil_mask, -150, 150)
     
     # Compute the signed distance function using the Fast Marching Method
     distance = skfmm.distance(phi,dx=1/150)
