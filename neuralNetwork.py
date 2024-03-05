@@ -152,8 +152,8 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     x = MaxPooling2D((5, 5))(x)
     x = Conv2D(filters, (5, 5), activation=swish, padding='same')(x)
     x = MaxPooling2D((5, 5))(x)
-    x = Conv2D(filters, (3, 3), activation=swish, padding='same')(x)
-    x = MaxPooling2D((3, 3))(x)
+    x = Conv2D(filters, (5, 5), activation=swish, padding='same')(x)
+    x = MaxPooling2D((5, 5))(x)
     encoded = Flatten()(x)
     # Adicionando o ângulo de ataque e o número de Reynolds como entrada
     input_conditions = Input(shape=(2,))  # adaptar isso para o tamanho do seu vetor de condições
@@ -162,8 +162,8 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     # Definindo o decodificador
     x = Dense(filters*2*2, activation=swish)(merged)
     x = Reshape((2,2,filters))(x)
-    x = Conv2D(filters, (3, 3), padding='same', activation=swish)(x)
-    x = UpSampling2D((3, 3))(x)
+    x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
+    x = UpSampling2D((5, 5))(x)
     x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
     x = UpSampling2D((5, 5))(x)
     x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
