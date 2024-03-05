@@ -148,8 +148,8 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     get_custom_objects().clear()
     # Definindo o codificador
     input_img = Input(shape=(300, 300, 1))  # adaptar isso para o tamanho da sua imagem
-    x = Conv2D(filters, (5, 5), activation=swish, padding='same')(input_img)
-    x = MaxPooling2D((5, 5))(x)
+    x = Conv2D(filters, (6, 6), activation=swish, padding='same')(input_img)
+    x = MaxPooling2D((6, 6))(x)
     x = Conv2D(filters, (5, 5), activation=swish, padding='same')(x)
     x = MaxPooling2D((5, 5))(x)
     x = Conv2D(filters, (5, 5), activation=swish, padding='same')(x)
@@ -166,8 +166,8 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     x = UpSampling2D((5, 5))(x)
     x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
     x = UpSampling2D((5, 5))(x)
-    x = Conv2D(filters, (5, 5), padding='same', activation=swish)(x)
-    decoded = UpSampling2D((5, 5))(x)
+    x = Conv2D(filters, (6, 6), padding='same', activation=swish)(x)
+    decoded = UpSampling2D((6, 6))(x)
     output = Conv2D(1, (1, 1), padding='same')(decoded)
     output = Reshape((300, 300))(output)
 
