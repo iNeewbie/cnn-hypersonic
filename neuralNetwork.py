@@ -173,7 +173,7 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     input2Flat = Flatten()(input_conditions)
     merged = Concatenate()([input2Flat,encoded ])    
     # Definindo o decodificador
-    x = Dense(filters*2*2, activation=swish)(merged)
+    x = Dense(filters*5*5, activation=swish)(merged)
     x = Reshape((5,5,filters))(x)
     x = Conv2DTranspose(filters, (2, 2), padding='same', activation=swish)(x)
     x = UpSampling2D((2, 2))(x)
