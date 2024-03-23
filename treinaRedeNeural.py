@@ -53,10 +53,10 @@ except:
     
 
 
-epochs_N = 30000
+epochs_N = 1000
 batch_size_N = 77
-lambda_mse=0.99
-lambda_gs=0.01
+lambda_mse=0.7
+lambda_gs=0.3
 lambda_l2=1e-5#1e-6#1e-6#1e-6
 lambda_huber=0
 lr = 0.05
@@ -89,8 +89,8 @@ except:
 
 # Treinar o modelo
 start_time = time.time()
-history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
-#history = model.fit([x1_train,x2_train],y_train,epochs=epochs_N, batch_size = batch_size_N, callbacks=my_callbacks, verbose=1, use_multiprocessing=True)
+#history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
+history = model.fit([x1_train,x2_train],y_train,epochs=epochs_N, batch_size = batch_size_N, callbacks=my_callbacks, verbose=1, use_multiprocessing=True)
 end_time = time.time()
 
 weights = model.get_weights

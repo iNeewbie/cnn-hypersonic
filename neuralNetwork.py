@@ -88,7 +88,7 @@ def gdl_loss(y_true, y_pred, lambda_gdl):
 
     #return tf.reduce_mean(gd_loss)*lambda_gdl"""
 
-def gdl_loss(y_true, y_pred, lambda_gdl):
+"""def gdl_loss(y_true, y_pred, lambda_gdl):
     mask = tf.cast(tf.greater(y_true, 0), dtype='float32')
     m = tf.shape(y_true)[0]
     nx = tf.shape(y_true)[1]
@@ -103,13 +103,24 @@ def gdl_loss(y_true, y_pred, lambda_gdl):
     dV_diff = K.square(dVdx_true - dVdx_pred)
     sum_diff = K.sum(dU_diff[:, 1:-1, 1:-1] + dV_diff[:, 1:-1, 1:-1])
     loss = lambda_gdl * sum_diff / tf.cast(2 * m * (nx - 2) * (ny - 2), tf.float32)
-    return loss
+    return loss"""
 
-    
+def gdl_loss(y_true, y_pred, lambda_gdl)
+    m = tf.shape(y_true)[0]
+    nx = tf.shape(y_true)[1]
+    ny = tf.shape(y_true)[2]
+
+    # Calculate the gradients
+    grad_y_true_x, grad_y_true_y = tf.image.image_gradients(y_true)
+    grad_y_pred_x, grad_y_pred_y = tf.image.image_gradients(y_pred)
+
+    # Calculate the loss according to the provided formula
+    loss = 1 / (2 * m * (nx - 2) * (ny - 2)) * K.sum(K.square(grad_y_true_x - grad_y_pred_x) + K.square(grad_y_true_y - grad_y_pred_y))
+    return loss*lambda_gdl
 
     
     # Return the GSseparated value
-    return GSseparated * lambda_gdl
+    #return GSseparated * lambda_gdl
 
 
 
@@ -148,12 +159,14 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     get_custom_objects().clear()
     # Definindo o codificador
     input_img = Input(shape=(300, 300, 1))  # adaptar isso para o tamanho da sua imagem
-    x = Conv2D(filters, (6, 6), activation=swish, padding='same')(input_img)
-    x = MaxPooling2D((6, 6))(x)
-    x = Conv2D(filters, (5, 5), activation=swish, padding='same')(x)
+    x = Conv2D(filters, (5, 5), activation=swish, padding='same')(input_img)
     x = MaxPooling2D((5, 5))(x)
-    x = Conv2D(filters, (5, 5), activation=swish, padding='same')(x)
-    x = MaxPooling2D((5, 5))(x)
+    x = Conv2D(filters, (3, 3), activation=swish, padding='same')(x)
+    x = MaxPooling2D((3, 3))(x)
+    x = Conv2D(filters, (2, 2), activation=swish, padding='same')(x)
+    x = MaxPooling2D((2, 2))(x)
+    x = Conv2D(filters, (2, 2), activation=swish, padding='same')(x)
+    x = MaxPooling2D((2, 2))(x)
     encoded = Flatten()(x)
     # Adicionando o ângulo de ataque e o número de Reynolds como entrada
     input_conditions = Input(shape=(2,))  # adaptar isso para o tamanho do seu vetor de condições
@@ -161,13 +174,15 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     merged = Concatenate()([input2Flat,encoded ])    
     # Definindo o decodificador
     x = Dense(filters*2*2, activation=swish)(merged)
-    x = Reshape((2,2,filters))(x)
+    x = Reshape((5,5,filters))(x)
+    x = Conv2DTranspose(filters, (2, 2), padding='same', activation=swish)(x)
+    x = UpSampling2D((2, 2))(x)
+    x = Conv2DTranspose(filters, (2, 2), padding='same', activation=swish)(x)
+    x = UpSampling2D((2, 2))(x)
+    x = Conv2DTranspose(filters, (3, 3), padding='same', activation=swish)(x)
+    x = UpSampling2D((3, 3))(x)
     x = Conv2DTranspose(filters, (5, 5), padding='same', activation=swish)(x)
-    x = UpSampling2D((5, 5))(x)
-    x = Conv2DTranspose(filters, (5, 5), padding='same', activation=swish)(x)
-    x = UpSampling2D((5, 5))(x)
-    x = Conv2DTranspose(filters, (6, 6), padding='same', activation=swish)(x)
-    decoded = UpSampling2D((6, 6))(x)
+    decoded = UpSampling2D((5, 5))(x)
     output = Conv2D(1, (1, 1), padding='same')(decoded)
     output = Reshape((300, 300))(output)
 
