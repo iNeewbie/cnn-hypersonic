@@ -99,8 +99,10 @@ tempMasked = (np.ma.masked_array(temp, mask))
 
 
 
+levels = 300
+
 for i in range(len(temp)):
- 
+
   vmin_temp = (min(tempMasked[i].min(), y_testMasked[i].min()))
   vmax_temp = (max(tempMasked[i].max(), y_testMasked[i].max()))
   plt.figure(figsize=(10, 5))
@@ -110,30 +112,34 @@ for i in range(len(temp)):
   # Subfigure for temp[i]
   plt.subplot(2, 2, 1)
   #plt.contour(temp_denormalizada[i,:,:,0],levels=11,colors='black')
-  plt.contourf((tempMasked[i]),levels=200, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
+  plt.contourf(tempMasked[i], cmap='jet', levels = levels)#, vmin = vmin_temp, vmax = vmax_temp)
   plt.colorbar()
-  plt.title('Predição')
+  plt.title(f'Predição: {label_test[i]}')
 
   # Subfigure for y_test[i]
   plt.subplot(2, 2, 2)
   #plt.contour(y_denormalizado[i],levels=11,colors='black')
-  plt.contourf((y_testMasked[i]),levels=200, cmap='jet')#, vmin = vmin_temp, vmax = vmax_temp)
+  plt.contourf(y_testMasked[i], cmap='jet', levels = levels)#, vmin = vmin_temp, vmax = vmax_temp)
   plt.colorbar()
-  plt.title('Ground truth')
+  plt.title(f'CFD: {label_test[i]}')
 
   # Calculate the difference
-  diff =np.abs(tempMasked[i]- y_testMasked[i])#/y_testMasked[i]
+  ape = np.abs(tempMasked[i] - y_testMasked[i]) / np.abs(y_testMasked[i]) * 100
+  outliers = np.where(ape > 100)
+  non_outliers = np.where(ape <= 100)
 
+  mape = np.mean(ape[non_outliers])
+
+  percentage_outliers = len(ape[outliers]) / len(ape.flatten()) * 100
 
   # Subfigure for the difference
   plt.subplot(2, 2, 3)
-  plt.contourf(diff, levels=200, cmap='jet')
+  plt.contourf(ape, levels=levels, cmap='jet')
   plt.colorbar()
-  plt.title('Erro percentual')
+  plt.title(f'Mean Absolute Percentage Error: {mape:.2f}, %outliers: {percentage_outliers:.2f}')
 
-  # Show the figure
+# Show the figure
   plt.tight_layout()
   plt.show()
-
 
 
