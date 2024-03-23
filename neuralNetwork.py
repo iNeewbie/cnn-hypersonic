@@ -105,7 +105,7 @@ def gdl_loss(y_true, y_pred, lambda_gdl):
     loss = lambda_gdl * sum_diff / tf.cast(2 * m * (nx - 2) * (ny - 2), tf.float32)
     return loss"""
 
-def gdl_loss(y_true, y_pred, lambda_gdl)
+def gdl_loss(y_true, y_pred, lambda_gdl):
     m = tf.shape(y_true)[0]
     nx = tf.shape(y_true)[1]
     ny = tf.shape(y_true)[2]
