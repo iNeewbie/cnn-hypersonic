@@ -185,7 +185,7 @@ def trainNeuralNetwork(lambda_mse = 0.03, lambda_gdl = 0.1, lambda_l2=1e-5, lamb
     x = UpSampling2D((5, 5))(x)
     x = Conv2DTranspose(filters, (5, 5), padding='same', activation=swish)(x)
     decoded = UpSampling2D((5, 5))(x)
-    output = Conv2DTranspose(1, (5, 5), padding='same')(decoded)
+    output = Conv2DTranspose(1, (2, 2), padding='same')(decoded)
     output = Reshape((300, 300))(output)
 
     #mask = tf.cast(tf.greater(input_img, 0), dtype='float32')
