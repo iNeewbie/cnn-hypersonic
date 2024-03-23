@@ -117,7 +117,7 @@ def gdl_loss(y_true, y_pred, lambda_gdl):
     grad_y_pred_x, grad_y_pred_y = tf.image.image_gradients(y_pred)
 
     # Calculate the loss according to the provided formula
-    loss = 1 / (2 * m * (nx - 2) * (ny - 2)) * K.sum(K.square(grad_y_true_x - grad_y_pred_x) + K.square(grad_y_true_y - grad_y_pred_y))
+    loss = tf.cast(1 / (2 * m * (nx - 2) * (ny - 2)),tf.float32) * K.sum(K.square(grad_y_true_x - grad_y_pred_x) + K.square(grad_y_true_y - grad_y_pred_y))
     return loss*lambda_gdl
 
     
