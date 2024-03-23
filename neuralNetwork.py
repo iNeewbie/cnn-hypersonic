@@ -106,6 +106,8 @@ def gdl_loss(y_true, y_pred, lambda_gdl):
     return loss"""
 
 def gdl_loss(y_true, y_pred, lambda_gdl):
+    y_true = tf.expand_dims(y_true, -1)  
+    y_pred = tf.expand_dims(y_pred, -1)
     m = tf.shape(y_true)[0]
     nx = tf.shape(y_true)[1]
     ny = tf.shape(y_true)[2]
