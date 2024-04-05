@@ -53,14 +53,14 @@ except:
     
 
 
-epochs_N = 30000
-batch_size_N = 77
+epochs_N = 15000
+batch_size_N = 50
 lambda_mse=1
 lambda_gs=0
 lambda_l2=1e-5#1e-6#1e-6#1e-6
 lambda_huber=0
 lr = 0.01
-filtros = 1
+filtros = 150
 
 tensorboard_callback = TensorBoard(log_dir='logs')
 checkpoint = ModelCheckpoint('meu_modelo_{epoch}.keras', save_freq=5000)
