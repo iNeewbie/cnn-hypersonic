@@ -42,13 +42,9 @@ def getSDF(datFile, AoA, plot=False):
     # Campo de distância inicial com valores de -300 (dentro do aerofólio) e 300 (fora)
     phi = np.where(airfoil_mask, -300, 300)
     
-<<<<<<< Updated upstream
-    # Compute the signed distance function using the Fast Marching Method
-    distance = skfmm.distance(phi,dx=1/300)
-=======
     # Computa o campo de distância com dx de 5mm
     distance = skfmm.distance(phi, dx=0.005)
->>>>>>> Stashed changes
+
     
     # Visualização opcional
     if plot:

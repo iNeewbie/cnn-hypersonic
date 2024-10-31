@@ -43,25 +43,16 @@ except:
         
     else:
             
+   
         print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
-        x1_train, x1_test = train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
-        x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
-        y_train, y_test = train_test_split(y1, test_size=0.15, shuffle=True, random_state=13)
-        label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)  
+        x1_train, x1_test =  x1,0#train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
+        x2_train, x2_test = x2, 0#train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
+        y_train, y_test = y1, 0#train_test_split(y1, test_size=0.15, shuffle=True, random_state=13)
+        label_train, label_test = label, 0#train_test_split(label, test_size=0.15, shuffle=True, random_state=13)  
         np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
                  array5=y_train, array6=y_test, array7=label_train, array8=label_test)
-    x1, x2, y1, _, label = geraDadosTreino()    
-    fim_gerarDados = time.time()
     
-    print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
-    x1_train, x1_test =  x1,0#train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
-    x2_train, x2_test = x2, 0#train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
-    y_train, y_test = y1, 0#train_test_split(y1, test_size=0.15, shuffle=True, random_state=13)
-    label_train, label_test = label, 0#train_test_split(label, test_size=0.15, shuffle=True, random_state=13)  
-    np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
-             array5=y_train, array6=y_test, array7=label_train, array8=label_test)
-
-    
+        
 
 
 epochs_N = 30000
@@ -100,9 +91,7 @@ except:
 
 # Treinar o modelo
 start_time = time.time()
-history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
 #history = model.fit([x1_train,x2_train],y_train,epochs=epochs_N, batch_size = batch_size_N, callbacks=my_callbacks, verbose=1, use_multiprocessing=True)
-#history = model.fit([x1_train,x2_train], y_train,validation_data=([x1_test,x2_test],y_test), epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
 history = model.fit([x1_train,x2_train], y_train, epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
 
 end_time = time.time()
