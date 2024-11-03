@@ -7,9 +7,9 @@ def importResults(data,plot=False):
     # Extract columns
     x = data[:, 1]
     y = data[:, 2]
-    pressure = data[:, 5]
+    pressure = data[:, 3]
     mach_number = data[:, 4]
-    temperature = data[:, 3]
+    temperature = data[:, 5]
     #e = data[:, 6]
     
     

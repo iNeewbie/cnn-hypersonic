@@ -4,7 +4,7 @@ Created on Mon Jan  8 13:01:14 2024
 
 @author: Guilherme
 """
-from neuralNetwork import trainNeuralNetwork, get_total_loss, MaskingLayer
+from neuralNetwork import trainNeuralNetwork, total_loss, mse_loss, gdl_loss, huber_loss, CustomTotalLoss
 from geraDadosTreino import geraDadosTreino
 import tensorflow as tf
 from keras.models import load_model
@@ -15,7 +15,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from keras.callbacks import TensorBoard
 from keras.callbacks import ModelCheckpoint
+from tensorflow.keras.optimizers import Adam
 import joblib
+
 
 
 plt.close('all')
@@ -55,14 +57,14 @@ except:
         
 
 
-epochs_N = 30000
+epochs_N = 490
 batch_size_N = 77
-lambda_mse=0.99
-lambda_gs=0.01
+lambda_mse=0.9
+lambda_gdl=0.1
 lambda_l2=1e-5#1e-6#1e-6#1e-6
 lambda_huber=0
-lr = 0.05
-filtros = 50
+lr = 0.001
+filtros = 100
 
 tensorboard_callback = TensorBoard(log_dir='logs')
 checkpoint = ModelCheckpoint('meu_modelo_{epoch}.keras', save_freq=5000)
@@ -71,26 +73,38 @@ checkpoint = ModelCheckpoint('meu_modelo_{epoch}.keras', save_freq=5000)
 my_callbacks = [tf.keras.callbacks.TerminateOnNaN(),checkpoint]#tf.keras.callbacks.EarlyStopping(monitor='loss', patience=1000,min_delta = 0.0001), ]
 
 try:
-    # Carregar o modelo
-    model = load_model('meu_modelo.keras', custom_objects={'MaskingLayer': MaskingLayer, 'my_loss_fn_wrapper': get_total_loss})
+    custom_objects = {
+        'CustomTotalLoss': CustomTotalLoss,
+        'total_loss': total_loss,
+        'mse_loss': mse_loss,
+        'gdl_loss': gdl_loss,
+        'huber_loss': huber_loss
+    }
+
+    model = load_model('meu_modelo.keras', custom_objects=custom_objects)
     print("carregou modelo")
     # Criar uma instância da função de perda personalizada
 
-    loss = get_total_loss(model, lambda_mse, lambda_gs, lambda_l2, lambda_huber)
-    # Compilar o modelo com a função de perda personalizada
-    model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=lr), loss=loss, metrics=tf.keras.metrics.MeanAbsolutePercentageError())
-    
+    loss = CustomTotalLoss(lambda_mse, lambda_gdl, lambda_huber)
+    model.compile(optimizer=Adam(learning_rate=lr),
+                  loss=loss,
+                  metrics=[tf.keras.metrics.MeanAbsolutePercentageError()])
 except:
     print("NÃO carregou modelo")
     # Se o modelo ainda não existe, inicialize-o
-    model = trainNeuralNetwork(lambda_mse, lambda_gs, lambda_l2, lambda_huber, lr, filtros)
+    model = trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filtros)
+
     
 
-#model = trainNeuralNetwork(lambda_mse, lambda_gs, lambda_l2, lambda_huber, lr, filtros)
+#model = trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filtros)
 
 
 # Treinar o modelo
 start_time = time.time()
+# Adicionar a dimensão do canal aos dados de entrada e saída
+x1_train = np.expand_dims(x1_train, axis=-1)  # Shape: (num_samples, 800, 800, 1)
+y_train = np.expand_dims(y_train, axis=-1)    # Shape: (num_samples, 800, 800, 1)
+
 #history = model.fit([x1_train,x2_train],y_train,epochs=epochs_N, batch_size = batch_size_N, callbacks=my_callbacks, verbose=1, use_multiprocessing=True)
 history = model.fit([x1_train,x2_train], y_train, epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
 
@@ -133,12 +147,12 @@ except:
 
 hist_df.to_csv('history.csv', index=False)
 
-"""
 # Criar uma nova figura
 plt.figure()
 
 # Plotar a perda de treinamento
-plt.semilogy(new_hist_df['loss'], label='Treinamento')
+plt.semilogy(new_hist_df['loss'], label='Loss')
+plt.semilogy(new_hist_df['mean_absolute_percentage_error'], label='MAPE')
 
 # Plotar a perda de validação
 #plt.semilogy(hist_df['val_loss'], label='Validação')
@@ -153,4 +167,4 @@ plt.legend()
 
 # Mostrar o gráfico
 plt.show()
-"""
+

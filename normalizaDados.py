@@ -1,32 +1,27 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 
-def normalizaDadosFunc(dados,plot=False):
-    
+def normalizaDadosFunc(dados, plot=False):
     dados = np.array(dados)
-    dados[dados <= 216.65] = 216.65
+    dados[dados <= 300] = 2.166500000E+02
     dados = np.log(dados)
     scaled_data = dados
-    
+
     # Redimensiona os dados para duas dimensões
     dados_2d = dados.reshape(-1, 1)
-    
-    # Agora você pode usar o StandardScaler
+
+    # Aplica a normalização com StandardScaler
     scaler = StandardScaler()
     scaled_data = scaler.fit_transform(dados_2d)
-    
+
     # Redimensiona os dados de volta para a forma original
-    scaled_data = scaled_data.reshape(-1, 300, 300)
-    #scaler = 0
-    
-    #print(np.mean(scaled_data), np.std(scaled_data))
-        
-    if plot != False:
-    
-        # Plot the grid_mach_number
+    scaled_data = scaled_data.reshape(-1, 400, 400)
+
+    if plot:
+        # Usando apenas a primeira camada para visualização
         plt.figure()
-        c = plt.contourf(scaled_data, cmap=plt.cm.jet, levels=200)
+        c = plt.contourf(scaled_data[0], cmap=plt.cm.jet, levels=200)
         plt.colorbar(c)
         plt.title('Dados normalizados')
         plt.xlabel('X')
