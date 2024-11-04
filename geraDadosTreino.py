@@ -47,13 +47,13 @@ def geraDadosTreino():
         sdf,X,Y = getSDF(genDatFile(WedgeAngles[wa_it]), 0)
         for aoa_it in range(len(AoAs)):    
             for mn_it in range(len(MachNumbers)):       
-                if index_mach==112:
+                if index_mach<=10:
                     if os.path.isfile(pasta2[index_mach]):
                         simFiles.append(np.genfromtxt(pasta2[index_mach], delimiter=',', skip_header=1))
                         conditionsFile.append([AoAs[aoa_it],MachNumbers[mn_it]])                    
                         sdfFile.append(sdf)
-                        results = importResults(simFiles[-1],True)#importResults(simFiles[index_mach])
-                        dadosTemperatura,_,_ = interpSDFCart(sdf, X, Y, results,True)
+                        results = importResults(simFiles[-1])#importResults(simFiles[index_mach])
+                        dadosTemperatura,_,_ = interpSDFCart(sdf, X, Y, results)
 
                         
                         outputTemp.append(dadosTemperatura)
@@ -72,7 +72,7 @@ def geraDadosTreino():
                         
         index += 1
         
-    outputTemp, scaler = normalizaDadosFunc(outputTemp,True) 
+    outputTemp, scaler = normalizaDadosFunc(outputTemp) 
             
     conditionsFile = np.array(conditionsFile)    
     outputPress = np.array(outputPress)

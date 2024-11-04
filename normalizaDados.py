@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 
 def normalizaDadosFunc(dados, plot=False):
     dados = np.array(dados)
-    dados[dados <= 300] = 2.166500000E+02
+    dados[dados <= 2.166500000E+02] = 2.166500000E+02
     dados = np.log(dados)
     scaled_data = dados
 

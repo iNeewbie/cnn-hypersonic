@@ -38,9 +38,9 @@ except:
         np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
                  array5=y_train, array6=y_test, array7=label_train, array8=label_test)
 
-x1_test= x1_train
-x2_test=x2_train
-y_test=y_train
+#x1_test= x1_train
+#x2_test=x2_train
+#y_test=y_train
 # Adicionar a dimensão do canal aos dados de teste
 x1_test = np.expand_dims(x1_test, axis=-1)  # Shape: (num_samples, height, width, 1)
 y_test = np.expand_dims(y_test, axis=-1)    # Shape: (num_samples, height, width, 1)
@@ -66,9 +66,9 @@ y_test = y_test[..., 0]            # Shape: (num_samples, height, width)
 x1_test = x1_test[..., 0]
 
 # Remover bordas indesejadas (se necessário)
-temp_test = temp_test[:, 1:-1, 1:-1]
-x1_test = x1_test[:, 1:-1, 1:-1]
-y_test = y_test[:, 1:-1, 1:-1]
+#temp_test = temp_test[:, 1:-1, 1:-1]
+#x1_test = x1_test[:, 1:-1, 1:-1]
+#y_test = y_test[:, 1:-1, 1:-1]
 
 # Redimensionar os dados para o formato apropriado para denormalização
 y_test_flat = y_test.reshape(-1, 1)
@@ -99,7 +99,7 @@ y_testMasked_inv = np.ma.masked_array(y_test_inv, mask_test)
 tempMasked_inv = np.ma.masked_array(temp_test_inv, mask_test)
 
 # Loop para plotagem
-for i in range(len(tempMasked_inv)):  # Ajuste o range conforme necessário
+for i in range(1):#len(tempMasked_inv)):  # Ajuste o range conforme necessário
     vmin_temp = min(tempMasked_inv[i].min(), y_testMasked_inv[i].min())
     vmax_temp = max(tempMasked_inv[i].max(), y_testMasked_inv[i].max())
     plt.figure(figsize=(10, 5))
@@ -117,7 +117,7 @@ for i in range(len(tempMasked_inv)):  # Ajuste o range conforme necessário
     plt.title('Ground Truth (Denormalizada e Exponenciada)')
 
     # Calcule a diferença (erro percentual) entre predição e ground truth
-    diff = np.abs(tempMasked_inv[i] - y_testMasked_inv[i]) / np.abs(y_testMasked_inv[i])  # Evitar divisão por zero
+    diff = np.abs(tempMasked_inv[i] - y_testMasked_inv[i]) /(y_testMasked_inv[i]) *100 # Evitar divisão por zero
 
     # Gráfico do erro percentual
     plt.subplot(2, 2, 3)
@@ -129,65 +129,133 @@ for i in range(len(tempMasked_inv)):  # Ajuste o range conforme necessário
     plt.tight_layout()
     plt.show()
 
+    
 
-
-# Loop sobre as três primeiras amostras de teste
-for i in range(len(tempMasked_inv)):  # Ajuste o range conforme necessário
-    # Defina a coordenada x para a linha de corte vertical
-    cut_x = 200
-
-    # Extrair valores ao longo da linha vertical para a predição e o ground truth
-    pred_line = tempMasked_inv[i, :, cut_x]
-    truth_line = y_testMasked_inv[i, :, cut_x]
-
-    # Plot da linha vertical de corte
-    plt.figure(figsize=(10, 6))
-    plt.plot(pred_line, label='Predição (Denormalizada e Exponenciada)', color='blue')
-    plt.plot(truth_line, label='Ground truth (Denormalizado e Exponenciado)', color='orange')
-    plt.xlabel('Índice y')
-    plt.ylabel('Valor')
-    plt.title(f'Linha de Corte Vertical em x={cut_x} - {label_test[i]}')
-    plt.legend()
-    plt.grid()
-    plt.show()
-
-    # Inicializar listas para armazenar os valores acima e abaixo do perfil
-    above_profile_pred = []
-    below_profile_pred = []
-    above_profile_truth = []
-    below_profile_truth = []
+    # Preparar a SDF para plotagem
+    sdf_sample = x1_test[i]
+    """
+    # Plotar a SDF para visualizar o perfil
+    plt.figure(figsize=(12, 6))
+    plt.imshow(sdf_sample, origin='lower', cmap='gray')
+    plt.colorbar(label='Valor da SDF')
+    plt.title(f'Visualização da SDF - Amostra {i}')
+    
+    # Sobrepor a borda do perfil (contorno onde SDF = 0)
+    contours = plt.contour(sdf_sample, levels=[0], colors='black', linewidths=2)
+    plt.clabel(contours, inline=True, fontsize=8, fmt='Borda do Perfil')"""
+    
+    # Agora encontrar os pontos imediatamente acima e abaixo da borda da SDF
+    num_rows, num_cols = sdf_sample.shape# Inicializar listas para armazenar os valores para os dorsos superior e inferior
+    x_indices_upper = []
+    y_indices_upper = []
+    pred_values_upper = []
+    true_values_upper = []
+    
+    x_indices_lower = []
+    y_indices_lower = []
+    pred_values_lower = []
+    true_values_lower = []
+    
+    # Definir a linha média em y=200 (ajuste conforme necessário)
+    y_mid = 199.5
+    
+    # Obter o número de linhas (altura) e colunas (largura) da imagem
+    num_rows, num_cols = x1_test.shape[1], x1_test.shape[2]
+ 
+    # Obter a SDF para a amostra atual
+    sdf_sample = x1_test[i]
 
     # Loop sobre cada coluna x
-    for x in range(tempMasked_inv.shape[2]):
-        # Encontre o índice y onde a SDF está mais próxima de zero (próximo à borda do perfil)
-        sdf_column = x1_test[i, :, x]  # Use a amostra atual
-        y_borda = np.argmin(np.abs(sdf_column))
+    for x in range(num_cols):
+        sdf_column = sdf_sample[:, x]
+        s = sdf_column
+        zero_crossings = np.where(s[:-1] * s[1:] <= 0)[0]
 
-        # Pega valores imediatamente acima e abaixo da borda
-        if y_borda > 0 and y_borda < tempMasked_inv.shape[1] - 1:  # Verifica limites da borda
-            above_profile_pred.append(tempMasked_inv[i, y_borda + 1, x])
-            below_profile_pred.append(tempMasked_inv[i, y_borda - 1, x])
-            above_profile_truth.append(y_testMasked_inv[i, y_borda + 1, x])
-            below_profile_truth.append(y_testMasked_inv[i, y_borda - 1, x])
-
-    # Plot dos valores imediatamente acima do perfil
+        # Se houver cruzamentos de zero nesta coluna
+        if len(zero_crossings) > 0:
+            for y_borda in zero_crossings:
+                # Garantir que os índices estão dentro dos limites
+                if y_borda >= 1 and y_borda + 1 < num_rows:
+                    # Verificar se é o dorso superior ou inferior com base na posição y_borda
+                    if y_borda < y_mid:
+                        # Dorso Superior
+                        # Determinar se a SDF muda de negativo para positivo ou vice-versa
+                        s1 = s[y_borda]
+                        s2 = s[y_borda + 1]
+                        if s1 <= 0 and s2 > 0:
+                            # De dentro (negativo) para fora (positivo)
+                            y_inside = y_borda
+                            y_outside = y_borda + 1
+                        elif s1 >= 0 and s2 < 0:
+                            # De fora (positivo) para dentro (negativo)
+                            y_inside = y_borda + 1
+                            y_outside = y_borda
+                        else:
+                            continue  # Não é um cruzamento válido
+                        # Armazenar os valores para o dorso superior
+                        x_indices_upper.append(x)
+                        y_indices_upper.append(y_outside)
+                        pred_values_upper.append(temp_test_inv[i, y_outside, x])
+                        true_values_upper.append(y_test_inv[i, y_outside, x])
+                    elif y_borda > y_mid:
+                        # Dorso Inferior
+                        # Determinar se a SDF muda de negativo para positivo ou vice-versa
+                        s1 = s[y_borda]
+                        s2 = s[y_borda + 1]
+                        if s1 <= 0 and s2 > 0:
+                            # De dentro (negativo) para fora (positivo)
+                            y_inside = y_borda
+                            y_outside = y_borda + 1
+                        elif s1 >= 0 and s2 < 0:
+                            # De fora (positivo) para dentro (negativo)
+                            y_inside = y_borda + 1
+                            y_outside = y_borda
+                        else:
+                            continue  # Não é um cruzamento válido
+                        # Armazenar os valores para o dorso inferior
+                        x_indices_lower.append(x)
+                        y_indices_lower.append(y_outside)
+                        pred_values_lower.append(temp_test_inv[i, y_outside, x])
+                        true_values_lower.append(y_test_inv[i, y_outside, x])
+        # Plotar os valores imediatamente acima do dorso superior
     plt.figure(figsize=(12, 6))
-    plt.plot(above_profile_pred, label='Predição Acima do Perfil', color='blue', linestyle='--')
-    plt.plot(above_profile_truth, label='Ground Truth Acima do Perfil', color='orange', linestyle='--')
-    plt.xlabel('Índice x')
-    plt.ylabel('Valor')
-    plt.title(f'Comparação de Valores Acima do Perfil Aerodinâmico - {label_test[i]}')
+    plt.plot(x_indices_upper, pred_values_upper, label='Predição Acima do Dorso Superior', color='red', linestyle='--')
+    plt.plot(x_indices_upper, true_values_upper, label='Ground Truth Acima do Dorso Superior', color='darkred')
+    plt.xlabel('Índice X')
+    plt.ylabel('Temperatura (K)')
+    plt.title(f'Valores Imediatamente Acima do Dorso Superior - Amostra {i}')
     plt.legend()
     plt.grid()
     plt.show()
 
-    # Plot dos valores imediatamente abaixo do perfil
+    # Plotar os valores imediatamente abaixo do dorso inferior
     plt.figure(figsize=(12, 6))
-    plt.plot(below_profile_pred, label='Predição Abaixo do Perfil', color='blue')
-    plt.plot(below_profile_truth, label='Ground Truth Abaixo do Perfil', color='orange')
-    plt.xlabel('Índice x')
-    plt.ylabel('Valor')
-    plt.title(f'Comparação de Valores Abaixo do Perfil Aerodinâmico - {label_test[i]}')
+    plt.plot(x_indices_lower, pred_values_lower, label='Predição Abaixo do Dorso Inferior', color='blue', linestyle='--')
+    plt.plot(x_indices_lower, true_values_lower, label='Ground Truth Abaixo do Dorso Inferior', color='darkblue')
+    plt.xlabel('Índice X')
+    plt.ylabel('Temperatura (K)')
+    plt.title(f'Valores Imediatamente Abaixo do Dorso Inferior - Amostra {i}')
     plt.legend()
     plt.grid()
     plt.show()
+    
+    # Plotar a SDF para visualizar o perfil
+    plt.figure(figsize=(12, 6))
+    #plt.imshow(sdf_sample, origin='lower', cmap='gray')
+    #plt.colorbar(label='Valor da SDF')
+    plt.title(f'Visualização da SDF - Amostra {i}')
+
+    # Sobrepor a borda do perfil (contorno onde SDF = 0)
+    contours = plt.contour(sdf_sample, levels=[0], colors='black', linewidths=2)
+    #plt.clabel(contours, inline=True, fontsize=8, fmt='Borda do Perfil')
+
+    # Sobrepor os pontos no gráfico da SDF
+    plt.scatter(x_indices_upper, y_indices_upper, c='red', s=10, label='Pontos Acima do Dorso Superior')
+    plt.scatter(x_indices_lower, y_indices_lower, c='blue', s=10, label='Pontos Abaixo do Dorso Inferior')
+    plt.legend()
+    plt.xlabel('Índice X')
+    plt.ylabel('Índice Y')
+    plt.title(f'SDF e Pontos Acima/Abaixo do Perfil - Amostra {i}')
+    plt.show()
+    
+        
