@@ -4,11 +4,10 @@ Created on Tue Nov  7 09:59:39 2023
 
 @author: Guilherme
 """
-
+import tensorflow as tf
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Reshape, Concatenate, Conv2DTranspose, BatchNormalization, Activation
 from tensorflow.keras.models import Model
 from tensorflow.keras.activations import swish
-import tensorflow as tf
 import numpy as np
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.regularizers import l2

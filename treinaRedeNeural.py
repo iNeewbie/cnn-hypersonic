@@ -4,24 +4,26 @@ Created on Mon Jan  8 13:01:14 2024
 
 @author: Guilherme
 """
+# Importações
 from neuralNetwork import trainNeuralNetwork, total_loss, mse_loss, gdl_loss, huber_loss, CustomTotalLoss
 from geraDadosTreino import geraDadosTreino
 import tensorflow as tf
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 import pandas as pd
 import time
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import numpy as np
-from keras.callbacks import TensorBoard
-from keras.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import TensorBoard, ModelCheckpoint, TerminateOnNaN
 from tensorflow.keras.optimizers import Adam
 import joblib
-
-
+import datetime  # Para logs do TensorBoard
 
 plt.close('all')
 
+# =========================================================
+# 1. Carregar os dados, ou gerar se não estiverem disponíveis
+# =========================================================
 try:
     data = np.load('arquivo.npz')
     x1_train = data['array1']
@@ -41,37 +43,69 @@ except:
     if len(x1) == 1:
         ar0  = np.array([0])
         np.savez('arquivo.npz', array1=x1, array2=x2, array3=ar0, array4=ar0,
-             array5=y1, array6=ar0, array7=label, array8=ar0)
-        
+                 array5=y1, array6=ar0, array7=label, array8=ar0)
     else:
-            
-   
-        print(f"Passou {(fim_gerarDados-tempo_gerarDados)/60} minutos para gerar dados")
-        x1_train, x1_test =  train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
+        print(f"Passou {(fim_gerarDados - tempo_gerarDados) / 60} minutos para gerar dados")
+        x1_train, x1_test = train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
         x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
         y_train, y_test = train_test_split(y1, test_size=0.15, shuffle=True, random_state=13)
-        label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)  
+        label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)
         np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
                  array5=y_train, array6=y_test, array7=label_train, array8=label_test)
-    
-        
 
+# ==========================================
+# 2. Pré-processamento dos dados
+# ==========================================
+x1_train = np.expand_dims(x1_train, axis=-1)
+y_train = np.expand_dims(y_train, axis=-1)
+x1_test = np.expand_dims(x1_test, axis=-1)
+y_test = np.expand_dims(y_test, axis=-1)
 
-epochs_N = 5000
-batch_size_N = 77
-lambda_mse=0.9
-lambda_gdl=0.1
-lambda_l2=1e-5#1e-6#1e-6#1e-6
-lambda_huber=0
+x1_train = x1_train.astype('float32')
+y_train = y_train.astype('float32')
+x1_test = x1_test.astype('float32')
+y_test = y_test.astype('float32')
+
+# =========================================================
+# 3. Criação dos datasets de treino e teste com tf.data
+# =========================================================
+train_dataset = tf.data.Dataset.from_tensor_slices(((x1_train, x2_train), y_train))
+test_dataset = tf.data.Dataset.from_tensor_slices(((x1_test, x2_test), y_test))
+
+BUFFER_SIZE = len(x1_train)
+BATCH_SIZE = 77
+AUTOTUNE = tf.data.AUTOTUNE
+
+train_dataset = train_dataset.shuffle(buffer_size=BUFFER_SIZE)
+train_dataset = train_dataset.batch(BATCH_SIZE)
+train_dataset = train_dataset.prefetch(buffer_size=AUTOTUNE)
+
+test_dataset = test_dataset.batch(BATCH_SIZE)
+test_dataset = test_dataset.prefetch(buffer_size=AUTOTUNE)
+
+# =========================================================
+# 4. Hiperparâmetros do modelo
+# =========================================================
+epochs_N = 5
+lambda_mse = 0.9
+lambda_gdl = 0.1
+lambda_l2 = 1e-5
+lambda_huber = 0
 lr = 0.001
 filtros = 20
 
-tensorboard_callback = TensorBoard(log_dir='logs')
-checkpoint = ModelCheckpoint('meu_modelo_{epoch}.keras', save_freq=10000)
+# =========================================================
+# 5. Configuração dos callbacks (TensorBoard incluído)
+# =========================================================
+log_dir = "C:/Users/guilh/OneDrive/Desktop/cnn-hypersonic/logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
-#my_callbacks = [tf.keras.callbacks.ReduceLROnPlateau(monitor='loss',factor=0.8,patience=200), tf.keras.callbacks.EarlyStopping(monitor='loss', patience=100,min_delta = 0.001), tf.keras.callbacks.TerminateOnNaN()]
-my_callbacks = [tf.keras.callbacks.TerminateOnNaN(),checkpoint]#tf.keras.callbacks.EarlyStopping(monitor='loss', patience=1000,min_delta = 0.0001), ]
+tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
+checkpoint = ModelCheckpoint('meu_modelo.keras', save_best_only=True)
+my_callbacks = [TerminateOnNaN(), checkpoint, tensorboard_callback]
 
+# =========================================================
+# 6. Carregamento ou inicialização do modelo
+# =========================================================
 try:
     custom_objects = {
         'CustomTotalLoss': CustomTotalLoss,
@@ -82,99 +116,63 @@ try:
     }
 
     model = load_model('meu_modelo.keras', custom_objects=custom_objects)
-    print("carregou modelo")
-    # Criar uma instância da função de perda personalizada
+    print("Modelo carregado com sucesso.")
 
     loss = CustomTotalLoss(lambda_mse, lambda_gdl, lambda_huber)
     model.compile(optimizer=Adam(learning_rate=lr),
                   loss=loss,
                   metrics=[tf.keras.metrics.MeanAbsolutePercentageError()])
 except:
-    print("NÃO carregou modelo")
-    # Se o modelo ainda não existe, inicialize-o
+    print("NÃO carregou modelo, inicializando um novo modelo.")
     model = trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filtros)
 
-    
+model.summary()
 
-#model = trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filtros)
-
-
-# Treinar o modelo
+# =========================================================
+# 7. Treinamento do modelo com TensorBoard
+# =========================================================
 start_time = time.time()
-# Adicionar a dimensão do canal aos dados de entrada e saída
-x1_train = np.expand_dims(x1_train, axis=-1)  # Shape: (num_samples, 800, 800, 1)
-y_train = np.expand_dims(y_train, axis=-1)    # Shape: (num_samples, 800, 800, 1)
-x1_test = np.expand_dims(x1_test, axis=-1)  # Shape: (num_samples, 800, 800, 1)
-y_test = np.expand_dims(y_test, axis=-1)    # Shape: (num_samples, 800, 800, 1)
 
 history = model.fit(
-    [x1_train, x2_train], y_train,
+    train_dataset,
     epochs=epochs_N,
-    batch_size=batch_size_N,
-    validation_data=([x1_test, x2_test], y_test),  # Adiciona dados de validação
+    validation_data=test_dataset,
     callbacks=my_callbacks,
-    verbose=1,
-    use_multiprocessing=True
+    verbose=1
 )
-#history = model.fit([x1_train,x2_train], y_train, epochs=epochs_N, batch_size=batch_size_N,callbacks=my_callbacks,verbose=1,use_multiprocessing=True)
 
 end_time = time.time()
+elapsed_time = end_time - start_time
+print(f"Tempo de treinamento: {elapsed_time / 60:.2f} minutos.")
 
-weights = model.get_weights
+# =========================================================
+# 8. Salvamento do modelo e histórico de treinamento
+# =========================================================
 model.save('meu_modelo.keras')
-
-elapsed_time = end_time-start_time
-
-# Obter o loss e o tempo
-#loss = history.history['loss'][-1]  # Substitua se você tiver uma maneira diferente de calcular o loss
-#val_loss = history.history['val_loss'][-1]
-# Tente ler o arquivo CSV
-#try:
-   #df = pd.read_csv('dados_treinamento.csv')
-   # last_day = df['Dia'].iloc[-1]
-#except:
-    # Se o arquivo CSV ainda não existe, inicialize o DataFrame e defina o último dia como 0
-    #df = pd.DataFrame(columns=['Dia', 'Épocas', 'Loss', 'Val_loss', 'Tempo'])
-    #last_day = 0
-
-
-# Adicionar os dados ao DataFrame
-#df = pd.concat([df, pd.DataFrame([{'Dia': last_day+1, 'Épocas': len(history.history['loss']), 'Loss': loss, 'Val_loss':val_loss, 'Tempo': elapsed_time}])], ignore_index=True)
-# Salvar o modelo
-
-
-# Salvar o DataFrame como um arquivo CSV
-#df.to_csv('dados_treinamento.csv',index=False)
-
+print("Modelo salvo em 'meu_modelo.keras'.")
 
 new_hist_df = pd.DataFrame(history.history)
-
 try:
     hist_df = pd.read_csv('history.csv')
     hist_df = pd.concat([hist_df, new_hist_df], ignore_index=True)
-except:
-    hist_df = new_hist_df  
+except FileNotFoundError:
+    hist_df = new_hist_df
 
 hist_df.to_csv('history.csv', index=False)
+print("Histórico de treinamento salvo em 'history.csv'.")
 
-# Criar uma nova figura
-plt.figure()
+# =========================================================
+# 9. Plotagem das métricas de perda e MAPE
+# =========================================================
+plt.figure(figsize=(10, 6))
 
-# Plotar a perda de treinamento
 plt.semilogy(new_hist_df['loss'], label='Loss')
 plt.semilogy(new_hist_df['mean_absolute_percentage_error'], label='MAPE')
 
-# Plotar a perda de validação
-#plt.semilogy(hist_df['val_loss'], label='Validação')
-
-# Adicionar um título e rótulos aos eixos
 plt.title('Perda de Treinamento e Validação')
 plt.xlabel('Épocas')
 plt.ylabel('Perda (log)')
-
-# Adicionar uma legenda
 plt.legend()
+plt.grid(True, which="both", ls="--")
 
-# Mostrar o gráfico
 plt.show()
-

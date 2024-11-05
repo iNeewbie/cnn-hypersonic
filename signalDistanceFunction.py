@@ -41,7 +41,6 @@ def getSDF(datFile, AoA, plot=False):
     
     # Campo de distância inicial com valores de -300 (dentro do aerofólio) e 300 (fora)
     phi = np.where(airfoil_mask, -300, 300)
-    
     # Computa o campo de distância com dx de 5mm
     distance = skfmm.distance(phi, dx=2/nx)
 
