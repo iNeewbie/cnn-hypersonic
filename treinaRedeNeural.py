@@ -86,7 +86,7 @@ test_dataset = test_dataset.prefetch(buffer_size=AUTOTUNE)
 # =========================================================
 # 4. Hiperparâmetros do modelo
 # =========================================================
-epochs_N = 5
+epochs_N = 100
 lambda_mse = 0.9
 lambda_gdl = 0.1
 lambda_l2 = 1e-5
@@ -97,7 +97,7 @@ filtros = 20
 # =========================================================
 # 5. Configuração dos callbacks (TensorBoard incluído)
 # =========================================================
-log_dir = "C:/Users/guilh/OneDrive/Desktop/cnn-hypersonic/logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
 tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
 checkpoint = ModelCheckpoint('meu_modelo.keras', save_best_only=True)
