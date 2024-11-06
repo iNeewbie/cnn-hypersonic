@@ -77,17 +77,17 @@ def trainNeuralNetwork(lambda_mse=0.03, lambda_gdl=0.1, lambda_l2=1e-5, lambda_h
     
     # Codificador
     x = Conv2D(filters, (5, 5), padding='same', kernel_regularizer=l2(lambda_l2))(input_img)
-    #x = BatchNormalization()(x)
+    x = BatchNormalization()(x)
     x = Activation(swish)(x)
     x = MaxPooling2D((5, 5))(x)
     
     x = Conv2D(filters, (5, 5), padding='same', kernel_regularizer=l2(lambda_l2))(x)
-    #x = BatchNormalization()(x)
+    x = BatchNormalization()(x)
     x = Activation(swish)(x)
     x = MaxPooling2D((5, 5))(x)
     
     x = Conv2D(filters, (4, 4), padding='same', kernel_regularizer=l2(lambda_l2))(x)
-    #x = BatchNormalization()(x)
+    x = BatchNormalization()(x)
     x = Activation(swish)(x)
     x = MaxPooling2D((4, 4))(x)
     
@@ -99,7 +99,7 @@ def trainNeuralNetwork(lambda_mse=0.03, lambda_gdl=0.1, lambda_l2=1e-5, lambda_h
     
     # Decodificador
     x = Dense(filters * 4 * 4, kernel_regularizer=l2(lambda_l2))(x)
-    #x = BatchNormalization()(x)
+    x = BatchNormalization()(x)
     x = Activation(swish)(x)
     x = Reshape((4, 4, filters))(x)  # Correção: aplicar a camada Reshape em x
     
@@ -110,11 +110,11 @@ def trainNeuralNetwork(lambda_mse=0.03, lambda_gdl=0.1, lambda_l2=1e-5, lambda_h
     x = Activation(swish)(x)
     
     x = Conv2DTranspose(filters, (5, 5), strides=(5, 5), padding='same', kernel_regularizer=l2(lambda_l2))(x)
-    #x = BatchNormalization()(x)
+    x = BatchNormalization()(x)
     x = Activation(swish)(x)
     
     x = Conv2DTranspose(filters, (5, 5), strides=(5, 5), padding='same', kernel_regularizer=l2(lambda_l2))(x)
-    #x = BatchNormalization()(x)
+    x = BatchNormalization()(x)
     x = Activation(swish)(x)
     
     # Camada de saída

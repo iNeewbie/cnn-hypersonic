@@ -86,7 +86,7 @@ test_dataset = test_dataset.prefetch(buffer_size=AUTOTUNE)
 # =========================================================
 # 4. Hiperparâmetros do modelo
 # =========================================================
-epochs_N = 100
+epochs_N = 10
 lambda_mse = 0.9
 lambda_gdl = 0.1
 lambda_l2 = 1e-5
@@ -99,9 +99,20 @@ filtros = 20
 # =========================================================
 log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
-tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
-checkpoint = ModelCheckpoint('meu_modelo.keras', save_best_only=True)
-my_callbacks = [TerminateOnNaN(), checkpoint, tensorboard_callback]
+tensorboard_callback = TensorBoard(log_dir='logs')
+checkpoint = ModelCheckpoint(
+    'meu_modelo.keras',  # sem especificar uma extensão; `.tf` será o padrão
+    save_best_only=True,
+    save_weights_only=False,  # Salva o modelo completo, não apenas os pesos
+    monitor='val_mean_absolute_percentage_error',  # Monitorando a perda de validação, ajuste conforme necessário
+    mode='min'  # Minimizando a perda, ajuste conforme necessário
+)
+
+
+my_callbacks = [
+    tf.keras.callbacks.TerminateOnNaN(),
+]
+
 
 # =========================================================
 # 6. Carregamento ou inicialização do modelo
