@@ -16,7 +16,7 @@ def normalizaDadosFunc(dados, plot=False):
     scaled_data = scaler.fit_transform(dados_2d)
 
     # Redimensiona os dados de volta para a forma original
-    scaled_data = scaled_data.reshape(-1, 400, 400)
+    scaled_data = scaled_data.reshape(-1, 150, 150)
 
     if plot:
         # Usando apenas a primeira camada para visualização

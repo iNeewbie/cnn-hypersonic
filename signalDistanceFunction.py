@@ -13,7 +13,7 @@ def getSDF(datFile, AoA, plot=False):
                                 [np.sin(angle_rad), np.cos(angle_rad)]])
     
     # Configuração da grade para o domínio de 2m x 1m com resolução de 5mm (0.005)
-    nx, ny = 400,400
+    nx, ny = 150,150
     x = np.linspace(-0.5, 1.5, nx)  # Domínio de -0.5 a 1.5m em x (2m no total)
     y = np.linspace(-0.5, 0.5, ny)  # Domínio de -0.5 a 0.5m em y (1m no total)
     X, Y = np.meshgrid(x, y)
