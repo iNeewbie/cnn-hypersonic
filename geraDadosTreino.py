@@ -19,7 +19,7 @@ def geraDadosTreino():
     AoAs = [-5, -3, 0, 5, 10, 15]
     
     def genDatFile(WA):
-        datFile = np.array([[0,0],[0.5,0.5*np.tan(WA/2*np.pi/180)],[1,0],[0.5,-0.5*np.tan(WA/2*np.pi/180)],[0,0]])
+        datFile = np.array([[0,0],[0.5,0.5*np.tan(WA*np.pi/180)],[1,0],[0.5,-0.5*np.tan(WA*np.pi/180)],[0,0]])
         return datFile
     
     
@@ -47,27 +47,39 @@ def geraDadosTreino():
         sdf,X,Y = getSDF(genDatFile(WedgeAngles[wa_it]), 0)
         for aoa_it in range(len(AoAs)):    
             for mn_it in range(len(MachNumbers)):       
-                #if index_mach <3:
-                if os.path.isfile(pasta2[index_mach]):
-                    simFiles.append(np.genfromtxt(pasta2[index_mach], delimiter=',', skip_header=1))
-                    conditionsFile.append([AoAs[aoa_it],MachNumbers[mn_it]])                    
-                    sdfFile.append(sdf)
-                    results = importResults(simFiles[index_mach])
-                    dadosTemperatura,_,_ = interpSDFCart(sdf, X, Y, results)
-                    
-                    outputTemp.append(dadosTemperatura)
-                    #outputPress.append(normalizaDadosFunc(grid_pressure))
-                    label.append(f'Wedge: {WedgeAngles[wa_it]}, AoA: {AoAs[aoa_it]}, Mach: {MachNumbers[mn_it]}')
+                if index_mach<36:
+                    if os.path.isfile(pasta2[index_mach]):
+                        simFiles.append(np.genfromtxt(pasta2[index_mach], delimiter=',', skip_header=1))
+                        conditionsFile.append([AoAs[aoa_it],MachNumbers[mn_it]])                    
+                        sdfFile.append(sdf)
+                        results = importResults(simFiles[-1])#importResults(simFiles[index_mach])
+                        dadosTemperatura,_,_ = interpSDFCart(sdf, X, Y, results)
 
-                    index_mach+=1
+                        
+                        outputTemp.append(dadosTemperatura)
+
+
+                        #outputPress.append(normalizaDadosFunc(grid_pressure))
+                        label.append(f'Wedge: {WedgeAngles[wa_it]}, AoA: {AoAs[aoa_it]}, Mach: {MachNumbers[mn_it]}')
+    
+                        index_mach+=1
+
+                    else:
+                        print("Arquivo não existe")
                 else:
-                    print("Arquivo não existe")
+                    
+                    index_mach+=1
+                        
         index += 1
         
-    outputTemp = normalizaDadosFunc(outputTemp) 
+    outputTemp, scaler = normalizaDadosFunc(outputTemp) 
             
     conditionsFile = np.array(conditionsFile)    
-    sdfFile = np.array(sdfFile) 
-    outputTemp = np.array(outputTemp)
     outputPress = np.array(outputPress)
-    return sdfFile, conditionsFile, outputTemp, outputPress, label
+    
+    
+    
+    sdfFile = np.array(sdfFile)
+    outputTemp = np.array(outputTemp)
+    
+    return sdfFile, conditionsFile, outputTemp, outputPress, label, scaler

@@ -1,5 +1,7 @@
 *.log
 *.trn
 desktop.ini
-*.npz
 __pycache__
+testeeeeee.py
+teste2.py
+/logs
