@@ -47,7 +47,7 @@ def geraDadosTreino():
         sdf,X,Y = getSDF(genDatFile(WedgeAngles[wa_it]), 0)
         for aoa_it in range(len(AoAs)):    
             for mn_it in range(len(MachNumbers)):       
-                if index_mach<36:
+                if index_mach<200:
                     if os.path.isfile(pasta2[index_mach]):
                         simFiles.append(np.genfromtxt(pasta2[index_mach], delimiter=',', skip_header=1))
                         conditionsFile.append([AoAs[aoa_it],MachNumbers[mn_it]])                    
