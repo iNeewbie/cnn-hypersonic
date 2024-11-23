@@ -1,7 +1,7 @@
 <FluentXMLReport>
 <version>
 Fluent
-Version: 2d, dp, dbns imp, sstkw (2d, double precision, density-based implicit, SST k-omega)
+Version: 2d, dp, dbns imp, ske (2d, double precision, density-based implicit, standard k-epsilon)
 Release: 23.1.0
 Title: 
 </version>
@@ -11,25 +11,26 @@ Title:
 Models
 ------
 
-   Model                        Settings                       
-   ---------------------------------------------------------
-   Space                        2D                             
-   Time                         Steady                         
-   Viscous                      SST k-omega turbulence model   
-   Heat Transfer                Enabled                        
-   Solidification and Melting   Disabled                       
-   Radiation                    None                           
-   Species                      Disabled                       
-   Coupled Dispersed Phase      Disabled                       
-   NOx Pollutants               Disabled                       
-   SOx Pollutants               Disabled                       
-   Soot                         Disabled                       
-   Mercury Pollutants           Disabled                       
-   Structure                    Disabled                       
-   Acoustics                    Disabled                       
-   Eulerian Wall Film           Disabled                       
-   Potential/Electrochemistry   Disabled                       
-   Multiphase                   Disabled                       
+   Model                        Settings                              
+   ----------------------------------------------------------------
+   Space                        2D                                    
+   Time                         Steady                                
+   Viscous                      Standard k-epsilon turbulence model   
+   Wall Treatment               Standard Wall Functions               
+   Heat Transfer                Enabled                               
+   Solidification and Melting   Disabled                              
+   Radiation                    None                                  
+   Species                      Disabled                              
+   Coupled Dispersed Phase      Disabled                              
+   NOx Pollutants               Disabled                              
+   SOx Pollutants               Disabled                              
+   Soot                         Disabled                              
+   Mercury Pollutants           Disabled                              
+   Structure                    Disabled                              
+   Acoustics                    Disabled                              
+   Eulerian Wall Film           Disabled                              
+   Potential/Electrochemistry   Disabled                              
+   Multiphase                   Disabled                              
 
 </Models>
 
@@ -95,19 +96,19 @@ Boundary Conditions
 
          Condition                                                              Value         
          ----------------------------------------------------------------------------------
-         Gauge Pressure [Pa]                                                    101325        
+         Gauge Pressure [Pa]                                                    18755.7       
          Mach Number                                                            9             
+         Temperature [K]                                                        216.65        
          X-Component of Flow Direction                                          0.91284426    
          Y-Component of Flow Direction                                          0.087155743   
-         Note: Reinjected particles do not change their injection association   122776720     
+         Note: Reinjected particles do not change their injection association   1704935568    
 
       outlet
 
          Condition                                                              Value        
          ---------------------------------------------------------------------------------
-         Gauge Pressure [Pa]                                                    101325       
-         Note: Reinjected particles do not change their injection association   1874166688   
-         Build artificial walls to prevent reverse flow?                        yes          
+         Gauge Pressure [Pa]                                                    18755.7      
+         Note: Reinjected particles do not change their injection association   1704936368   
 
       airfoil
 
@@ -116,7 +117,6 @@ Boundary Conditions
          Thermal BC Type            Heat Flux         
          Wall Motion                Stationary Wall   
          Shear Boundary Condition   No Slip           
-         Wall Surface Roughness     0                 
 
 </BoundaryConditions>
 
@@ -139,28 +139,28 @@ Solver Settings
 
    Under-Relaxation Factors
 
-      Variable                    Relaxation Factor   
-      ---------------------------------------------
-      Turbulent Kinetic Energy    0.8                 
-      Specific Dissipation Rate   0.8                 
-      Turbulent Viscosity         1                   
-      Solid                       1                   
+      Variable                     Relaxation Factor   
+      ----------------------------------------------
+      Turbulent Kinetic Energy     0.8                 
+      Turbulent Dissipation Rate   0.8                 
+      Turbulent Viscosity          1                   
+      Solid                        1                   
 
    Linear Solver
 
-      Variable                    Solver Type   Termination Criterion   Residual Reduction Tolerance   
-      ----------------------------------------------------------------------------------------------
-      Flow                        F-Cycle       0.01                                                   
-      Turbulent Kinetic Energy    Flexible      0.1                     0.7                            
-      Specific Dissipation Rate   Flexible      0.1                     0.7                            
+      Variable                     Solver Type   Termination Criterion   Residual Reduction Tolerance   
+      -----------------------------------------------------------------------------------------------
+      Flow                         F-Cycle       0.01                                                   
+      Turbulent Kinetic Energy     Flexible      0.1                     0.7                            
+      Turbulent Dissipation Rate   Flexible      0.1                     0.7                            
 
    Discretization Scheme
 
-      Variable                    Scheme                
-      -----------------------------------------------
-      Flow                        Second Order Upwind   
-      Turbulent Kinetic Energy    Second Order Upwind   
-      Specific Dissipation Rate   Second Order Upwind   
+      Variable                     Scheme                
+      ------------------------------------------------
+      Flow                         Second Order Upwind   
+      Turbulent Kinetic Energy     Second Order Upwind   
+      Turbulent Dissipation Rate   Second Order Upwind   
 
    Time Marching
 
@@ -178,7 +178,7 @@ Solver Settings
       Minimum Temperature              1        
       Maximum Temperature              5000     
       Minimum Turb. Kinetic Energy     1e-14    
-      Minimum Spec. Dissipation Rate   1e-20    
+      Minimum Turb. Dissipation Rate   1e-20    
       Maximum Turb. Viscosity Ratio    100000   
 
 </SolverSettings>

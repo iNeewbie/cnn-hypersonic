@@ -2,13 +2,14 @@
 <Storage>
   <Project Version="9.1">
     <base-designpoint-name valType="String">0</base-designpoint-name>
-    <timestamp-max valType="Int64">3774</timestamp-max>
+    <timestamp-max valType="Int64">3812</timestamp-max>
     <framework-build-version valType="String">23.1.153.0</framework-build-version>
     <external-version-string valType="String">2023 R1</external-version-string>
-    <last-saved-utc valType="String">10/29/2024 01:28:07</last-saved-utc>
+    <last-saved-utc valType="String">11/23/2024 20:35:22</last-saved-utc>
     <managed-categories valType="String">[report, misc, progress]</managed-categories>
     <logHistory valType="StringArray">
       <ArrayEntry Index="0">Guilherme@GUILHERME:C:\Users\guilh\AppData\Local\Temp\WorkbenchLogs\CoreEvents6904.log</ArrayEntry>
+      <ArrayEntry Index="1">Guilherme@GUILHERME:C:\Users\guilh\AppData\Local\Temp\WorkbenchLogs\CoreEvents1164.log</ArrayEntry>
     </logHistory>
     <expression-scope-container valType="String">Parameters</expression-scope-container>
     <project-type valType="String">WB2</project-type>
@@ -31,8 +32,6 @@
 "df027953-48b3-424c-8ada-7367dae02b89": "/FileContainer/FileReference:F7",
 "a08a7995-48f7-4fae-b4c3-df9e121fc5b7": "/FileContainer/FileReference:F9",
 "792b24bf-97bf-47d1-b0df-82616246d244": "/FileContainer/FileReference:F8",
-"af569093-afad-4fe2-9d86-5db15c37444a": "/FileContainer/FileReference:F12",
-"78002fa9-7ef8-4db8-a47e-ed7183ed87f7": "/FileContainer/FileReference:F13",
 "771c8b89-11c4-4c61-a5ec-f028047d6353": "/FileContainer/FileReference:F11",
 "1cfd7ab7-e4be-4e64-a9ea-911ee9351432": "/FileContainer/FileReference:F10",
 "381a9a5f-705b-4d32-9cc6-ee190c86e4bb": "/FileTypesContainer/FileType:GeometryFileType",
@@ -54,7 +53,9 @@
 "e5cbb745-ea19-4833-8e13-323140245a36": "/Schematic/ComponentTemplate:GeometryCellTemplate",
 "ab6c2ebf-d5a1-4c65-ac89-7f741519b47c": "/Schematic/ComponentTemplate:SimulationMeshingModelCellTemplate",
 "30ebb6f8-31ea-4f3b-a058-78608c9b6821": "/Schematic/ComponentTemplate:FluentSetupCellTemplate",
-"d3df73bf-6303-427c-9e09-33c10e2b3a0d": "/Schematic/ComponentTemplate:FluentResultsCellTemplate"
+"d3df73bf-6303-427c-9e09-33c10e2b3a0d": "/Schematic/ComponentTemplate:FluentResultsCellTemplate",
+"128a7918-b4b9-408b-8ed5-a8dea05fadab": "/FileContainer/FileReference:F12",
+"7d43e182-90b2-4ab9-80d2-cf1e00c28a7b": "/FileContainer/FileReference:F13"
 }</ReferenceList>
       </ProjectReferenceList>
       <DesignPointReferenceListCollection>
@@ -103,7 +104,7 @@
       <storage-scheme-id valType="String">version-1-format</storage-scheme-id>
       <deleted-sources valType="String">[]</deleted-sources>
       <last-updated valType="Int64">0</last-updated>
-      <last-modified-by-usage valType="String">{"Extrinsic": 3770, "Input": 1440, "Output": 1440}</last-modified-by-usage>
+      <last-modified-by-usage valType="String">{"Extrinsic": 3809, "Input": 1440, "Output": 1440}</last-modified-by-usage>
       <outputs-generated-by-type valType="String">{}</outputs-generated-by-type>
       <contains-significant-data valType="Boolean">false</contains-significant-data>
       <Object Name="/FileContainer/FileReference:F1" Version="1.0">
@@ -114,7 +115,7 @@
       <Object Name="/FileContainer/FileReference:F2" Version="1.0">
         <class-type valType="String">FileReference</class-type>
         <object-name valType="String">F2</object-name>
-        <member-data valType="String">{"DisplayText": "act.dat", "FileType": $$b246f326-1ea7-451d-ab6b-b4e05dd8cbf4, "DependentFiles": [], "ContainerAssociations": [], "SkipForDesignPointDuplication": False, "IsDeletable": True, "ExternalSource": None, "LastDownloadFromRepository": -1, "Location": r"$(ProjectName)_files\dp0\act.dat", "ReferenceCount": 2}</member-data>
+        <member-data valType="String">{"DisplayText": "act.dat", "FileType": $$b246f326-1ea7-451d-ab6b-b4e05dd8cbf4, "DependentFiles": [], "ContainerAssociations": [], "SkipForDesignPointDuplication": False, "IsDeletable": True, "ExternalSource": None, "LastDownloadFromRepository": -1, "Location": r"$(ProjectName)_files\dp0\act.dat", "ReferenceCount": 4}</member-data>
       </Object>
       <Object Name="/FileContainer/FileReference:F3" Version="1.0">
         <class-type valType="String">FileReference</class-type>
@@ -149,17 +150,17 @@
       <Object Name="/FileContainer/FileReference:F11" Version="1.0">
         <class-type valType="String">FileReference</class-type>
         <object-name valType="String">F11</object-name>
-        <member-data valType="String">{"DisplayText": "SolutionMonitor.gz", "FileType": $$3f537db5-8b5b-4f92-947e-14f03a5c4d84, "DependentFiles": [], "ContainerAssociations": ["Solution"], "SkipForDesignPointDuplication": False, "IsDeletable": False, "ExternalSource": None, "LastDownloadFromRepository": -1, "Location": r"$(ProjectName)_files\dp0\FFF\Fluent\SolutionMonitor.gz", "ReferenceCount": 6}</member-data>
+        <member-data valType="String">{"DisplayText": "SolutionMonitor.gz", "FileType": $$3f537db5-8b5b-4f92-947e-14f03a5c4d84, "DependentFiles": [], "ContainerAssociations": ["Solution"], "SkipForDesignPointDuplication": False, "IsDeletable": False, "ExternalSource": None, "LastDownloadFromRepository": -1, "Location": r"$(ProjectName)_files\dp0\FFF\Fluent\SolutionMonitor.gz", "ReferenceCount": 7}</member-data>
       </Object>
       <Object Name="/FileContainer/FileReference:F12" Version="1.0">
         <class-type valType="String">FileReference</class-type>
         <object-name valType="String">F12</object-name>
-        <member-data valType="String">{"DisplayText": "FFF.1-2-05000.cas.h5", "FileType": $$03777280-4ac6-4e88-befd-a08d1aabfa38, "DependentFiles": [$$78002fa9-7ef8-4db8-a47e-ed7183ed87f7], "ContainerAssociations": ["Solution"], "SkipForDesignPointDuplication": False, "IsDeletable": True, "ExternalSource": None, "LastDownloadFromRepository": -1, "Location": r"$(ProjectName)_files\dp0\FFF\Fluent\FFF.1-2-05000.cas.h5", "ReferenceCount": 1}</member-data>
+        <member-data valType="String">{"DisplayText": "FFF.1-3-01523.cas.h5", "FileType": $$03777280-4ac6-4e88-befd-a08d1aabfa38, "DependentFiles": [$$7d43e182-90b2-4ab9-80d2-cf1e00c28a7b], "ContainerAssociations": ["Solution"], "SkipForDesignPointDuplication": False, "IsDeletable": True, "ExternalSource": None, "LastDownloadFromRepository": -1, "Location": r"$(ProjectName)_files\dp0\FFF\Fluent\FFF.1-3-01523.cas.h5", "ReferenceCount": 1}</member-data>
       </Object>
       <Object Name="/FileContainer/FileReference:F13" Version="1.0">
         <class-type valType="String">FileReference</class-type>
         <object-name valType="String">F13</object-name>
-        <member-data valType="String">{"DisplayText": "FFF.1-2-05000.dat.h5", "FileType": $$0d72421d-8e2c-4651-a8d0-e5b504379f8e, "DependentFiles": [], "ContainerAssociations": ["Solution"], "SkipForDesignPointDuplication": False, "IsDeletable": True, "ExternalSource": None, "LastDownloadFromRepository": -1, "Location": r"$(ProjectName)_files\dp0\FFF\Fluent\FFF.1-2-05000.dat.h5", "ReferenceCount": 1}</member-data>
+        <member-data valType="String">{"DisplayText": "FFF.1-3-01523.dat.h5", "FileType": $$0d72421d-8e2c-4651-a8d0-e5b504379f8e, "DependentFiles": [], "ContainerAssociations": ["Solution"], "SkipForDesignPointDuplication": False, "IsDeletable": True, "ExternalSource": None, "LastDownloadFromRepository": -1, "Location": r"$(ProjectName)_files\dp0\FFF\Fluent\FFF.1-3-01523.dat.h5", "ReferenceCount": 1}</member-data>
       </Object>
     </Container>
     <Container Name="Messages" Version="1.0">
@@ -358,7 +359,7 @@ flow ,airfoil ,far-field ,outlet
       <Object Name="/Units/UnitSystem:UnitSys" Version="1.0">
         <class-type valType="String">UnitSystem</class-type>
         <object-name valType="String">UnitSys</object-name>
-        <member-data valType="String">{"DisplayText": "Metric (kg,m,s,°C,A,N,V)", "ChangedQuantityUnits": {"Temperature": "C", "Energy Source Coefficient": "W m^-3 C^-1", "Heat Transfer Coefficient": "W m^-2 C^-1", "InvTemp1": "C^-1", "InvTemp2": "C^-2", "InvTemp3": "C^-3", "InvTemp4": "C^-4", "Molar Entropy": "J mol^-1 C^-1", "Normalized Value": "m m^-1", "Seebeck Coefficient": "V C^-1", "Specific Entropy": "J kg^-1 C^-1", "Specific Heat Capacity": "J kg^-1 C^-1", "Temperature Gradient": "C m^-1", "Thermal Conductivity": "W m^-1 C^-1", "Thermal Expansivity": "C^-1", "Stress Per Temperature": "Pa C^-1", "Temperature Difference": "C", "Density Derivative wrt Temperature": "kg m^-3 C^-1", "Pressure Derivative wrt Temperature": "Pa C^-1", "Thermal Capacitance": "J C^-1", "Thermal Conductance": "W C^-1", "Thermal Contact Resistance": "W^-1 m^2 C", "Piezoelectric Strain Coefficient": "A s N^-1", "Piezoelectric Stress Coefficient": "A s m^-2", "Thermal Compliance": "W C"}, "UnitSystemName": "MKS_STANDARD", "BaseUnitSystemName": "SI", "IsProjectUnitSystem": True, "IsDefault": False}</member-data>
+        <member-data valType="String">{"DisplayText": "Metric (kg,m,s,°C,A,N,V)", "ChangedQuantityUnits": {}, "UnitSystemName": "MKS_STANDARD", "BaseUnitSystemName": "SI", "IsProjectUnitSystem": True, "IsDefault": False}</member-data>
       </Object>
       <Object Name="/Units/UnitSystem:UnitSys 1" Version="1.0">
         <class-type valType="String">UnitSystem</class-type>
