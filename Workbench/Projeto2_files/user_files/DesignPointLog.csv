@@ -1,0 +1,12 @@
+﻿# 
+# This file contains the parameter values of the Design Points successfully updated by Ansys Workbench.
+# Project name: Projeto2
+# Creation date: 10/30/2024 19:12:16
+# 
+# 10/30/2024 19:12:16
+# The parameters defined in the project are:
+# ,P1 - WedgeAngle [degree]
+# 
+# The following header line defines the name of the columns by reference to the parameters.
+Name,P1
+DP 0,12
