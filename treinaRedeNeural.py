@@ -73,7 +73,7 @@ train_dataset = tf.data.Dataset.from_tensor_slices(((x1_train, x2_train), y_trai
 test_dataset = tf.data.Dataset.from_tensor_slices(((x1_test, x2_test), y_test))
 
 BUFFER_SIZE = len(x1_train)
-BATCH_SIZE = 77
+BATCH_SIZE = 39
 AUTOTUNE = tf.data.AUTOTUNE
 
 train_dataset = train_dataset.shuffle(buffer_size=BUFFER_SIZE)
@@ -86,13 +86,13 @@ test_dataset = test_dataset.prefetch(buffer_size=AUTOTUNE)
 # =========================================================
 # 4. Hiperparâmetros do modelo
 # =========================================================
-epochs_N = 10
+epochs_N = 10000
 lambda_mse = 0.9
 lambda_gdl = 0.1
 lambda_l2 = 1e-5
 lambda_huber = 0
 lr = 0.001
-filtros = 20
+filtros = 300
 
 # =========================================================
 # 5. Configuração dos callbacks (TensorBoard incluído)
@@ -142,14 +142,18 @@ model.summary()
 # =========================================================
 # 7. Treinamento do modelo com TensorBoard
 # =========================================================
-start_time = time.time()
 
-history = model.fit(
-    train_dataset,
-    epochs=epochs_N,
-    validation_data=test_dataset,
-    callbacks=my_callbacks,
-    verbose=1
+print("GPUs disponíveis: ", tf.config.list_physical_devices('GPU'))
+
+
+start_time = time.time()
+with tf.device('/GPU:0'):
+	history = model.fit(
+    		train_dataset,
+		epochs=epochs_N,
+		validation_data=test_dataset,
+		callbacks=my_callbacks,
+		verbose=1
 )
 
 end_time = time.time()
