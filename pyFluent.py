@@ -10,13 +10,15 @@ solver = pyfluent.launch_fluent(
     processor_count=4,
     mode="solver",
     ui_mode="gui",
-    dimension=2
+    dimension=2,
+    product_version=pyfluent.FluentVersion.v231
 )
+
 solver.transcript.stop()
 print("Solver iniciado.")
 
 # Carregando o caso inicial
-case_file = "C:\\Users\\guilh\\OneDrive\\Documentos\\cnn-hypersonic\\pyFluent\\caso.cas.h5"
+case_file = "D:\\cnn-hypersonic\\pyFluent\\caso.cas.h5"
 print("Carregando caso:", case_file)
 solver.file.read_case(file_type="case", file_name=case_file)
 print("Caso carregado.")
@@ -26,7 +28,7 @@ MachNumbers = [5, 6, 7, 8, 9, 10]
 WedgeAngles = [5, 7, 10, 12, 15]
 AoAs = [-5, -3, 0, 5, 10, 15]
 
-base_path = "C:\\Users\\guilh\\OneDrive\\Documentos\\cnn-hypersonic\\DataCFD2"
+base_path = "D:\\cnn-hypersonic\\DataCFD2"
 pasta = [os.path.join(base_path, str(WedgeAngle) + "-WedgeAngle", "meshFile.msh") for WedgeAngle in WedgeAngles]
 pasta2 = [os.path.join(base_path, str(WedgeAngle) + "-WedgeAngle", str(AoA) + "-AoA", str(MachNumber) + "-Mach","solData") 
          for WedgeAngle in WedgeAngles for AoA in AoAs for MachNumber in MachNumbers]
