@@ -23,7 +23,7 @@ print("Carregando caso:", case_file)
 solver.file.read_case(file_type="case", file_name=case_file)
 print("Caso carregado.")
 
-# Parâmetros para iteração
+# Parâmetros para iteraçã
 MachNumbers = [5, 6, 7, 8, 9, 10]
 WedgeAngles = [5, 7, 10, 12, 15]
 AoAs = [-5, -3, 0, 5, 10, 15]
