@@ -9,7 +9,7 @@ solver = pyfluent.launch_fluent(
     precision="double",
     processor_count=4,
     mode="solver",
-    ui_mode="gui",
+    ui_mode="text",
     dimension=2,
     product_version=pyfluent.FluentVersion.v231
 )
@@ -60,7 +60,7 @@ for wa_it in tqdm(range(len(WedgeAngles)), desc="Wedge Angles"):
 
                 # Executar cálculo
                 print(f"Executando cálculo: Mach={MachNumbers[mn_it]}, AoA={AoAs[aoa_it]}, WedgeAngle={WedgeAngles[wa_it]}")
-                solver.solution.run_calculation.iterate(iter_count=10)
+                solver.solution.run_calculation.iterate(iter_count=10000)
 
                 # Exportar dados
 
