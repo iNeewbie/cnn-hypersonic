@@ -15,21 +15,23 @@ from tensorflow.keras.utils import get_custom_objects, register_keras_serializab
 
 @register_keras_serializable(package="my_package")
 class CustomTotalLoss(tf.keras.losses.Loss):
-    def __init__(self, lambda_mse, lambda_gdl, lambda_huber, **kwargs):
+    def __init__(self, lambda_mse, lambda_gdl, lambda_huber, delta_huber, **kwargs):
         super().__init__(**kwargs)
         self.lambda_mse = lambda_mse
         self.lambda_gdl = lambda_gdl
         self.lambda_huber = lambda_huber
+        self.delta_huber = delta_huber
 
     def call(self, y_true, y_pred):
-        return total_loss(y_true, y_pred, self.lambda_mse, self.lambda_gdl, self.lambda_huber)
+        return total_loss(y_true, y_pred, self.lambda_mse, self.lambda_gdl, self.lambda_huber, self.delta_huber)
 
     def get_config(self):
         config = super().get_config()
         config.update({
             'lambda_mse': self.lambda_mse,
             'lambda_gdl': self.lambda_gdl,
-            'lambda_huber': self.lambda_huber
+            'lambda_huber': self.lambda_huber,
+            'delta_huber': self.delta_huber
         })
         return config
 
@@ -56,19 +58,19 @@ def gdl_loss(y_true, y_pred, lambda_gdl):
     return lambda_gdl * loss
 
 @register_keras_serializable(package="my_package")
-def huber_loss(y_true, y_pred, lambda_huber):
-    loss = tf.keras.losses.Huber(delta=0.5)(y_true, y_pred)
+def huber_loss(y_true, y_pred, lambda_huber,delta_huber):
+    loss = tf.keras.losses.Huber(delta=delta_huber)(y_true, y_pred)
     return lambda_huber * loss
 
 @register_keras_serializable(package="my_package")
-def total_loss(y_true, y_pred, lambda_mse, lambda_gdl, lambda_huber):
+def total_loss(y_true, y_pred, lambda_mse, lambda_gdl, lambda_huber,delta_huber):
     return (mse_loss(y_true, y_pred, lambda_mse) +
             gdl_loss(y_true, y_pred, lambda_gdl) +
-            huber_loss(y_true, y_pred, lambda_huber))
+            huber_loss(y_true, y_pred, lambda_huber, delta_huber))
 
 
 
-def trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filters):
+def trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filters,delta_huber):
     # Limpar objetos personalizados
     
     # Definir as entradas
@@ -110,7 +112,7 @@ def trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filt
 
     
     # Compilar o modelo
-    loss = CustomTotalLoss(lambda_mse, lambda_gdl, lambda_huber)
+    loss = CustomTotalLoss(lambda_mse, lambda_gdl, lambda_huber, delta_huber)
     autoencoder.compile(optimizer=Adam(learning_rate=lr),
                         loss=loss,
                         metrics=[tf.keras.metrics.MeanAbsolutePercentageError()])

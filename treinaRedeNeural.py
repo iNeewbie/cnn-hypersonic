@@ -91,6 +91,7 @@ lambda_mse = 0.0
 lambda_gdl = 0.2
 lambda_l2 = 1e-5
 lambda_huber = 0.8
+delta_huber = 0.5
 lr = 0.0001
 filtros = 100
 
@@ -123,19 +124,20 @@ try:
         'total_loss': total_loss,
         'mse_loss': mse_loss,
         'gdl_loss': gdl_loss,
-        'huber_loss': huber_loss
+        'huber_loss': huber_loss,
+        'delta_huber': delta_huber
     }
 
     model = load_model('meu_modelo.keras', custom_objects=custom_objects)
     print("Modelo carregado com sucesso.")
 
-    loss = CustomTotalLoss(lambda_mse, lambda_gdl, lambda_huber)
+    loss = CustomTotalLoss(lambda_mse, lambda_gdl, lambda_huber, delta_huber)
     model.compile(optimizer=Adam(learning_rate=lr),
                   loss=loss,
                   metrics=[tf.keras.metrics.MeanAbsolutePercentageError()])
 except:
     print("NÃO carregou modelo, inicializando um novo modelo.")
-    model = trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filtros)
+    model = trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filtros, delta_huber)
 
 model.summary()
 
