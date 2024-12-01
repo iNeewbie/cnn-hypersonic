@@ -57,7 +57,7 @@ def gdl_loss(y_true, y_pred, lambda_gdl):
 
 @register_keras_serializable(package="my_package")
 def huber_loss(y_true, y_pred, lambda_huber):
-    loss = tf.keras.losses.Huber(delta=2.0)(y_true, y_pred)
+    loss = tf.keras.losses.Huber(delta=0.5)(y_true, y_pred)
     return lambda_huber * loss
 
 @register_keras_serializable(package="my_package")

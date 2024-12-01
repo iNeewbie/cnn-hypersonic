@@ -86,11 +86,11 @@ test_dataset = test_dataset.prefetch(buffer_size=AUTOTUNE)
 # =========================================================
 # 4. Hiperparâmetros do modelo
 # =========================================================
-epochs_N = 30000
-lambda_mse = 0.8
+epochs_N = 10000
+lambda_mse = 0.0
 lambda_gdl = 0.2
 lambda_l2 = 1e-5
-lambda_huber = 0
+lambda_huber = 0.8
 lr = 0.0001
 filtros = 100
 
