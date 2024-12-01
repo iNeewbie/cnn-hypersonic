@@ -6,6 +6,7 @@ from tqdm import tqdm
 # Iniciando o solver
 print("Iniciando solver...")
 solver = pyfluent.launch_fluent(
+    version="23.1",
     precision="double",
     processor_count=4,
     mode="solver",
