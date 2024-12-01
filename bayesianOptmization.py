@@ -59,7 +59,17 @@ test_dataset = test_dataset.prefetch(buffer_size=AUTOTUNE)
 # =========================================================
 # 3. Configurar e Inicializar o Modelo
 # =========================================================
-model = trainNeuralNetwork(lambda_mse=0, lambda_gdl=0, lambda_l2=0, lambda_huber=0, lr=0.0001, filtros=100, delta_huber=0)
+
+epochs_N = 10000
+lambda_mse = 0.0
+lambda_gdl = 0.2
+lambda_l2 = 1e-5
+lambda_huber = 0.8
+delta_huber = 0.5
+lr = 0.0001
+filtros = 100
+
+model = trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filtros, delta_huber)
 initial_weights = model.get_weights()
 my_callbacks = [
         tf.keras.callbacks.EarlyStopping(
@@ -94,7 +104,7 @@ def optimizeParameters(lambda_huber, lambda_l2, delta_huber):
     with tf.device('/GPU:0'):
         history = model.fit(
                 train_dataset,
-            epochs=10000,
+            epochs=epochs_N,
             validation_data=test_dataset,
             callbacks=my_callbacks,
             verbose=1
