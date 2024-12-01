@@ -38,6 +38,16 @@ except FileNotFoundError:
     np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
              array5=y_train, array6=y_test)
 
+x1_train = np.expand_dims(x1_train, axis=-1)
+y_train = np.expand_dims(y_train, axis=-1)
+x1_test = np.expand_dims(x1_test, axis=-1)
+y_test = np.expand_dims(y_test, axis=-1)
+
+x1_train = x1_train.astype('float32')
+y_train = y_train.astype('float32')
+x1_test = x1_test.astype('float32')
+y_test = y_test.astype('float32')
+
 # =========================================================
 # 2. Criação dos datasets de treino e teste com tf.data
 # =========================================================
