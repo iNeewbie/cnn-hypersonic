@@ -68,7 +68,7 @@ def total_loss(y_true, y_pred, lambda_mse, lambda_gdl, lambda_huber):
 
 
 
-def trainNeuralNetwork(lambda_mse=0.03, lambda_gdl=0.1, lambda_l2=1e-5, lambda_huber=0.9, lr=0.001, filters=300):
+def trainNeuralNetwork(lambda_mse, lambda_gdl, lambda_l2, lambda_huber, lr, filters):
     # Limpar objetos personalizados
     
     # Definir as entradas

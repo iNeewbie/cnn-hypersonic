@@ -46,10 +46,10 @@ except:
                  array5=y1, array6=ar0, array7=label, array8=ar0)
     else:
         print(f"Passou {(fim_gerarDados - tempo_gerarDados) / 60} minutos para gerar dados")
-        x1_train, x1_test = train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
-        x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
-        y_train, y_test = train_test_split(y1, test_size=0.15, shuffle=True, random_state=13)
-        label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)
+        x1_train, x1_test = train_test_split(x1, test_size=0.15, shuffle=True, random_state=19)
+        x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=19)
+        y_train, y_test = train_test_split(y1, test_size=0.15, shuffle=True, random_state=19)
+        label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=19)
         np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
                  array5=y_train, array6=y_test, array7=label_train, array8=label_test)
 
@@ -87,12 +87,12 @@ test_dataset = test_dataset.prefetch(buffer_size=AUTOTUNE)
 # 4. Hiperparâmetros do modelo
 # =========================================================
 epochs_N = 30000
-lambda_mse = 0.9
-lambda_gdl = 0.1
+lambda_mse = 0.8
+lambda_gdl = 0.2
 lambda_l2 = 1e-5
 lambda_huber = 0
 lr = 0.0001
-filtros = 300
+filtros = 100
 
 # =========================================================
 # 5. Configuração dos callbacks (TensorBoard incluído)
