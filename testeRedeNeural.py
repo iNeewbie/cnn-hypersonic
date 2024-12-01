@@ -22,7 +22,7 @@ try:
 except:
     # Gerar os dados caso o arquivo não exista
     tempo_gerarDados = time.time()
-    x1, x2, y1, _, label, scaler = geraDadosTreino()    
+    x1, x2, y1, _, label, scaler = geraDadosTreino()
     fim_gerarDados = time.time()
     joblib.dump(scaler, 'scaler.pkl')
     if len(x1) == 1:
@@ -34,13 +34,14 @@ except:
         x1_train, x1_test = train_test_split(x1, test_size=0.15, shuffle=True, random_state=13)
         x2_train, x2_test = train_test_split(x2, test_size=0.15, shuffle=True, random_state=13)
         y_train, y_test = train_test_split(y1, test_size=0.15, shuffle=True, random_state=13)
-        label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)  
+        label_train, label_test = train_test_split(label, test_size=0.15, shuffle=True, random_state=13)
         np.savez('arquivo.npz', array1=x1_train, array2=x2_train, array3=x1_test, array4=x2_test,
                  array5=y_train, array6=y_test, array7=label_train, array8=label_test)
 
 #x1_test= x1_train
 #x2_test=x2_train
 #y_test=y_train
+#label_test=label_train
 # Adicionar a dimensão do canal aos dados de teste
 x1_test = np.expand_dims(x1_test, axis=-1)  # Shape: (num_samples, height, width, 1)
 y_test = np.expand_dims(y_test, axis=-1)    # Shape: (num_samples, height, width, 1)
@@ -87,7 +88,8 @@ temp_test_inv = temp_test_inv.reshape(-1, height, width)
 y_test_inv = np.exp(y_test_inv)
 temp_test_inv = np.exp(temp_test_inv)
 
-
+#temp_test_inv = temp_test
+#y_test_inv = y_test
 
 
 # Aplicar máscara nos dados de teste
@@ -99,7 +101,7 @@ y_testMasked_inv = np.ma.masked_array(y_test_inv, mask_test)
 tempMasked_inv = np.ma.masked_array(temp_test_inv, mask_test)
 
 # Loop para plotagem
-for i in range(1):#len(tempMasked_inv)):  # Ajuste o range conforme necessário
+for i in range(1):#(len(tempMasked_inv)):  # Ajuste o range conforme necessário
     vmin_temp = min(tempMasked_inv[i].min(), y_testMasked_inv[i].min())
     vmax_temp = max(tempMasked_inv[i].max(), y_testMasked_inv[i].max())
     plt.figure(figsize=(10, 5))
@@ -108,16 +110,16 @@ for i in range(1):#len(tempMasked_inv)):  # Ajuste o range conforme necessário
     plt.subplot(2, 2, 1)
     plt.contourf(tempMasked_inv[i], levels=200, cmap='jet', vmin=vmin_temp, vmax=vmax_temp)
     plt.colorbar()
-    plt.title('Predição (Denormalizada e Exponenciada)')
+    plt.title(f'Predição  - {label_test[i]}')
 
     # Gráfico do ground truth denormalizado e exponenciado
     plt.subplot(2, 2, 2)
     plt.contourf(y_testMasked_inv[i], levels=200, cmap='jet', vmin=vmin_temp, vmax=vmax_temp)
     plt.colorbar()
-    plt.title('Ground Truth (Denormalizada e Exponenciada)')
+    plt.title(f'Ground truth - {label_test[i]}')
 
     # Calcule a diferença (erro percentual) entre predição e ground truth
-    diff = np.abs(tempMasked_inv[i] - y_testMasked_inv[i]) /(y_testMasked_inv[i]) *100 # Evitar divisão por zero
+    diff = np.abs(tempMasked_inv[i] - y_testMasked_inv[i]) # Evitar divisão por zero
 
     # Gráfico do erro percentual
     plt.subplot(2, 2, 3)
@@ -128,10 +130,8 @@ for i in range(1):#len(tempMasked_inv)):  # Ajuste o range conforme necessário
     # Exibir a figura
     plt.tight_layout()
     plt.show()
-
     
-
-    # Preparar a SDF para plotagem
+# Preparar a SDF para plotagem
     sdf_sample = x1_test[i]
     """
     # Plotar a SDF para visualizar o perfil
@@ -143,7 +143,7 @@ for i in range(1):#len(tempMasked_inv)):  # Ajuste o range conforme necessário
     # Sobrepor a borda do perfil (contorno onde SDF = 0)
     contours = plt.contour(sdf_sample, levels=[0], colors='black', linewidths=2)
     plt.clabel(contours, inline=True, fontsize=8, fmt='Borda do Perfil')"""
-    
+
     # Agora encontrar os pontos imediatamente acima e abaixo da borda da SDF
     num_rows, num_cols = sdf_sample.shape# Inicializar listas para armazenar os valores para os dorsos superior e inferior
     x_indices_upper = []
@@ -157,7 +157,7 @@ for i in range(1):#len(tempMasked_inv)):  # Ajuste o range conforme necessário
     true_values_lower = []
     
     # Definir a linha média em y=200 (ajuste conforme necessário)
-    y_mid = 199.5
+    y_mid = 74.5
     
     # Obter o número de linhas (altura) e colunas (largura) da imagem
     num_rows, num_cols = x1_test.shape[1], x1_test.shape[2]
@@ -258,4 +258,3 @@ for i in range(1):#len(tempMasked_inv)):  # Ajuste o range conforme necessário
     plt.title(f'SDF e Pontos Acima/Abaixo do Perfil - Amostra {i}')
     plt.show()
     
-        

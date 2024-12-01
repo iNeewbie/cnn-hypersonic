@@ -76,17 +76,14 @@ def trainNeuralNetwork(lambda_mse=0.03, lambda_gdl=0.1, lambda_l2=1e-5, lambda_h
     input_conditions = Input(shape=(2,))
 
     # Codificador
-    x = Conv2D(filters, (5, 5), padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(input_img)
-    #x = BatchNormalization()(x)
-    x = MaxPooling2D((5, 5))(x)
+    x = Conv2D(filters, kernel_size=5, strides=5, padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(input_img)
 
-    x = Conv2D(filters, (5, 5), padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(x)
-    #x = BatchNormalization()(x)
-    x = MaxPooling2D((5, 5))(x)
 
-    x = Conv2D(filters, (3, 3), padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(x)
-    #x = BatchNormalization()(x)
-    x = MaxPooling2D((3, 3))(x)
+    x = Conv2D(filters, kernel_size=5, strides=5, padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(x)
+
+
+    x = Conv2D(filters, kernel_size=3, strides=3, padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(x)
+
 
     x = Flatten()(x)
 
@@ -96,22 +93,17 @@ def trainNeuralNetwork(lambda_mse=0.03, lambda_gdl=0.1, lambda_l2=1e-5, lambda_h
 
     # Decodificador
     x = Dense(filters * 2 * 2, kernel_regularizer=l2(lambda_l2), activation=swish)(x)
-    #x = BatchNormalization()(x)
     x = Reshape((2, 2, filters))(x)  # Correção: aplicar a camada Reshape em x
 
     # Upsampling usando Conv2DTranspose
-    x = Conv2DTranspose(filters, (3, 3), strides=(3, 3), padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(x)
-    #x = BatchNormalization()(x)
+    x = Conv2DTranspose(filters, kernel_size=3, strides=3, padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(x)
 
-    x = Conv2DTranspose(filters, (5, 5), strides=(5, 5), padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(x)
-    #x = BatchNormalization()(x)
+    x = Conv2DTranspose(filters, kernel_size=5, strides=5, padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(x)
 
-    x = Conv2DTranspose(filters, (5, 5), strides=(5, 5), padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(x)
-    #x = BatchNormalization()(x)
+    x = Conv2DTranspose(filters, kernel_size=5, strides=5, padding='same', kernel_regularizer=l2(lambda_l2), activation=swish)(x)
 
     # Camada de saída
-    output = Conv2D(1, (1, 1), padding='same')(x) 
-    # Sem função de ativação, assumindo tarefa de regressão
+    output = Conv2D(1, kernel_size=1, strides=1,padding='same')(x)     # Sem função de ativação, assumindo tarefa de regressão
 
     # Definir o modelo
     autoencoder = Model(inputs=[input_img, input_conditions], outputs=output)
