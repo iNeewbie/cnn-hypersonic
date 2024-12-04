@@ -117,7 +117,7 @@ def optimizeParameters(lambda_huber, lambda_l2, delta_huber):
             epochs=epochs_N,
             validation_data=test_dataset,
             callbacks=my_callbacks,
-            verbose=1
+            verbose=0
     )
 
     # Calcular métrica de avaliação
@@ -130,9 +130,9 @@ def optimizeParameters(lambda_huber, lambda_l2, delta_huber):
 # 5. Configurar Limites e Otimizar
 # =========================================================
 pbounds = {
-    'lambda_huber': (0.4, 0.99),       # λ_huber entre 0 e 1
-    'lambda_l2': (1e-4, 1e-7),      # Regularização L2
-    'delta_huber': (0.1, 2)        # Delta do Huber Loss
+    'lambda_huber': (0.4, 1.0),       # λ_huber entre 0 e 1
+    'lambda_l2': (1e-7, 1e-4),      # Regularização L2
+    'delta_huber': (0.1, 5)        # Delta do Huber Loss
 }
 
 optimizer = BayesianOptimization(
@@ -144,7 +144,7 @@ opt_time_start = time.time()
 
 optimizer.maximize(
     init_points=30,  # Pontos iniciais de exploração
-    n_iter=60      # Iterações para otimização
+    n_iter=30      # Iterações para otimização
 )
 
 opt_time_end = time.time()
@@ -181,7 +181,7 @@ with tf.device('/GPU:0'):
 		epochs=30000,
 		validation_data=test_dataset,
 		callbacks=my_callbacks,
-		verbose=1
+		verbose=0
 )
 model.save('best_model.keras')
 print("Modelo treinado salvo como 'best_model.keras'")
