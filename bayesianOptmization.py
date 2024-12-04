@@ -93,9 +93,8 @@ my_callbacks = [
 # =========================================================
 # 4. Função de Otimização
 # =========================================================
-def optimizeParameters(lambda_huber, lambda_l2, delta_huber):
+def optimizeParameters(lambda_huber, lambda_gdl, lambda_l2, delta_huber):
     # Relacionar lambda_gdl
-    lambda_gdl = 1 - lambda_huber
     lambda_mse = 0  # Fixo
 
     
@@ -130,7 +129,8 @@ def optimizeParameters(lambda_huber, lambda_l2, delta_huber):
 # 5. Configurar Limites e Otimizar
 # =========================================================
 pbounds = {
-    'lambda_huber': (0.4, 1.0),       # λ_huber entre 0 e 1
+    'lambda_huber': (0.1, 2),       # λ_huber entre 0 e 1
+    'lambda_gdl': (0.1, 2),         # λ_gdl entre 
     'lambda_l2': (1e-7, 1e-4),      # Regularização L2
     'delta_huber': (0.1, 5)        # Delta do Huber Loss
 }
@@ -144,7 +144,7 @@ opt_time_start = time.time()
 
 optimizer.maximize(
     init_points=30,  # Pontos iniciais de exploração
-    n_iter=30      # Iterações para otimização
+    n_iter=60      # Iterações para otimização
 )
 
 opt_time_end = time.time()
@@ -164,7 +164,7 @@ df.to_csv('optimization_results.csv', index=False)
 # =========================================================
 best_params = optimizer.max['params']
 lambda_huber = best_params['lambda_huber']
-lambda_gdl = 1 - lambda_huber
+lambda_gdl = best_params['lambda_gdl']
 lambda_l2 = best_params['lambda_l2']
 delta_huber = best_params['delta_huber']
 

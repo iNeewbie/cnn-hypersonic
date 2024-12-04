@@ -177,7 +177,7 @@ for i in range(1):#(len(tempMasked_inv)):  # Ajuste o range conforme necessário
                 # Garantir que os índices estão dentro dos limites
                 if y_borda >= 1 and y_borda + 1 < num_rows:
                     # Verificar se é o dorso superior ou inferior com base na posição y_borda
-                    if y_borda < y_mid:
+                    if y_borda > y_mid:
                         # Dorso Superior
                         # Determinar se a SDF muda de negativo para positivo ou vice-versa
                         s1 = s[y_borda]
@@ -197,7 +197,7 @@ for i in range(1):#(len(tempMasked_inv)):  # Ajuste o range conforme necessário
                         y_indices_upper.append(y_outside)
                         pred_values_upper.append(temp_test_inv[i, y_outside, x])
                         true_values_upper.append(y_test_inv[i, y_outside, x])
-                    elif y_borda > y_mid:
+                    elif y_borda < y_mid:
                         # Dorso Inferior
                         # Determinar se a SDF muda de negativo para positivo ou vice-versa
                         s1 = s[y_borda]
