@@ -129,8 +129,8 @@ def optimizeParameters(lambda_huber, lambda_gdl, lambda_l2, delta_huber):
 # 5. Configurar Limites e Otimizar
 # =========================================================
 pbounds = {
-    'lambda_huber': (0.1, 2),       # λ_huber entre 0 e 1
-    'lambda_gdl': (0.1, 2),         # λ_gdl entre 
+    'lambda_huber': (0.1, 10),       # λ_huber entre 0 e 1
+    'lambda_gdl': (0.1, 10),         # λ_gdl entre 
     'lambda_l2': (1e-7, 1e-4),      # Regularização L2
     'delta_huber': (0.1, 5)        # Delta do Huber Loss
 }

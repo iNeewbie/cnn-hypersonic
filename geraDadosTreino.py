@@ -23,7 +23,7 @@ def geraDadosTreino():
         return datFile
     
     
-    pasta2 = [os.path.join("DataCFD", str(WedgeAngle) + "-WedgeAngle", str(AoA) + "-AoA", str(MachNumber) + "-Mach","solData") 
+    pasta2 = [os.path.join("DataCFD2", str(WedgeAngle) + "-WedgeAngle", str(AoA) + "-AoA", str(MachNumber) + "-Mach","solData") 
             for WedgeAngle in WedgeAngles for AoA in AoAs for MachNumber in MachNumbers]
     
     simFiles = []
