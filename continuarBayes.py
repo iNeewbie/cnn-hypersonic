@@ -85,9 +85,7 @@ my_callbacks = [
     ]
 
 
-def optimizeParameters(lambda_huber, lambda_l2, delta_huber):
-    # Relacionar lambda_gdl
-    lambda_gdl = 1 - lambda_huber
+def optimizeParameters(lambda_huber, lambda_gdl, lambda_l2, delta_huber):
     lambda_mse = 0  # Fixo
 
 
@@ -124,7 +122,7 @@ opt_time_start = time.time()
 
 optimizer.maximize(
     init_points=0,  # Não precisa de novos pontos iniciais, pois já foi iniciado
-    n_iter=30       # Rodar mais 30 iterações
+    n_iter=60       # Rodar mais 30 iterações
 )
 
 opt_time_end = time.time()
@@ -145,7 +143,7 @@ df.to_csv('optimization_results.csv', index=False)
 # =========================================================
 best_params = optimizer.max['params']
 lambda_huber = best_params['lambda_huber']
-lambda_gdl = 1 - lambda_huber
+lambda_gdl = best_params['lambda_gdl']
 lambda_l2 = best_params['lambda_l2']
 delta_huber = best_params['delta_huber']
 
